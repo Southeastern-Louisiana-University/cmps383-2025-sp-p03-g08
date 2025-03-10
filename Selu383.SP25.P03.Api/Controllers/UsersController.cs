@@ -24,7 +24,7 @@ namespace Selu383.SP25.P03.Api.Controllers
             this.roleManager = roleManager;
             this.userManager = userManager;
             this.dataContext = dataContext;
-            roles = dataContext.Set<Role>();
+            roles = dataContext.Set<Role>(); 
         }
 
         [HttpPost]

@@ -20,7 +20,7 @@ namespace Selu383.SP25.P03.Api.Controllers
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.dataContext = dataContext;
-            users = dataContext.Set<User>();
+            users = dataContext.Set<User>(); 
         }
 
         [HttpPost]

@@ -22,7 +22,7 @@ namespace Selu383.SP25.P03.Api.Controllers
             this.dataContext = dataContext;
             theaters = dataContext.Set<Theater>();
             users = dataContext.Set<User>();
-            this.userManager = userManager;
+            this.userManager = userManager; 
         }
 
         [HttpGet]

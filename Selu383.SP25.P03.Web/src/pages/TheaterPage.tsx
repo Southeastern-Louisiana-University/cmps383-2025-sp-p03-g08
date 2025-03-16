@@ -9,17 +9,17 @@ export default function TheaterPage() {
         <TheaterCard
           imageUrl="/Theater1.png"
           title="Lion's Den Cinemas 1"
-          subtitle="1234 Example St"
+          subtitle="address"
         />
         <TheaterCard
           imageUrl="/Theater2.png"
           title="Lion's Den Cinemas 2"
-          subtitle="5678 Another Rd"
+          subtitle="address"
         />
         <TheaterCard
           imageUrl="/Theater3.png"
           title="Lion's Den Cinemas 3"
-          subtitle="91011 Some Place"
+          subtitle="address"
         />
       </div>
     </div>

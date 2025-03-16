@@ -1,0 +1,40 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #100E0E;
+    padding: 1rem 2rem;
+  }
+  .navbar__logo {
+    display: flex;
+    align-items: center;
+  }
+  .navbar__icon {
+    height: 40px;
+    margin-right: 8px;
+  }
+  .navbar__brand {
+    color: #EFBF04;
+    font-size: 1.5rem;
+    text-decoration: none;
+  }
+  .navbar__links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+  }
+  .navbar__links a {
+    color: #EFBF04;
+    text-decoration: none;
+    font-size: 1.2rem;
+  }
+  .navbar__signin {
+    background-color: #EFBF04;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #100E0E;
+  }
+  

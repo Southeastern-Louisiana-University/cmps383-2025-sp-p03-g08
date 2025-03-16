@@ -1,0 +1,33 @@
+.footer {
+    background: #ffffff;
+    padding: 2rem;
+  }
+  
+  .footer__sections {
+    display: flex;
+    gap: 48px;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+  }
+  
+  .footer__section h4 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 1rem;
+  }
+  
+  .footer__section p {
+    color: #454545;
+    font-size: 16px;
+    margin: 0.5rem 0;
+  }
+  
+  .footer__bottom {
+    border-top: 1px solid #e6e6e6;
+    padding-top: 1rem;
+    text-align: right;
+    color: #828282;
+    font-size: 14px;
+  }
+  

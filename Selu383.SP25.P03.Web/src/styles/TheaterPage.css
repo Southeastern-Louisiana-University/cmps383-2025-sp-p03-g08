@@ -1,0 +1,19 @@
+.theatersPage {
+    padding: 2rem;
+    background: #ffffff;
+  }
+  
+  .theatersPage__title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 80px;
+    line-height: 100px;
+    color: #000000;
+    margin-bottom: 2rem;
+  }
+  
+  .theatersPage__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  

@@ -34,7 +34,7 @@ export default function FullMenuPage() {
   
     return (
       <div style={{ padding: '2rem' }}>
-        <h1>Our Full Menu</h1>
+        <h1>Enjoy our curated menu crafted for every craving!</h1>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem', marginTop: '1rem' }}>
           {menuItems.map((item, idx) => (
             <div key={idx} style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '1rem' }}>

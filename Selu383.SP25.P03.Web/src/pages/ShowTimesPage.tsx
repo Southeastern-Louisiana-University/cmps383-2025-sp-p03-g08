@@ -12,6 +12,7 @@ export default function ShowTimesPage() {
     <div style={{ padding: '2rem' }}>
       <h1>Show Times</h1>
       <h2>{movieId}</h2>
+      <p>Explore the available showtimes below and pick the one that suits you best!</p>
       <div>
         {showTimes.map((st, i) => (
           <div key={i} style={{ marginBottom: '1rem' }}>
@@ -21,6 +22,9 @@ export default function ShowTimesPage() {
           </div>
         ))}
       </div>
+      <p style={{ marginTop: '2rem', fontStyle: 'italic' }}>
+        Tickets are selling fast—book now to secure your spot!
+      </p>
     </div>
   )
 }

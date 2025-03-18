@@ -1,0 +1,39 @@
+.homePage {
+    padding: 2rem;
+  }
+  .homePage__nowPlaying h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  .homePage__movieGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+  .homePage__foodGrid {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+  }
+  .homePage__foodItem img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  .homePage__aboutUs {
+    margin-top: 3rem;
+  }
+  .homePage__testimonials {
+    margin-top: 3rem;
+  }
+  .homePage__testimonialGrid {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .homePage__testimonialCard {
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    flex: 1 1 250px;
+  }
+  

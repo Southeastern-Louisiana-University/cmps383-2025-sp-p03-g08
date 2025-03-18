@@ -10,6 +10,7 @@ export default function TheatersPage() {
   return (
     <div className="theatersPage">
       <h1>Theaters</h1>
+      <p>Discover the best theaters in your area!</p>
       <div className="theatersPage__list">
         {theaters.map(t => (
           <div key={t.id} className="theatersPage__card">

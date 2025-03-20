@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "Selu383-SP25-P02-Mobile-g08",
+    "slug": "Selu383-SP25-P02-Mobile-g08",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.selu383.sp24.p02.g08"
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "141e7921-736b-4142-9268-7508c6df1367"
+      }
+    },
+    "owner": "Kolbey.Jones"
+  }
+}

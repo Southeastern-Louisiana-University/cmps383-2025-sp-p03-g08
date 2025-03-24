@@ -1,0 +1,22 @@
+.movieCard {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.5rem;
+  text-align: center;
+}
+.movieCard__poster {
+  width: 100%;
+  border-radius: 4px;
+}
+.movieCard__title {
+  margin: 0.5rem 0;
+}
+.movieCard__link {
+  text-decoration: none;
+  background-color: #efbf04;
+  color: #100e0e;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  display: inline-block;
+}

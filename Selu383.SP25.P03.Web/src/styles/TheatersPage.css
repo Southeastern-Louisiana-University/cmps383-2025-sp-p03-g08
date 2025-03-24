@@ -1,0 +1,28 @@
+.theatersPage {
+  padding: 2rem;
+}
+.theatersPage__list {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+}
+.theatersPage__card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+.theatersPage__card img {
+  width: 100%;
+  border-radius: 8px;
+  max-height: 200px;
+  object-fit: cover;
+}
+.theatersPage__card button {
+  background-color: #EFBF04;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+}

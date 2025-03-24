@@ -1,0 +1,17 @@
+.footer {
+  background-color: #FFFFFF;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+.footer__links {
+  display: flex;
+  gap: 2rem;
+}
+.footer__links h4 {
+  margin: 0 0 0.5rem 0;
+}
+.footer__brand {
+  display: flex;
+  align-items: flex-end;
+}

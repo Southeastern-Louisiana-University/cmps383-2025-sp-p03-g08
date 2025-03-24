@@ -9,12 +9,13 @@ export default function Navbar() {
       <div className="navbar__logo">
         <Link to={routes.root} className="navbar__brand">
           <img
-            src="/assets/lion-logo.png"
+            src="/public/logo.png"
             alt="Lion Logo"
             className="navbar__icon"
           />
-          Lion's Den Cinema
+
         </Link>
+        <div className="navbar__brand"> Lion's Den Cinema</div>
       </div>
       <ul className="navbar__links">
         <li>

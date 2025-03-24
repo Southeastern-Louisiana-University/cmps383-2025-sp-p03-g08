@@ -1,16 +1,10 @@
 #root {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 164px;
-  background-color: #100e0e;
-  padding: 0 2rem;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 ;
+  padding: 0rem;
+  overflow-x: hidden;
 }
 
 .navbar__logo {

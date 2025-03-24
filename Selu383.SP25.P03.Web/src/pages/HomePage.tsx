@@ -10,27 +10,27 @@ export default function HomePage() {
         <h1>Now Playing</h1>
         <div className="homePage__movieGrid">
           <MovieCard
-            poster="/assets/anora-poster.jpg"
+            poster="/public/Anora.jpeg"
             title="Anora"
             linkUrl="/showtimes/anora"
           />
           <MovieCard
-            poster="/assets/captainAmerica.jpg"
+            poster="/public/Anora.jpeg"
             title="Captain America Brave New World"
             linkUrl="/showtimes/captain-america"
           />
           <MovieCard
-            poster="/assets/mickey17.jpg"
+            poster="/public/Anora.jpeg"
             title="Mickey 17"
             linkUrl="/showtimes/mickey17"
           />
           <MovieCard
-            poster="/assets/the-monkey.jpg"
+            poster="/public/Anora.jpeg"
             title="The Monkey"
             linkUrl="/showtimes/the-monkey"
           />
           <MovieCard
-            poster="/assets/last-breath.jpg"
+            poster="/public/Anora.jpeg"
             title="Last Breath"
             linkUrl="/showtimes/last-breath"
           />
@@ -41,12 +41,12 @@ export default function HomePage() {
         <h2>Food & Drinks</h2>
         <div className="homePage__foodGrid">
           <div className="homePage__foodItem">
-            <img src="/assets/mozarella-sticks.jpg" alt="Mozarella Sticks" />
+            <img src="/public/sliders.jpeg" alt="Mozarella Sticks" />
             <h3>Mozarella Sticks</h3>
             <p>4 Fried Mozarella Sticks served with marinara sauce</p>
           </div>
           <div className="homePage__foodItem">
-            <img src="/assets/sliders.jpg" alt="Cheeseburger Sliders" />
+            <img src="/public/sliders.jpeg" alt="Cheeseburger Sliders" />
             <h3>Cheeseburger Sliders</h3>
             <p>
               3 Delicious Cheeseburger Sliders dressed with cheddar cheese and a
@@ -54,7 +54,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="homePage__foodItem">
-            <img src="/assets/egg-rolls.jpg" alt="Egg Rolls" />
+            <img src="/public/sliders.jpeg" alt="Egg Rolls" />
             <h3>Southwest Egg Rolls</h3>
             <p>6 Tasty Southwest Egg Rolls served with dipping sauce</p>
           </div>

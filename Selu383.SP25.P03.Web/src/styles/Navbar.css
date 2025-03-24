@@ -1,16 +1,20 @@
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   background-color: #100e0e;
   padding: 1rem 2rem;
 }
 .navbar__logo {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: auto;
+  margin-right: 525px;
 }
 .navbar__icon {
-  height: 40px;
+  max-width: 100px;
+  max-height: 100px;
   margin-right: 8px;
 }
 .navbar__brand {
@@ -22,11 +26,17 @@
   display: flex;
   list-style: none;
   gap: 2rem;
+  margin-right: 0px;
+  padding: 0px;
+
 }
 .navbar__links a {
   color: #efbf04;
   text-decoration: none;
   font-size: 1.5rem;
+  margin-right: 0px;
+  padding: 0px;
+  
 }
 .navbar__signin {
   background-color: #efbf04;
@@ -36,4 +46,5 @@
   font-size: 1.2rem;
   cursor: pointer;
   color: #100e0e;
+  margin-left: 1rem;
 }

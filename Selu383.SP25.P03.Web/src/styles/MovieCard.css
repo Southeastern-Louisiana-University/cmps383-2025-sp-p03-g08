@@ -1,9 +1,8 @@
 .movieCard {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
   padding: 0.5rem;
   text-align: center;
+  height: 600px;
+  width: 400px;
 }
 .movieCard__poster {
   width: 100%;
@@ -11,6 +10,7 @@
 }
 .movieCard__title {
   margin: 0.5rem 0;
+  color: black;
 }
 .movieCard__link {
   text-decoration: none;

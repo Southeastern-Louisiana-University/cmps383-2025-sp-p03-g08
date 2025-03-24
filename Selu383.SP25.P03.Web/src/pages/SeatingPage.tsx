@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Group, Text } from '@mantine/core';
-import './SeatingPage.css';
+import '../styles/SeatingPage.css';
 
 type SeatStatus = 'available' | 'reserved' | 'occupied';
 

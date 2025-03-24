@@ -7,7 +7,7 @@ export const routes = {
   about: "/about",
   theaters: "/theaters",
   showtimes: "/showtimes",
-  chooseseats: "/choose-seats",
+  seating: "/seating",
   foodndrinks: "/food-drinks",
   menu: "/full-menu",
   tickets: "/tickets",

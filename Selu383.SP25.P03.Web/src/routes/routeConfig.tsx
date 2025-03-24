@@ -10,8 +10,10 @@ import FoodAndDrinksPage from "../pages/FoodAndDrinksPage";
 import FullMenuPage from "../pages/FullMenuPage";
 import AboutUsPage from "../pages/AboutUsPage";
 import LoginPage from "../pages/LoginPage";
-import ProtectedRoute from "../components/ProtectedRoute";
+
 import HomePage from "../pages/HomePage";
+import ProtectedRoute from "../Components/ProtectedRoute";
+import { SeatingPage } from "../pages/SeatingPage";
 
 export const RoutesConfig = () => {
   return (
@@ -22,7 +24,7 @@ export const RoutesConfig = () => {
       <Route path={routes.login} element={<LoginPage />} />
       <Route path={routes.theaters} element={<TheaterPage />} />
       <Route path={routes.showtimes} element={<ShowTimesPage />} />
-      <Route path={routes.chooseseats} element={<ChooseSeatsPage />} />
+      <Route path={routes.seating} element={<SeatingPage />} />
       <Route path={routes.foodndrinks} element={<FoodAndDrinksPage />} />
       <Route path={routes.menu} element={<FullMenuPage />} />
       <Route path={routes.about} element={<AboutUsPage />} />

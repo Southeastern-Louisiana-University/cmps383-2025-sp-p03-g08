@@ -117,7 +117,7 @@ export function SeatingPage() {
           </div>
         ))}
       </div>
-      <div>
+      <div className= "seating-container">
         <Text size="lg">
           {seats.flat().filter((seat) => seat.selected).length > 0
             ? `You have selected ${seats.flat().filter((seat) => seat.selected).length} seat(s).`

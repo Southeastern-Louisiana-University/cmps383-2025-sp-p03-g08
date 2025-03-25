@@ -44,6 +44,8 @@
   
   .seat.selected {
     background-color: #EFBF04; 
+    border: none;
+    border-radius: 5px;
   }
 
   
@@ -64,9 +66,14 @@
   }
   
   .purchaseButton{
-    background-color: black;
+    background-color: rgb(11, 11, 11);
     color: white;
     margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    height: 30px;
+    align-items: center;
+    font-size: 20px;
   }
   .purchaseButton:hover {
     background-color: #EFBF04; /* Darker yellow or another color for hover */

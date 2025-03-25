@@ -10,7 +10,7 @@
 }
 .movieCard__title {
   margin: 0.5rem 0;
-  color: black;
+  color: rgb(243, 241, 241);
 }
 .movieCard__link {
   text-decoration: none;

@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: center;
   width: auto;
-  margin-right: 525px;
+  margin-right: 480px;
 }
 .navbar__icon {
   max-width: 100px;
@@ -27,7 +27,7 @@
   list-style: none;
   gap: 2rem;
   margin-right: 0px;
-  padding: 0px;
+  padding:20px;
 
 }
 .navbar__links a {

@@ -2,7 +2,8 @@ import "./styles/App.css";
 import { BrowserRouter } from "react-router";
 import { RoutesConfig } from "./routes/routeConfig";
 import { MantineProvider } from "@mantine/core";
-import Navbar from "./components/Navbar";
+import Navbar from "./Components/Navbar";
+
 
 function App() {
   return (

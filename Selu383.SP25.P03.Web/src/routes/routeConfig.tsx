@@ -5,7 +5,6 @@ import { NotFoundTitle } from "../pages/page-not-found/not-found";
 
 import TheaterPage from "../pages/TheatersPage";
 import ShowTimesPage from "../pages/ShowTimesPage";
-import ChooseSeatsPage from "../pages/ChooseSeatsPage";
 import FoodAndDrinksPage from "../pages/FoodAndDrinksPage";
 import FullMenuPage from "../pages/FullMenuPage";
 import AboutUsPage from "../pages/AboutUsPage";

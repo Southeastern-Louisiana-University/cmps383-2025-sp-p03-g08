@@ -14,7 +14,7 @@ export default function TheatersPage() {
       <div className="theatersPage__list">
         {theaters.map(t => (
           <div key={t.id} className="theatersPage__card">
-            <img src="/assets/theater-placeholder.jpg" alt={t.name} />
+            <img src="/public/Cinema.jpg" alt={t.name} />
             <h2>{t.name}</h2>
             <p>{t.address}</p>
             <button>Choose This Theater</button>

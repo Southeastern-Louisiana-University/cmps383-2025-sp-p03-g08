@@ -3,17 +3,17 @@ export default function FoodAndDrinksPage() {
     {
       name: 'Mozarella Sticks',
       description: '4 Fried Mozarella Sticks served with marinara sauce',
-      image: '/assets/mozarella-sticks.jpg'
+      image: '/public/sliders.jpeg'
     },
     {
       name: 'Cheeseburger Sliders',
       description: '3 Delicious Cheeseburger Sliders dressed with cheddar cheese and a pickle',
-      image: '/assets/sliders.jpg'
+      image: '/public/sliders.jpeg'
     },
     {
       name: 'Southwest Egg Rolls',
       description: '6 Tasty Southwest Egg Rolls served with dipping sauce',
-      image: '/assets/egg-rolls.jpg'
+      image: '/public/sliders.jpeg'
     }
   ]
 

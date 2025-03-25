@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import '../styles/TheatersPage.css'
 
 export default function TheatersPage() {
@@ -8,19 +9,24 @@ export default function TheatersPage() {
   ]
 
   return (
+    <div>    <div className = "heading-container"> <h1>Theaters</h1></div>
     <div className="theatersPage">
-      <h1>Theaters</h1>
-      <p>Discover the best theaters in your area!</p>
+
       <div className="theatersPage__list">
         {theaters.map(t => (
           <div key={t.id} className="theatersPage__card">
-            <img src="/public/Cinema.jpg" alt={t.name} />
+            <img src="/public/Theater1.png" alt={t.name} />
+            <div>
             <h2>{t.name}</h2>
             <p>{t.address}</p>
+            <Link to={"/seating"}>
             <button>Choose This Theater</button>
+            </Link>
+            </div>
           </div>
         ))}
       </div>
+    </div>
     </div>
   )
 }

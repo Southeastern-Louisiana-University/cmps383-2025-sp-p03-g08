@@ -16,6 +16,9 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+h1 {
+  font-size: 2.5rem;
+}
 
 @media (prefers-color-scheme: light) {
   :root {

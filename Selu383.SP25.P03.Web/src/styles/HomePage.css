@@ -24,12 +24,13 @@
 }
 .homePage__foodGrid {
   display: flex;
-  gap: 2rem;
+  gap: 3rem;
   margin-top: 1rem;
   width: 95%;
 }
 .homePage__foodItem img {
-  width: 100%;
+  width: 425px;
+  height: 300px;
   border-radius: 8px;
 }
 .homePage__aboutUs {

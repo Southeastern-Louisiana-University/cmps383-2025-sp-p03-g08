@@ -15,7 +15,7 @@ export default function Navbar() {
           />
 
         </Link>
-        <div className="navbar__brand"> Lion's Den Cinema</div>
+        <div className="navbar__brand">Lion's Den Cinema</div>
       </div>
       <ul className="navbar__links">
         <li>

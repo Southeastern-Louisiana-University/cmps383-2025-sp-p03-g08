@@ -15,7 +15,7 @@ export default function TheatersPage() {
       <div className="theatersPage__list">
         {theaters.map(t => (
           <div key={t.id} className="theatersPage__card">
-            <img src="/public/Theater1.png" alt={t.name} />
+            <img src="https://imgur.com/ftrpBar.jpg" alt={t.name} />
             <div>
             <h2>{t.name}</h2>
             <p>{t.address}</p>

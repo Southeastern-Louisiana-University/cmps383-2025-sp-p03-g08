@@ -11,7 +11,7 @@ export default function HomePage() {
         <h1>Now Playing</h1>
         <div className="homePage__movieGrid">
           <MovieCard
-            poster="/public/Anora.jpeg"
+            poster="https://imgur.com/gallery/been-kicking-down-road-few-years-HL22OUy"
             title="Anora"
             linkUrl="/showtimes/anora"
           />

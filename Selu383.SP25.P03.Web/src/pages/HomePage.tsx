@@ -55,7 +55,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="homePage__foodItem">
-            <img src="https://imgur.com/nAikWFY" alt="Egg Rolls" />
+            <img src="https://imgur.com/nAikWFY.jpg" alt="Egg Rolls" />
             <h3>Southwest Egg Rolls</h3>
             <p>6 Tasty Southwest Egg Rolls served with dipping sauce</p>
           </div>

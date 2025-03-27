@@ -1,5 +1,21 @@
 import { useState } from "react";
 
+import classes from "../styles/Login.module.css";
+import {
+  Container,
+  Title,
+  Anchor,
+  Paper,
+  TextInput,
+  PasswordInput,
+  Group,
+  Checkbox,
+  Button,
+  Text,
+  Box,
+  Stack,
+} from "@mantine/core";
+
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +38,46 @@ export default function LoginPage() {
   }
 
   return (
-    <div>
+    <Container size="xl">
+      <Title ta="center" className={classes.title}>
+        Welcome back!
+      </Title>
+
+      <Stack ta="center" maw={500} mx="auto">
+        <TextInput
+          label="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          styles={{
+            label: {
+              width: "100px", // Adjust label width as needed
+              ta: "left",
+            },
+            input: {
+              width: "10%",
+              height: "25px",
+            },
+          }}
+        />
+        <TextInput
+          label="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          styles={{
+            input: {
+              width: "10%",
+              height: "25px",
+            },
+          }}
+        />
+
+        <Button onClick={handleLogin}>Sign in</Button>
+      </Stack>
+    </Container>
+  );
+}
+
+/* <div>  
       <h1>Sign In</h1>
       <input
         placeholder="Username"
@@ -36,6 +91,7 @@ export default function LoginPage() {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleLogin}>Login</button>
-    </div>
-  );
-}
+    </div> 
+      );
+      }
+      */

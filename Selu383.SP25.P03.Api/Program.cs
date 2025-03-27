@@ -81,6 +81,13 @@ namespace Selu383.SP25.P03.Api
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+                // Add web UIs to interact with the document
+                 // Available at: http://localhost:<port>/swagger
+                 //app.UseSwaggerUi();
+                 app.UseSwaggerUi(options =>
+                 {
+                     options.DocumentPath = "openapi/v1.json";
+                 });
             }
 
             app.UseHttpsRedirection();

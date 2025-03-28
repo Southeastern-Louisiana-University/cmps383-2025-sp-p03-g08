@@ -1,11 +1,20 @@
 import { useEffect, useState } from "react";
 import classes from "../styles/Login.module.css";
-import { Container, Title, TextInput, Button, Stack } from "@mantine/core";
+import {
+  Container,
+  Title,
+  TextInput,
+  Button,
+  Stack,
+  Alert,
+} from "@mantine/core";
 import { useNavigate } from "react-router";
 import { routes } from "../routes/routeIndex";
 
 interface UserDto {
   userName: string;
+  id: number;
+  roles: string[];
 }
 
 interface LoginFormProps {
@@ -24,12 +33,11 @@ export default function LoginPage({ onLoginSuccess }: LoginFormProps) {
     let redirectTimer: number;
 
     if (loginSuccess) {
-      // Redirect after 2 seconds (adjust timing as needed)
+      // on log in success, redirect after 3 secs
       redirectTimer = window.setTimeout(() => {
         navigate(routes.home);
-      }, 2000);
+      }, 3000);
     }
-
     // Clean up timer if component unmounts
     return () => {
       if (redirectTimer) clearTimeout(redirectTimer);
@@ -61,7 +69,6 @@ export default function LoginPage({ onLoginSuccess }: LoginFormProps) {
       .then((data: UserDto) => {
         console.log("Logged in as", data);
         if (onLoginSuccess) {
-          // Check if it exists before calling
           onLoginSuccess(data);
         }
         setLoginSuccess(true);
@@ -80,47 +87,77 @@ export default function LoginPage({ onLoginSuccess }: LoginFormProps) {
   return (
     <Container size="xl">
       <Title ta="center" className={classes.title}>
-        Welcome back!
+        Sign in
       </Title>
 
-      <form onSubmit={handleLogin}>
-        <Stack ta="center" maw={500} mx="auto">
-          <TextInput
-            label="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            styles={{
-              label: {
-                width: "100px", // Adjust label width as needed
-                ta: "left",
-              },
-              input: {
-                width: "10%",
-                height: "25px",
-              },
-            }}
-          />
-          <TextInput
-            label="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            styles={{
-              input: {
-                width: "10%",
-                height: "25px",
-              },
-            }}
-          />
-          {formError ? <p style={{ color: "red" }}>{formError}</p> : null}
-          <Button
-            type="submit"
-            value={loading ? "Loading..." : "Login"}
-            disabled={loading}
-          >
-            {loading ? "Signing in..." : "Sign in"}
-          </Button>
-        </Stack>
-      </form>
+      {loginSuccess ? ( // if login success, tell user and redirect to homepage
+        <Alert
+          color="green"
+          title="Login Successful!"
+          style={{
+            maxWidth: "500px",
+            margin: "20px auto",
+            padding: "15px",
+            borderRadius: "8px",
+            textAlign: "center",
+          }}
+        >
+          <p style={{ fontSize: "18px", marginTop: "10px" }}>
+            Welcome back, <strong>{username}</strong>!
+          </p>
+          <p style={{ fontSize: "14px", marginTop: "5px" }}>
+            Redirecting you to the homepage...
+          </p>
+        </Alert>
+      ) : (
+        <form onSubmit={handleLogin} name="login" autoComplete="on">
+          <Stack ta="center" maw={500} mx="auto">
+            <TextInput
+              label="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              styles={{
+                label: {
+                  width: "100px", // Adjust label width as needed
+                  ta: "left",
+                },
+                input: {
+                  width: "10%",
+                  height: "25px",
+                },
+              }}
+            />
+            <TextInput
+              type="password"
+              label="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              styles={{
+                input: {
+                  width: "10%",
+                  height: "25px",
+                },
+              }}
+            />
+
+            <Button
+              type="submit"
+              value={loading ? "Loading..." : "Login"}
+              disabled={loading}
+              styles={{
+                root: {
+                  marginTop: "20px",
+                  width: "5%",
+                  height: "25px",
+                },
+              }}
+            >
+              {loading ? "Signing in..." : "Sign in"}
+            </Button>
+            {formError ? <p style={{ color: "red" }}>{formError}</p> : null}
+          </Stack>
+        </form>
+      )}
     </Container>
   );
 }

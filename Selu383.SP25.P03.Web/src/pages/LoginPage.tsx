@@ -1,40 +1,80 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 import classes from "../styles/Login.module.css";
-import {
-  Container,
-  Title,
-  Anchor,
-  Paper,
-  TextInput,
-  PasswordInput,
-  Group,
-  Checkbox,
-  Button,
-  Text,
-  Box,
-  Stack,
-} from "@mantine/core";
+import { Container, Title, TextInput, Button, Stack } from "@mantine/core";
+import { useNavigate } from "react-router";
+import { routes } from "../routes/routeIndex";
 
-export default function LoginPage() {
+interface UserDto {
+  userName: string;
+}
+
+interface LoginFormProps {
+  onLoginSuccess?: (user: UserDto) => void;
+}
+
+export default function LoginPage({ onLoginSuccess }: LoginFormProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [formError, setFormError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const navigate = useNavigate();
 
-  function handleLogin() {
+  useEffect(() => {
+    let redirectTimer: number;
+
+    if (loginSuccess) {
+      // Redirect after 2 seconds (adjust timing as needed)
+      redirectTimer = window.setTimeout(() => {
+        navigate(routes.home);
+      }, 2000);
+    }
+
+    // Clean up timer if component unmounts
+    return () => {
+      if (redirectTimer) clearTimeout(redirectTimer);
+    };
+  }, [loginSuccess, navigate]);
+
+  function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (loading) {
+      return;
+    }
+
+    setFormError("");
+    setLoading(true);
+
     fetch("/api/authentication/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userName: username, password }),
+      body: JSON.stringify({ username, password }),
       credentials: "include",
     })
-      .then((r) => {
-        if (!r.ok) throw new Error("Login failed");
-        return r.json();
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Login failed");
+        }
+        return response.text().then((text) => (text ? JSON.parse(text) : {}));
       })
-      .then((data) => {
+
+      .then((data: UserDto) => {
         console.log("Logged in as", data);
+        if (onLoginSuccess) {
+          // Check if it exists before calling
+          onLoginSuccess(data);
+        }
+        setLoginSuccess(true);
       })
-      .catch((err) => console.error(err));
+
+      .catch((error) => {
+        console.error("Login error:", error);
+        setFormError("Wrong username or password");
+      })
+
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (
@@ -43,55 +83,44 @@ export default function LoginPage() {
         Welcome back!
       </Title>
 
-      <Stack ta="center" maw={500} mx="auto">
-        <TextInput
-          label="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          styles={{
-            label: {
-              width: "100px", // Adjust label width as needed
-              ta: "left",
-            },
-            input: {
-              width: "10%",
-              height: "25px",
-            },
-          }}
-        />
-        <TextInput
-          label="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          styles={{
-            input: {
-              width: "10%",
-              height: "25px",
-            },
-          }}
-        />
-
-        <Button onClick={handleLogin}>Sign in</Button>
-      </Stack>
+      <form onSubmit={handleLogin}>
+        <Stack ta="center" maw={500} mx="auto">
+          <TextInput
+            label="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            styles={{
+              label: {
+                width: "100px", // Adjust label width as needed
+                ta: "left",
+              },
+              input: {
+                width: "10%",
+                height: "25px",
+              },
+            }}
+          />
+          <TextInput
+            label="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            styles={{
+              input: {
+                width: "10%",
+                height: "25px",
+              },
+            }}
+          />
+          {formError ? <p style={{ color: "red" }}>{formError}</p> : null}
+          <Button
+            type="submit"
+            value={loading ? "Loading..." : "Login"}
+            disabled={loading}
+          >
+            {loading ? "Signing in..." : "Sign in"}
+          </Button>
+        </Stack>
+      </form>
     </Container>
   );
 }
-
-/* <div>  
-      <h1>Sign In</h1>
-      <input
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        placeholder="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleLogin}>Login</button>
-    </div> 
-      );
-      }
-      */

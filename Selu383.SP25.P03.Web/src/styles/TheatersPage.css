@@ -1,0 +1,48 @@
+.theatersPage {
+  padding: 2rem;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width:100%;
+}
+.theatersPage__list {
+  display: flex;
+  flex-direction: column;
+  width:60%;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  align-items: center;
+}
+.theatersPage__card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  justify-content: space-between;
+  width: 100%;
+  max-height: 500px;
+  color: black;
+  display: flex;
+
+}
+.theatersPage__card img {
+  width: 550px;
+  border-radius: 8px;
+  height: 400px;
+  object-fit: cover;
+
+}
+.theatersPage__card div {
+  margin-right: 15px;
+
+}
+.theatersPage__card button {
+  background-color: #EFBF04;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  width: 100%;
+  color: black;
+}

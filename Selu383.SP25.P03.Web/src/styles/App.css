@@ -1,0 +1,41 @@
+#root {
+  margin: 0 auto;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 ;
+  padding: 0rem;
+  overflow-x: hidden;
+}
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar__logo img {
+  width: 164px;
+  height: 164px;
+}
+
+.navbar__links {
+  list-style: none;
+  display: flex;
+  gap: 48px;
+}
+
+.navbar__links li {
+  color: #efbf04;
+  font-size: 32px;
+  cursor: pointer;
+}
+
+.navbar__signIn {
+  background: #efbf04;
+  color: #100e0e;
+  font-size: 24px;
+  padding: 14px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}

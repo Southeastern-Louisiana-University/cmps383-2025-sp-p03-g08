@@ -1,0 +1,81 @@
+/* This will make sure the page takes the full height of the viewport */
+.seating-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Align the content to the top */
+    align-items: center;
+    height: 100vh; /* Take full height of the viewport */
+    width: 100%; /* No padding */ /* No margin */
+  }
+  
+  /* Heading container at the top */
+  .heading-container {
+    width: 100%;
+    text-align: left;
+    margin-top: 20px; /* Adjust margin to move it down */
+    margin: 0; 
+    margin-left: 100px;
+  }
+  
+  /* Seating container, where seats are arranged */
+  .seating-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Centers the seats vertically */
+    margin-top: 20px;
+    flex-grow: 1; /* Ensures this part grows to fill the available space */
+    margin: 20px;
+  }
+  .seating-row {
+    display: flex;
+    justify-content: space-evenly; /* Evenly space the seats horizontally */
+    margin-bottom: 20px;
+    gap: 20px; /* Optional: space between rows */
+  }
+  
+  .seat {
+    width: 40px; /* Control the size of each seat */
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .seat.selected {
+    background-color: #EFBF04; 
+    border: none;
+    border-radius: 5px;
+  }
+
+  
+  .screen {
+    width: 60%; 
+    height: 20px; 
+    background-color: rgb(59, 59, 59); 
+    margin-bottom: 50px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+
+    /* Flexbox to center text vertically and horizontally */
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  color: white; 
+  font-weight: bold; 
+  text-align: center; 
+  }
+  
+  .purchaseButton{
+    background-color: rgb(11, 11, 11);
+    color: white;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    height: 30px;
+    align-items: center;
+    font-size: 20px;
+  }
+  .purchaseButton:hover {
+    background-color: #EFBF04; /* Darker yellow or another color for hover */
+    color: black; /* Change text color when hovered */
+  }

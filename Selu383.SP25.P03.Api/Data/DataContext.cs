@@ -30,6 +30,8 @@ namespace Selu383.SP25.P03.Api.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<PricingModel> PricingModels { get; set; }
 
+        public DbSet<MenuItem> MenuItems {get; set;}
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -13,4 +13,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />
   </ItemGroup>
 
+ <ItemGroup>
+    <ProjectReference Include="..\Selu383.SP25.P03.Web\Selu383.SP25.P03.Web.esproj" />
+  </ItemGroup>
+  
 </Project>

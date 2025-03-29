@@ -1,6 +1,7 @@
 .root {
   padding-top: 80px;
   padding-bottom: 80px;
+  text-align: center;
 }
 
 .label {
@@ -10,8 +11,11 @@
   line-height: 1;
   margin-bottom: calc(1.5 * var(--mantine-spacing-xl));
   color: var(--mantine-color-gray-2);
+}
 
-  @media (max-width: $mantine-breakpoint-sm) {
+@media (max-width: 768px) {
+  /* Converted from $mantine-breakpoint-sm */
+  .label {
     font-size: 32px;
   }
 }
@@ -28,8 +32,11 @@
   text-align: center;
   font-weight: 900;
   font-size: 38px;
+}
 
-  @media (max-width: $mantine-breakpoint-sm) {
+@media (max-width: 768px) {
+  /* Converted from $mantine-breakpoint-sm */
+  .title {
     font-size: 32px;
   }
 }

@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Selu383.SP25.P03.Api.Data;
@@ -14,14 +13,23 @@ namespace Selu383.SP25.P03.Api
 
             // Add services to the container.
             builder.Services.AddDbContext<DataContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DataContext") ?? throw new InvalidOperationException("Connection string 'DataContext' not found.")));
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DataContext")
+                        ?? throw new InvalidOperationException(
+                            "Connection string 'DataContext' not found."
+                        )
+                )
+            );
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddRazorPages();
 
-            builder.Services.AddIdentity<User, Role>()
+            builder.Services.AddSwaggerGen();
+
+            builder
+                .Services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
 
@@ -42,7 +50,7 @@ namespace Selu383.SP25.P03.Api
 
                 // User settings.
                 options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
 
@@ -80,24 +88,22 @@ namespace Selu383.SP25.P03.Api
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
-                // Add web UIs to interact with the document
-                 // Available at: http://localhost:<port>/swagger
-                 //app.UseSwaggerUi();
-                 app.UseSwaggerUi(options =>
-                 {
-                     options.DocumentPath = "openapi/v1.json";
-                 });
+                app.UseSwagger(); // Enable Swagger endpoint
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                    c.RoutePrefix = string.Empty; // Make Swagger UI available at the root URL
+                });
             }
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseRouting()
-               .UseAuthorization()
-               .UseEndpoints(x =>
-               {
-                   x.MapControllers();
-               });
+                .UseAuthorization()
+                .UseEndpoints(x =>
+                {
+                    x.MapControllers();
+                });
             app.UseStaticFiles();
 
             if (app.Environment.IsDevelopment())

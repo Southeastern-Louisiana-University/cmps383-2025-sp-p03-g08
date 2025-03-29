@@ -57,8 +57,7 @@ namespace Selu383.SP25.P03.Api.Controllers
             {
                 Name = dto.Name,
                 Address = dto.Address,
-                SeatCount = dto.SeatCount,
-                ManagerId = dto.ManagerId
+                ManagerId = dto.ManagerId,
             };
             theaters.Add(theater);
 
@@ -94,7 +93,6 @@ namespace Selu383.SP25.P03.Api.Controllers
 
             theater.Name = dto.Name;
             theater.Address = dto.Address;
-            theater.SeatCount = dto.SeatCount;
 
             if (User.IsInRole(UserRoleNames.Admin))
             {
@@ -129,24 +127,21 @@ namespace Selu383.SP25.P03.Api.Controllers
 
         private bool IsInvalid(TheaterDto dto)
         {
-            return string.IsNullOrWhiteSpace(dto.Name) ||
-                   dto.Name.Length > 120 ||
-                   string.IsNullOrWhiteSpace(dto.Address) ||
-                   dto.SeatCount <= 0 ||
-                   dto.ManagerId != null && !users.Any(x => x.Id == dto.ManagerId);
+            return string.IsNullOrWhiteSpace(dto.Name)
+                || dto.Name.Length > 120
+                || string.IsNullOrWhiteSpace(dto.Address)
+                || dto.ManagerId != null && !users.Any(x => x.Id == dto.ManagerId);
         }
 
         private static IQueryable<TheaterDto> GetTheaterDtos(IQueryable<Theater> theaters)
         {
-            return theaters
-                .Select(x => new TheaterDto
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Address = x.Address,
-                    SeatCount = x.SeatCount,
-                    ManagerId = x.ManagerId
-                });
+            return theaters.Select(x => new TheaterDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Address = x.Address,
+                ManagerId = x.ManagerId,
+            });
         }
     }
 }

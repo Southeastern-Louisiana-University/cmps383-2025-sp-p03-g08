@@ -108,7 +108,7 @@ EXEC sp_MSForEachTable 'ENABLE TRIGGER ALL ON ?'
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             connection =
-                $"Server=localhost,1433;Database={name};User Id=sa;Password=group8!!;TrustServerCertificate=True";
+                $"Server=localhost,1433;Database={name};User Id=sa;Password=Password123!;TrustServerCertificate=True";
         }
         else
         {

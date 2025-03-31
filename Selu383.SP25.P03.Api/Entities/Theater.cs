@@ -13,6 +13,6 @@ namespace Selu383.SP25.P03.Api.Features.Theaters
         public int? ManagerId { get; set; }
         public virtual User? Manager { get; set; }
         public List<CinemaHall> CinemaHalls { get; set; }
-        public string ImageURL { get; set; }
+        public string? ImageURL { get; set; }
     }
 }

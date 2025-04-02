@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import { useNavigate } from "react-router";
 import { routes } from "../routes/routeIndex";
+import { useAuth } from "../hooks/useAuth";
 
 interface UserDto {
   userName: string;
@@ -17,17 +18,14 @@ interface UserDto {
   roles: string[];
 }
 
-interface LoginFormProps {
-  onLoginSuccess?: (user: UserDto) => void;
-}
-
-export default function LoginPage({ onLoginSuccess }: LoginFormProps) {
+export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState("");
   const [loading, setLoading] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   useEffect(() => {
     let redirectTimer: number;
@@ -68,9 +66,7 @@ export default function LoginPage({ onLoginSuccess }: LoginFormProps) {
 
       .then((data: UserDto) => {
         console.log("Logged in as", data);
-        if (onLoginSuccess) {
-          onLoginSuccess(data);
-        }
+        login(data); // Update auth context
         setLoginSuccess(true);
       })
 

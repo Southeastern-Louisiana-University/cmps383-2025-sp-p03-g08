@@ -20,10 +20,8 @@ namespace Selu383.SP25.P03.Api.Features.Seats
     public class Seat
     {
         public int Id { get; set; }
-        public required string Row { get; set; }
+        public required char Row { get; set; }
         public required int Number { get; set; }
-        public bool Accessibility { get; set; } = false;
-
         public SeatStatus Status { get; set; } = SeatStatus.Available;
 
         public SeatType SeatType { get; set; } = SeatType.Regular;

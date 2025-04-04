@@ -94,7 +94,7 @@ export default function Navbar() {
             <p>Are you sure you want to log out?</p>
             <div className="logout-confirm-buttons">
               <button
-                className="logout-cancel-button"
+                className="logout-confirm-button"
                 onClick={handleCancelLogout}
               >
                 No, Cancel

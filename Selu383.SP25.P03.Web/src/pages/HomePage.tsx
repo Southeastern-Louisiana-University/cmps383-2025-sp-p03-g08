@@ -1,40 +1,53 @@
-//import { Link } from 'react-router-dom'
-
-
-import { useFetch } from "@mantine/hooks";
+import { useEffect, useState } from "react";
 import MovieCard from "../Components/MovieCard";
 import "../styles/HomePage.css";
-import { useEffect, useState } from "react";
 
 interface Movie {
   id: number;
   title: string;
   description: string;
   genre: string;
-  releaseDate: string; // You can also parse it to Date if necessary.
+  releaseDate: string;
   nowPlaying: boolean;
-  duration: string; // As returned, this is a string e.g., "01:52:00"
+  duration: string;
   posterURL: string;
 }
 
-
+interface MenuItem {
+  id: number;
+  name: string;
+  description: string;
+  imageURL: string;
+  price: number;
+  calories: number;
+  category: string;
+}
 
 export default function HomePage() {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [menuItems, setMenuItems] = useState([]);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch movies
         const moviesResponse = await fetch('http://localhost:5249/api/Movies');
-        const moviesData = await moviesResponse.json();
-        // const menuItemsResponse = await fetch('http://localhost:5000/api/MenuItems');
-        // const menuItemsData = await menuItemsResponse.json();
+        if (!moviesResponse.ok) {
+          throw new Error(`Failed to fetch movies, status: ${moviesResponse.status}`);
+        }
+        const moviesData: Movie[] = await moviesResponse.json();
+
+        // Fetch menu items
+        const menuItemsResponse = await fetch('http://localhost:5249/api/MenuItems/showcase');
+        if (!menuItemsResponse.ok) {
+          throw new Error(`Failed to fetch menu items, status: ${menuItemsResponse.status}`);
+        }
+        const menuItemsData: MenuItem[] = await menuItemsResponse.json();
+
         setMovies(moviesData);
-        console.log(moviesResponse);
-        // setMenuItems(menuItemsData);
+        setMenuItems(menuItemsData);
       } catch (err) {
         if (err instanceof Error) {
           setError(err);
@@ -48,19 +61,23 @@ export default function HomePage() {
 
     fetchData();
   }, []);
+
+  if (loading) return <div>Loading data...</div>;
+  if (error) return <div>Error loading data: {error.message}</div>;
+
   return (
     <div className="homePage">
+      {/* Now Playing Section */}
       <section className="homePage__nowPlaying">
         <h1>Now Playing</h1>
         <div className="homePage__movieGrid">
           {movies.length > 0 ? (
             movies.map((movie) => (
               <MovieCard
-                key={movie.id} // Unique key for each item
-                poster={movie.posterURL} // Use the URL from your movie data
+                key={movie.id}
+                poster={movie.posterURL}
                 title={movie.title}
-                // Optionally, generate a link URL based on the movie title
-               
+                linkUrl={`/showtimes/${movie.title.toLowerCase().replace(/\s+/g, '-')}`}
               />
             ))
           ) : (
@@ -69,30 +86,25 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Food & Drinks Section */}
       <section className="homePage__foodAndDrinks">
         <h2>Food & Drinks</h2>
         <div className="homePage__foodGrid">
-          <div className="homePage__foodItem">
-            <img src="https://imgur.com/ZPJRaPj.jpg" alt="Mozarella Sticks" />
-            <h3>Mozarella Sticks</h3>
-            <p>4 Fried Mozarella Sticks served with marinara sauce</p>
-          </div>
-          <div className="homePage__foodItem">
-            <img src="https://imgur.com/TkGozIU.jpg" alt="Cheeseburger Sliders" />
-            <h3>Cheeseburger Sliders</h3>
-            <p>
-              3 Delicious Cheeseburger Sliders dressed with cheddar cheese and a
-              pickle
-            </p>
-          </div>
-          <div className="homePage__foodItem">
-            <img src="https://imgur.com/nAikWFY.jpg" alt="Egg Rolls" />
-            <h3>Southwest Egg Rolls</h3>
-            <p>6 Tasty Southwest Egg Rolls served with dipping sauce</p>
-          </div>
+          {menuItems.length > 0 ? (
+            menuItems.map((item) => (
+              <div key={item.id} className="homePage__foodItem">
+                <img src={item.imageURL} alt={item.name} />
+                <h3>{item.name}</h3>
+                <p>{item.description}</p>
+              </div>
+            ))
+          ) : (
+            <p>No menu items available.</p>
+          )}
         </div>
       </section>
 
+      {/* About Us Section */}
       <section className="homePage__aboutUs">
         <h2>About Us</h2>
         <p>
@@ -103,6 +115,7 @@ export default function HomePage() {
         </p>
       </section>
 
+      {/* Testimonials Section */}
       <section className="homePage__testimonials">
         <h2>Hear From Our Happy Guests!</h2>
         <div className="homePage__testimonialGrid">

@@ -7,6 +7,13 @@ public class CinemaHallDto
     public int TheaterId { get; set; }
 }
 
+public class GetCinemaHallDto
+{
+    public string Name { get; set; }
+    public string Theater { get; set; }
+    public int SeatCount { get; set; }
+}
+
 public class CreateCinemaHallDto
 {
     public string Name { get; set; }

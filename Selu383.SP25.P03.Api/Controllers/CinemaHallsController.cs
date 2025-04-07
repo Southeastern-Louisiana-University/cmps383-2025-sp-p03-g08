@@ -26,7 +26,16 @@ namespace Selu383.SP25.P03.Api.Controllers
         {
             try
             {
-                var cinemaHalls = await context.CinemaHalls.ToListAsync();
+                var cinemaHalls = await context
+                    .CinemaHalls.Include(_ => _.Theater)
+                    .Include(_ => _.Seats)
+                    .Select(_ => new GetCinemaHallDto
+                    {
+                        Name = _.Name,
+                        Theater = _.Theater.Name,
+                        SeatCount = _.Seats.Count(),
+                    })
+                    .ToListAsync();
 
                 return Ok(cinemaHalls);
             }
@@ -78,7 +87,7 @@ namespace Selu383.SP25.P03.Api.Controllers
                 await context.CinemaHalls.AddAsync(newCinemaHall);
                 await context.SaveChangesAsync();
 
-                newCinemaHall.Seats = SetDefaultSeats(newCinemaHall, 5, 5);
+                newCinemaHall.Seats = SetDefaultSeats(newCinemaHall, 5, 10);
 
                 await context.SaveChangesAsync();
 
@@ -151,9 +160,9 @@ namespace Selu383.SP25.P03.Api.Controllers
                     seats.Add(
                         new Seat
                         {
-                            Row = rowLabel, 
-                            Number = j + 1, 
-                            CinemaHallId = cinemaHall.Id, 
+                            Row = rowLabel,
+                            Number = j + 1,
+                            CinemaHallId = cinemaHall.Id,
                         }
                     );
                 }

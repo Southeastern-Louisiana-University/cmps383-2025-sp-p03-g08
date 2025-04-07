@@ -80,9 +80,15 @@ namespace Selu383.SP25.P03.Api
             {
                 var db = scope.ServiceProvider.GetRequiredService<DataContext>();
                 await db.Database.MigrateAsync();
-                SeedTheaters.Initialize(scope.ServiceProvider);
+                await SeedTheaters.Initialize(scope.ServiceProvider);
                 await SeedRoles.Initialize(scope.ServiceProvider);
                 await SeedUsers.Initialize(scope.ServiceProvider);
+                await SeedMovies.Initialize(scope.ServiceProvider);
+                await SeedPricingModels.Initialize(scope.ServiceProvider);
+                await SeedCinemaHalls.Initialize(scope.ServiceProvider);
+                await SeedSeats.Initialize(scope.ServiceProvider);
+                await SeedShowings.Initialize(scope.ServiceProvider);
+                await SeedMenuItems.Initialize(scope.ServiceProvider);
             }
 
             // Configure the HTTP request pipeline.

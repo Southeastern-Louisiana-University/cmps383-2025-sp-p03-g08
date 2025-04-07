@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+using Selu383.SP25.P03.Api.Data;
 using Selu383.SP25.P03.Api.Features.Seats;
 using Selu383.SP25.P03.Api.Features.Theaters;
 
@@ -7,7 +9,7 @@ public class Showing
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public string ShowType { get; set; }
-    public bool IsSoldOut { get; set; }
+    public bool IsSoldOut { get; set; } = false;
 
     public Movie Movie { get; set; }
     public int MovieId { get; set; }
@@ -18,3 +20,4 @@ public class Showing
     public PricingModel PricingModel { get; set; }
     public int PricingModelId { get; set; }
 }
+

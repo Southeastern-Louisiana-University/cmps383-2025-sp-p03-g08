@@ -74,6 +74,20 @@ namespace Selu383.SP25.P03.Api
                 options.SlidingExpiration = true;
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    "AllowLocalhost5173",
+                    policy =>
+                    {
+                        policy
+                            .WithOrigins("http://localhost:5173")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    }
+                );
+            });
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
@@ -103,6 +117,8 @@ namespace Selu383.SP25.P03.Api
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("AllowLocalhost5173");
+
             app.UseAuthentication();
             app.UseRouting()
                 .UseAuthorization()

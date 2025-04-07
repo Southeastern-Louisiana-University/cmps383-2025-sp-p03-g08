@@ -1,40 +1,71 @@
 //import { Link } from 'react-router-dom'
 
 
+import { useFetch } from "@mantine/hooks";
 import MovieCard from "../Components/MovieCard";
 import "../styles/HomePage.css";
+import { useEffect, useState } from "react";
+
+interface Movie {
+  id: number;
+  title: string;
+  description: string;
+  genre: string;
+  releaseDate: string; // You can also parse it to Date if necessary.
+  nowPlaying: boolean;
+  duration: string; // As returned, this is a string e.g., "01:52:00"
+  posterURL: string;
+}
+
+
 
 export default function HomePage() {
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [menuItems, setMenuItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const moviesResponse = await fetch('http://localhost:5249/api/Movies');
+        const moviesData = await moviesResponse.json();
+        // const menuItemsResponse = await fetch('http://localhost:5000/api/MenuItems');
+        // const menuItemsData = await menuItemsResponse.json();
+        setMovies(moviesData);
+        console.log(moviesResponse);
+        // setMenuItems(menuItemsData);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err);
+        } else {
+          setError(new Error("An unexpected error occurred."));
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <div className="homePage">
       <section className="homePage__nowPlaying">
         <h1>Now Playing</h1>
         <div className="homePage__movieGrid">
-          <MovieCard
-            poster="https://imgur.com/cIj8NsO.jpg"
-            title="Anora"
-            linkUrl="/showtimes/anora"
-          />
-          <MovieCard
-            poster="https://imgur.com/q01x2l0.jpg"
-            title="Captain America Brave New World"
-            linkUrl="/showtimes/captain-america"
-          />
-          <MovieCard
-            poster="https://imgur.com/nyrRI13.jpg"
-            title="Mickey 17"
-            linkUrl="/showtimes/mickey17"
-          />
-          <MovieCard
-            poster="https://imgur.com/AEJ9A4D.jpg"
-            title="The Monkey"
-            linkUrl="/showtimes/the-monkey"
-          />
-          <MovieCard
-            poster="https://imgur.com/iaZh6XJ.jpg" 
-            title="Last Breath"
-            linkUrl="/showtimes/last-breath"
-          />
+          {movies.length > 0 ? (
+            movies.map((movie) => (
+              <MovieCard
+                key={movie.id} // Unique key for each item
+                poster={movie.posterURL} // Use the URL from your movie data
+                title={movie.title}
+                // Optionally, generate a link URL based on the movie title
+               
+              />
+            ))
+          ) : (
+            <p>No movies available.</p>
+          )}
         </div>
       </section>
 

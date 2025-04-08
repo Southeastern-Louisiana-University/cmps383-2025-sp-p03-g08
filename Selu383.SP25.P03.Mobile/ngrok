@@ -1,0 +1,18 @@
+authtoken: "2uYPiKYOT5KKqYaMLM1dNN4tCk9_5kssKELEqcz8C8kQYeWKg"
+version: "2"
+region: us
+tunnels:
+  web:
+    addr: https://localhost:7027
+    url: https://immense-complete-walrus.ngrok-free.app
+    proto: http
+    schemes:
+      - https
+  expo:
+    addr: http://localhost:8081
+    url: http://immense-complete-walrus.ngrok-free.app
+    proto: http
+    schemes:
+      - http
+
+    

@@ -11,8 +11,8 @@ import AboutUsPage from "../pages/AboutUsPage";
 import LoginPage from "../pages/LoginPage";
 
 import HomePage from "../pages/HomePage";
-import ProtectedRoute from "../components/ProtectedRoute";
 import { SeatingPage } from "../pages/SeatingPage";
+import ProtectedRoute from "../Components/ProtectedRoute";
 
 export const RoutesConfig = () => {
   return (

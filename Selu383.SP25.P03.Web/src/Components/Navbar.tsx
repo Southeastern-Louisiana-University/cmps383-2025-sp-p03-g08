@@ -40,7 +40,7 @@ export default function Navbar() {
             className="navbar__icon"
           />
         </Link>
-        <div className="navbar__brand">Lion's Den Cinema</div>
+        <div>Lion's Den Cinema</div>
       </div>
       <ul className="navbar__links">
         <li>

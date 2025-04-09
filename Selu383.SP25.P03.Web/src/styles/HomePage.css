@@ -45,7 +45,8 @@
   flex-wrap: wrap;
 }
 .homePage__testimonialCard {
-  background: #f9f9f9;
+  background: #fdba74;
+  color: black;
   padding: 1rem;
   border-radius: 8px;
   flex: 1 1 250px;

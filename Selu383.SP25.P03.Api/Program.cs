@@ -26,7 +26,18 @@ namespace Selu383.SP25.P03.Api
             builder.Services.AddOpenApi();
             builder.Services.AddRazorPages();
 
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(
+                    "v1",
+                    new Microsoft.OpenApi.Models.OpenApiInfo
+                    {
+                        Title = "My API",
+                        Version = "v1",
+                        Description = "Description of your API", // optional
+                    }
+                );
+            });
 
             builder
                 .Services.AddIdentity<User, Role>()
@@ -112,7 +123,7 @@ namespace Selu383.SP25.P03.Api
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                    c.RoutePrefix = string.Empty; // Make Swagger UI available at the root URL
+                    c.RoutePrefix = "swagger"; // Make Swagger UI available at the root URL
                 });
             }
 

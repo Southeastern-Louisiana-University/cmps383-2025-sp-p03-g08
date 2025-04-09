@@ -23,31 +23,33 @@ namespace Selu383.SP25.P03.Api.Data
                     return; // DB has been seeded
                 }
 
+                var theater1 = context.Theaters.FirstOrDefaultAsync(_ => _.Name == "New Orleans");
+                var theater2 = context.Theaters.FirstOrDefaultAsync(_ => _.Name == "New York");
                 // Create a list of cinema halls with appropriate TheaterId references.
                 var cinemaHalls = new List<CinemaHall>
                 {
                     new CinemaHall
                     {
                         Name = "Hall 1",
-                        TheaterId = 1, // Make sure this TheaterId exists from your SeedTheaters
+                        TheaterId = theater1.Id, // Make sure this TheaterId exists from your SeedTheaters
                         Seats = new List<Seat>(), // Optionally, you can seed seats here.
                     },
                     new CinemaHall
                     {
                         Name = "Hall 2",
-                        TheaterId = 1,
+                        TheaterId = theater1.Id,
                         Seats = new List<Seat>(),
                     },
                     new CinemaHall
                     {
                         Name = "Hall 3",
-                        TheaterId = 2, // Assuming Theater with Id 2 exists.
+                        TheaterId = theater1.Id, // Assuming Theater with Id 2 exists.
                         Seats = new List<Seat>(),
                     },
                     new CinemaHall
                     {
                         Name = "Hall 4",
-                        TheaterId = 2,
+                        TheaterId = theater2.Id,
                         Seats = new List<Seat>(),
                     },
                 };

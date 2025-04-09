@@ -13,8 +13,15 @@
 }
 .movieCard__title {
   margin: 0.5rem 0;
-  color: rgb(243, 241, 241);
+  color: black;
 }
+
+@media (prefers-color-scheme: dark) {
+  .movieCard__title {
+    color: white;
+  }
+}
+
 .movieCard__link {
   text-decoration: none;
   background-color: #fdba74;

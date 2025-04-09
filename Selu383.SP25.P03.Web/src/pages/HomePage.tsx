@@ -39,8 +39,8 @@ export default function HomePage() {
         }
         const moviesData: Movie[] = await moviesResponse.json();
 
-        // Fetch menu items
-        const menuItemsResponse = await fetch('/api/MenuItems/showcase');
+        // Fetch menu items 
+        const menuItemsResponse = await fetch('/api/MenuItems');
         if (!menuItemsResponse.ok) {
           throw new Error(`Failed to fetch menu items, status: ${menuItemsResponse.status}`);
         }

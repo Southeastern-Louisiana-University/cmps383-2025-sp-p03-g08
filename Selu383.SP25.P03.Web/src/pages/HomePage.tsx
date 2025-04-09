@@ -33,14 +33,14 @@ export default function HomePage() {
     const fetchData = async () => {
       try {
         // Fetch movies
-        const moviesResponse = await fetch('http://localhost:5249/api/Movies');
+        const moviesResponse = await fetch('/api/Movies');
         if (!moviesResponse.ok) {
           throw new Error(`Failed to fetch movies, status: ${moviesResponse.status}`);
         }
         const moviesData: Movie[] = await moviesResponse.json();
 
         // Fetch menu items
-        const menuItemsResponse = await fetch('http://localhost:5249/api/MenuItems/showcase');
+        const menuItemsResponse = await fetch('/api/MenuItems/showcase');
         if (!menuItemsResponse.ok) {
           throw new Error(`Failed to fetch menu items, status: ${menuItemsResponse.status}`);
         }

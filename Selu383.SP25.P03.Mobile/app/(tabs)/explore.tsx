@@ -1,109 +1,175 @@
-import { StyleSheet, Image, Platform } from 'react-native';
+import React from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+} from "react-native";
+import { useRouter } from "expo-router";
+import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 
-import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+export default function ExploreScreen() {
+  const router = useRouter();
 
-export default function TabTwoScreen() {
+  const recentItems = [
+    { id: "v1", name: "Your Last Pizza" },
+    { id: "v2", name: "Your Last Burger" },
+  ];
+
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
+      headerBackgroundColor={{ light: "#121212", dark: "#121212" }}
+      backgroundColor="#000"
+    >
+      {/* App Logo */}
+      <View style={styles.logoContainer}>
+        <Text style={styles.logoText}>Lions Den Movies</Text>
+      </View>
+
+      {/* Lion Image */}
+      <View style={styles.lionContainer}>
+        <Image
+          source={require("@/assets/images/lion.jpeg")}
+          style={styles.lionImage}
+          resizeMode="contain"
         />
-      }>
+      </View>
+
+      {/* Explore Title */}
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
+        <ThemedText type="title" style={styles.titleText}>
+          Explore
+        </ThemedText>
       </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user's current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
+
+      {/* Food / Movies Buttons */}
+      <View style={styles.navButtonsContainer}>
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => router.push("/food")}
+        >
+          <Text style={styles.navButtonText}>Food</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => router.push("/Movies")}
+        >
+          <Text style={styles.navButtonText}>Movies</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Deals of Today */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Deals of Today</Text>
+        <TouchableOpacity style={styles.banner}>
+          <Text style={styles.bannerText}>🔥 20% off all sushi today! 🔥</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Order Again */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Order Again</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {recentItems.map((item) => (
+            <View key={item.id} style={styles.cardSmall}>
+              <View style={styles.cardImageSmall} />
+              <Text style={styles.cardTitleSmall}>{item.name}</Text>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  logoContainer: {
+    alignItems: "center",
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  logoText: {
+    color: "#fdba74",
+    fontSize: 28,
+    fontWeight: "bold",
+  },
+  lionContainer: {
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  lionImage: {
+    width: 120,
+    height: 120,
   },
   titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
+  titleText: {
+    color: "#fdba74",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+
+  navButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginHorizontal: 16,
+    marginBottom: 16,
+  },
+  navButton: {
+    backgroundColor: "#fdba74",
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    width: "40%",
+    alignItems: "center",
+  },
+  navButtonText: {
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+
+  section: {
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "600",
+    marginHorizontal: 16,
+    marginBottom: 8,
+  },
+
+  banner: {
+    backgroundColor: "#fdba74",
+    marginHorizontal: 16,
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  bannerText: {
+    color: "#000",
+    fontWeight: "bold",
+  },
+
+  cardSmall: {
+    width: 100,
+    marginLeft: 16,
+  },
+  cardImageSmall: {
+    height: 60,
+    backgroundColor: "#333",
+    borderRadius: 8,
+  },
+  cardTitleSmall: {
+    color: "#fff",
+    marginTop: 4,
+    fontSize: 14,
   },
 });

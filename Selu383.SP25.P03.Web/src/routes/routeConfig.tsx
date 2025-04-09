@@ -11,7 +11,7 @@ import AboutUsPage from "../pages/AboutUsPage";
 import LoginPage from "../pages/LoginPage";
 
 import HomePage from "../pages/HomePage";
-import ProtectedRoute from "../Components/ProtectedRoute";
+import ProtectedRoute from "../components/ProtectedRoute";
 import { SeatingPage } from "../pages/SeatingPage";
 
 export const RoutesConfig = () => {

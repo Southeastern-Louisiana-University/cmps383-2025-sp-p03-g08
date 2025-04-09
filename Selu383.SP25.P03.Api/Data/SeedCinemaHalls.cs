@@ -23,8 +23,8 @@ namespace Selu383.SP25.P03.Api.Data
                     return; // DB has been seeded
                 }
 
-                var theater1 = context.Theaters.FirstOrDefaultAsync(_ => _.Name == "New Orleans");
-                var theater2 = context.Theaters.FirstOrDefaultAsync(_ => _.Name == "New York");
+                var theater1 = context.Theaters.FirstOrDefault(_ => _.Name == "New Orleans");
+                var theater2 = context.Theaters.FirstOrDefault(_ => _.Name == "New York");
                 // Create a list of cinema halls with appropriate TheaterId references.
                 var cinemaHalls = new List<CinemaHall>
                 {

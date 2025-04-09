@@ -10,7 +10,12 @@
   align-items: center;
   justify-content: center;
   width: auto;
-  margin-right: 480px;
+  min-width:300px;
+  margin-right:auto;
+  color: #fdba74;
+  font-size: 1.5rem;
+  text-align: center;
+  text-decoration: none;
 }
 .navbar__icon {
   max-width: 100px;
@@ -18,7 +23,7 @@
   margin-right: 8px;
 }
 .navbar__brand {
-  color: #efbf04;
+  color: #fdba74;
   font-size: 1.5rem;
   text-decoration: none;
 }
@@ -28,16 +33,17 @@
   gap: 2rem;
   margin-right: 0px;
   padding: 20px;
+  min-width: fit-content;
 }
 .navbar__links a {
-  color: #efbf04;
+  color: #fdba74;
   text-decoration: none;
   font-size: 1.5rem;
   margin-right: 0px;
   padding: 0px;
 }
 .navbar__signin {
-  background-color: #efbf04;
+  background-color: #fdba74;
   border: none;
   border-radius: 8px;
   padding: 0.5rem 1rem;

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Selu383.SP25.P03.Api.Data;
 
@@ -11,13 +12,15 @@ using Selu383.SP25.P03.Api.Data;
 namespace Selu383.SP25.P03.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250329234538_AddMenuItem")]
+    partial class AddMenuItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -73,9 +76,6 @@ namespace Selu383.SP25.P03.Api.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<bool>("Showcase")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -242,6 +242,9 @@ namespace Selu383.SP25.P03.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("Accessibility")
+                        .HasColumnType("bit");
+
                     b.Property<int>("CinemaHallId")
                         .HasColumnType("int");
 
@@ -250,7 +253,7 @@ namespace Selu383.SP25.P03.Api.Migrations
 
                     b.Property<string>("Row")
                         .IsRequired()
-                        .HasColumnType("nvarchar(1)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SeatType")
                         .HasColumnType("int");
@@ -278,6 +281,7 @@ namespace Selu383.SP25.P03.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageURL")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ManagerId")
@@ -463,13 +467,14 @@ namespace Selu383.SP25.P03.Api.Migrations
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("PurchasedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("SeatId")
                         .HasColumnType("int");
 
                     b.Property<int>("ShowingId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -477,8 +482,6 @@ namespace Selu383.SP25.P03.Api.Migrations
                     b.HasIndex("SeatId");
 
                     b.HasIndex("ShowingId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Tickets");
                 });
@@ -609,14 +612,6 @@ namespace Selu383.SP25.P03.Api.Migrations
                         .HasForeignKey("ShowingId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("Selu383.SP25.P03.Api.Features.Users.User", "PurchasedBy")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PurchasedBy");
 
                     b.Navigation("Seat");
 

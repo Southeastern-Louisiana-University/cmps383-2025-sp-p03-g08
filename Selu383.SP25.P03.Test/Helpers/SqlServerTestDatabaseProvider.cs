@@ -17,9 +17,12 @@ public sealed class SqlServerTestDatabaseProvider
             using var sqlConnection = new SqlConnection("server=(localdb)\\mssqllocaldb");
 
             sqlConnection.Open();
-            var tempPath = Environment.GetEnvironmentVariable("SqlServerTestDatabaseMdfPath") ?? Path.GetTempPath();
+            var tempPath =
+                Environment.GetEnvironmentVariable("SqlServerTestDatabaseMdfPath")
+                ?? Path.GetTempPath();
             var mdfPath = $"{tempPath}{databaseName}".Replace("'", "''");
-            var sql = $@"
+            var sql =
+                $@"
         CREATE DATABASE
             [{databaseName}]
         ON PRIMARY (
@@ -76,7 +79,8 @@ public sealed class SqlServerTestDatabaseProvider
 
         sqlConnection.Open();
         //see: https://stackoverflow.com/a/49735672/1590723
-        using var command = new SqlCommand($@"
+        using var command = new SqlCommand(
+            $@"
 USE [{databaseName}]
 
 EXEC sp_MSForEachTable 'DISABLE TRIGGER ALL ON ?'
@@ -92,7 +96,9 @@ EXEC sp_MSForEachTable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'
 
 
 EXEC sp_MSForEachTable 'ENABLE TRIGGER ALL ON ?'
-", sqlConnection);
+",
+            sqlConnection
+        );
         command.ExecuteNonQuery();
     }
 
@@ -101,7 +107,8 @@ EXEC sp_MSForEachTable 'ENABLE TRIGGER ALL ON ?'
         string connection;
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            connection = $"Server=localhost,1433;Database={name};User Id=sa;Password=Password123!;TrustServerCertificate=True";
+            connection =
+                $"Server=localhost,1433;Database={name};User Id=sa;Password=Password123!;TrustServerCertificate=True";
         }
         else
         {
@@ -117,14 +124,17 @@ EXEC sp_MSForEachTable 'ENABLE TRIGGER ALL ON ?'
         using var sqlConnection = new SqlConnection(master);
 
         sqlConnection.Open();
-        using var command = new SqlCommand(@$"
+        using var command = new SqlCommand(
+            @$"
 IF EXISTS(select * from sys.databases where name='{databaseName}')
 BEGIN
     ALTER DATABASE  [{databaseName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
 END
 
 DROP DATABASE IF EXISTS [{databaseName}];
-", sqlConnection);
+",
+            sqlConnection
+        );
         command.ExecuteNonQuery();
         databaseName = null;
     }

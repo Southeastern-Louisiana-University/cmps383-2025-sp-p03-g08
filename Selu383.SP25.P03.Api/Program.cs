@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Selu383.SP25.P03.Api.Data;
@@ -14,14 +13,34 @@ namespace Selu383.SP25.P03.Api
 
             // Add services to the container.
             builder.Services.AddDbContext<DataContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DataContext") ?? throw new InvalidOperationException("Connection string 'DataContext' not found.")));
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DataContext")
+                        ?? throw new InvalidOperationException(
+                            "Connection string 'DataContext' not found."
+                        )
+                )
+            );
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddRazorPages();
 
-            builder.Services.AddIdentity<User, Role>()
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(
+                    "v1",
+                    new Microsoft.OpenApi.Models.OpenApiInfo
+                    {
+                        Title = "My API",
+                        Version = "v1",
+                        Description = "Description of your API", // optional
+                    }
+                );
+            });
+
+            builder
+                .Services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
 
@@ -42,7 +61,7 @@ namespace Selu383.SP25.P03.Api
 
                 // User settings.
                 options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
 
@@ -66,31 +85,58 @@ namespace Selu383.SP25.P03.Api
                 options.SlidingExpiration = true;
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    "AllowLocalhost5173",
+                    policy =>
+                    {
+                        policy
+                            .WithOrigins("http://localhost:5173")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    }
+                );
+            });
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<DataContext>();
                 await db.Database.MigrateAsync();
-                SeedTheaters.Initialize(scope.ServiceProvider);
+                await SeedTheaters.Initialize(scope.ServiceProvider);
                 await SeedRoles.Initialize(scope.ServiceProvider);
                 await SeedUsers.Initialize(scope.ServiceProvider);
+                await SeedMovies.Initialize(scope.ServiceProvider);
+                await SeedPricingModels.Initialize(scope.ServiceProvider);
+                await SeedCinemaHalls.Initialize(scope.ServiceProvider);
+                await SeedSeats.Initialize(scope.ServiceProvider);
+                await SeedShowings.Initialize(scope.ServiceProvider);
+                await SeedMenuItems.Initialize(scope.ServiceProvider);
             }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                app.UseSwagger(); // Enable Swagger endpoint
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                    c.RoutePrefix = "swagger"; // Make Swagger UI available at the root URL
+                });
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("AllowLocalhost5173");
+
             app.UseAuthentication();
             app.UseRouting()
-               .UseAuthorization()
-               .UseEndpoints(x =>
-               {
-                   x.MapControllers();
-               });
+                .UseAuthorization()
+                .UseEndpoints(x =>
+                {
+                    x.MapControllers();
+                });
             app.UseStaticFiles();
 
             if (app.Environment.IsDevelopment())

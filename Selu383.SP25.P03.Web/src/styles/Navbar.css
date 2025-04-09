@@ -27,8 +27,7 @@
   list-style: none;
   gap: 2rem;
   margin-right: 0px;
-  padding:20px;
-
+  padding: 20px;
 }
 .navbar__links a {
   color: #efbf04;
@@ -36,7 +35,6 @@
   font-size: 1.5rem;
   margin-right: 0px;
   padding: 0px;
-  
 }
 .navbar__signin {
   background-color: #efbf04;
@@ -47,4 +45,51 @@
   cursor: pointer;
   color: #100e0e;
   margin-left: 1rem;
+}
+
+.logout-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.logout-confirm-dialog {
+  text-align: center;
+  background-color: black;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logout-confirm-dialog h3 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.logout-confirm-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.logout-confirm-button {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.logout-confirm-button:hover {
+  background-color: #ff7875;
 }

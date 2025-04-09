@@ -8,12 +8,16 @@ namespace Selu383.SP25.P03.Api.Data
     {
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
-            using (var context = new DataContext(serviceProvider.GetRequiredService<DbContextOptions<DataContext>>()))
+            using (
+                var context = new DataContext(
+                    serviceProvider.GetRequiredService<DbContextOptions<DataContext>>()
+                )
+            )
             {
                 // Look for any roles.
                 if (context.Roles.Any())
                 {
-                    return;   // DB has been seeded
+                    return; // DB has been seeded
                 }
                 var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
                 await roleManager.CreateAsync(new Role { Name = UserRoleNames.Admin });

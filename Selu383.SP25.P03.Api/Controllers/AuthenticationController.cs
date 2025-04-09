@@ -8,6 +8,7 @@ using Selu383.SP25.P03.Api.Features.Users;
 namespace Selu383.SP25.P03.Api.Controllers
 {
     [Route("api/authentication")]
+    [ApiController]
     public class AuthenticationController : ControllerBase
     {
         private readonly SignInManager<User> signInManager;

@@ -1,3 +1,4 @@
+import "../styles/MenuItem.css";
 export default function FoodAndDrinksPage() {
   const items = [
     {
@@ -20,13 +21,14 @@ export default function FoodAndDrinksPage() {
   return (
     <div style={{ padding: '2rem' }}>
       <h1>Food & Drinks</h1>
-      <p>Discover a delicious mix of flavors to complement your movie experience!</p>
-      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+      <p style ={{marginBottom:'30px'}}>Have your favorite meal delivered to your seat!</p>
+      <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap', marginTop: '1rem', justifyContent:'center'}}>
         {items.map((item, idx) => (
-          <div key={idx} style={{ width: '300px', border: '1px solid #ddd', borderRadius: '8px', padding: '1rem' }}>
-            <img src={item.image} alt={item.name} style={{ width: '100%', borderRadius: '8px' }} />
+          <div key={idx} style={{ width: '300px', borderRadius: '8px', padding: '1rem',backgroundColor:'#f5f5f5'}}>
+            <img src={item.image} alt={item.name} style={{ width: '100%', borderRadius: '8px', height:'50%'}} />
             <h2>{item.name}</h2>
-            <p>{item.description}</p>
+            <p style={{height:'10%', maxWidth:'100%'}}>{item.description}</p>
+            <button className="menu-item-button">Order Now</button>
           </div>
         ))}
       </div>

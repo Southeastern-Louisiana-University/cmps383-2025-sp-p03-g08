@@ -4,7 +4,7 @@ using Selu383.SP25.P03.Api.Features.Users;
 
 public class Ticket
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public Seat Seat { get; set; }
     public int SeatId { get; set; }
     public Showing Showing { get; set; }

@@ -26,16 +26,16 @@ namespace Selu383.SP25.P03.Api.Controllers
         }
 
         [HttpGet]
-        public IQueryable<TheaterDto> GetAllTheaters()
+        public async Task<ActionResult<IEnumerable<TheaterDto>>> GetAllTheaters()
         {
-            return GetTheaterDtos(theaters);
+            var results = await GetTheaterDtos(theaters).ToListAsync();
+            return Ok(results);
         }
 
-        [HttpGet]
-        [Route("{id}")]
-        public ActionResult<TheaterDto> GetTheaterById(int id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TheaterDto>> GetTheaterById(int id)
         {
-            var result = GetTheaterDtos(theaters.Where(x => x.Id == id)).FirstOrDefault();
+            var result = await GetTheaterDtos(theaters.Where(x => x.Id == id)).FirstOrDefaultAsync();
             if (result == null)
             {
                 return NotFound();
@@ -44,11 +44,29 @@ namespace Selu383.SP25.P03.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("zipcode/{zipcode}")]
+        public async Task<ActionResult<TheaterDto>> GetTheaterByZipcode(string zipcode)
+        {
+               if (zipcode == null || zipcode.Length != 5)
+                {
+                    throw new Exception("Please enter a 5 digit zip code.");
+                }
+                
+                var theater = await GetTheaterDtos(theaters.Where(_=>_.Address.Contains(zipcode))).FirstOrDefaultAsync();
+
+                if(theater is null)
+                {
+                    return NotFound();
+                };
+
+                return theater;
+        }
+
         [HttpPost]
         [Authorize(Roles = UserRoleNames.Admin)]
-        public ActionResult<TheaterDto> CreateTheater(TheaterDto dto)
+        public async Task<ActionResult<TheaterDto>> CreateTheater(TheaterDto dto)
         {
-            if (IsInvalid(dto))
+            if (await IsInvalid(dto))
             {
                 return BadRequest();
             }
@@ -61,19 +79,18 @@ namespace Selu383.SP25.P03.Api.Controllers
             };
             theaters.Add(theater);
 
-            dataContext.SaveChanges();
+            await dataContext.SaveChangesAsync();
 
             dto.Id = theater.Id;
 
             return CreatedAtAction(nameof(GetTheaterById), new { id = dto.Id }, dto);
         }
 
-        [HttpPut]
-        [Route("{id}")]
+        [HttpPut("{id}")]
         [Authorize]
         public async Task<ActionResult<TheaterDto>> UpdateTheater(int id, TheaterDto dto)
         {
-            if (IsInvalid(dto))
+            if (await IsInvalid(dto))
             {
                 return BadRequest();
             }
@@ -85,7 +102,7 @@ namespace Selu383.SP25.P03.Api.Controllers
                 return Forbid();
             }
 
-            var theater = theaters.FirstOrDefault(x => x.Id == id);
+            var theater = await theaters.FirstOrDefaultAsync(x => x.Id == id);
             if (theater == null)
             {
                 return NotFound();
@@ -99,7 +116,7 @@ namespace Selu383.SP25.P03.Api.Controllers
                 theater.ManagerId = dto.ManagerId;
             }
 
-            dataContext.SaveChanges();
+            await dataContext.SaveChangesAsync();
 
             dto.Id = theater.Id;
             dto.ManagerId = theater.ManagerId;
@@ -107,12 +124,11 @@ namespace Selu383.SP25.P03.Api.Controllers
             return Ok(dto);
         }
 
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpDelete("{id}")]
         [Authorize(Roles = UserRoleNames.Admin)]
-        public ActionResult DeleteTheater(int id)
+        public async Task<ActionResult> DeleteTheater(int id)
         {
-            var theater = theaters.FirstOrDefault(x => x.Id == id);
+            var theater = await theaters.FirstOrDefaultAsync(x => x.Id == id);
             if (theater == null)
             {
                 return NotFound();
@@ -120,17 +136,30 @@ namespace Selu383.SP25.P03.Api.Controllers
 
             theaters.Remove(theater);
 
-            dataContext.SaveChanges();
+            await dataContext.SaveChangesAsync();
 
             return Ok();
         }
 
-        private bool IsInvalid(TheaterDto dto)
+        private async Task<bool> IsInvalid(TheaterDto dto)
         {
-            return string.IsNullOrWhiteSpace(dto.Name)
+            if (string.IsNullOrWhiteSpace(dto.Name)
                 || dto.Name.Length > 120
-                || string.IsNullOrWhiteSpace(dto.Address)
-                || dto.ManagerId != null && !users.Any(x => x.Id == dto.ManagerId);
+                || string.IsNullOrWhiteSpace(dto.Address))
+            {
+                return true;
+            }
+
+            if (dto.ManagerId != null)
+            {
+                bool exists = await users.AnyAsync(x => x.Id == dto.ManagerId);
+                if (!exists)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static IQueryable<TheaterDto> GetTheaterDtos(IQueryable<Theater> theaters)

@@ -35,19 +35,26 @@ namespace Selu383.SP25.P03.Api.Controllers
             return seat;
         }
 
-        [HttpGet("by-hall/{hallId}")]
-        public async Task<ActionResult<List<GetSeatDto>>> GetByHallId(int hallId)
+        [HttpGet("by-showing/{showingId}")]
+        public async Task<ActionResult<List<SeatDto>>> GetByHallId(int showingId)
         {
-            var hall = await _context.CinemaHalls.FirstOrDefaultAsync(_ => _.Id == hallId);
+            var hallId = await _context.Showings
+    .Where(s => s.Id == showingId)
+    .Select(s => s.CinemaHallId)
+    .FirstOrDefaultAsync();
 
-            if (hall is null)
+            var hallCount = await _context.CinemaHalls.CountAsync(_=> _.Id == hallId);
+
+            if (hallCount<1)
             {
-                return NotFound($"CinemaHall with Id: {hallId} does not exist.");
+                return NotFound($"No cinema hall associated with showing with Id: {showingId}");
             }
+
             var seats = await _context
                 .Seats.Where(_ => _.CinemaHallId == hallId)
-                .Select(_ => new GetSeatDto
+                .Select(_ => new SeatDto
                 {
+                    Id=_.Id,
                     Row = _.Row,
                     Number = _.Number,
                     SeatType = _.SeatType,
@@ -55,6 +62,17 @@ namespace Selu383.SP25.P03.Api.Controllers
                 })
                 .ToListAsync();
 
+                var ticketsSold = await _context.Tickets.Where(_=> _.ShowingId == showingId).ToListAsync();
+
+                foreach (var ticket in ticketsSold)
+                {
+                var seat = seats.FirstOrDefault(_=> _.Id == ticket.SeatId);
+                if(seat is not null)
+                {
+                seat.Status = "Unavailable";
+                }
+                }
+            
             return Ok(seats);
         }
 

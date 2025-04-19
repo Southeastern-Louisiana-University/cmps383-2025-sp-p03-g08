@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Selu383.SP25.P03.Api.Data;
 
@@ -11,9 +12,11 @@ using Selu383.SP25.P03.Api.Data;
 namespace Selu383.SP25.P03.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250419211532_UpdateTicketAgain")]
+    partial class UpdateTicketAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -488,13 +491,12 @@ namespace Selu383.SP25.P03.Api.Migrations
 
                     b.HasIndex("SeatId");
 
+                    b.HasIndex("ShowingId");
+
                     b.HasIndex("TicketCode")
                         .IsUnique();
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("ShowingId", "SeatId")
-                        .IsUnique();
 
                     b.ToTable("Tickets");
                 });

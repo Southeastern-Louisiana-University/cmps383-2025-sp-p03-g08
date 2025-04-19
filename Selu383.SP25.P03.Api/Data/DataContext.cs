@@ -30,7 +30,7 @@ namespace Selu383.SP25.P03.Api.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<PricingModel> PricingModels { get; set; }
 
-        public DbSet<MenuItem> MenuItems {get; set;}
+        public DbSet<MenuItem> MenuItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -69,6 +69,9 @@ namespace Selu383.SP25.P03.Api.Data
                 .WithMany() // Assuming Showing doesn't have Tickets as a navigation property
                 .HasForeignKey(t => t.ShowingId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Ticket>().HasIndex(t => t.TicketCode).IsUnique();
+            builder.Entity<Ticket>().HasIndex(t => new { t.ShowingId, t.SeatId }).IsUnique();
         }
     }
 }

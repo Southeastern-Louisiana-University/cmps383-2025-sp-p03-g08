@@ -25,9 +25,19 @@ namespace Selu383.SP25.P03.Api.Controllers
 
         // GET: api/Seats/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Seat>> GetSeat(int id)
+        public async Task<ActionResult<SeatDto>> GetSeat(int id)
         {
-            var seat = await _context.Seats.FindAsync(id);
+            var seat = await _context
+                .Seats.Where(s => s.Id == id)
+                .Select(s => new SeatDto
+                {
+                    Row = s.Row,
+                    Number = s.Number,
+                    Status = s.Status,
+                    SeatType = s.SeatType,
+                })
+                .FirstOrDefaultAsync();
+
             if (seat == null)
             {
                 return NotFound();
@@ -38,14 +48,14 @@ namespace Selu383.SP25.P03.Api.Controllers
         [HttpGet("by-showing/{showingId}")]
         public async Task<ActionResult<List<SeatDto>>> GetByHallId(int showingId)
         {
-            var hallId = await _context.Showings
-    .Where(s => s.Id == showingId)
-    .Select(s => s.CinemaHallId)
-    .FirstOrDefaultAsync();
+            var hallId = await _context
+                .Showings.Where(s => s.Id == showingId)
+                .Select(s => s.CinemaHallId)
+                .FirstOrDefaultAsync();
 
-            var hallCount = await _context.CinemaHalls.CountAsync(_=> _.Id == hallId);
+            var hallCount = await _context.CinemaHalls.CountAsync(_ => _.Id == hallId);
 
-            if (hallCount<1)
+            if (hallCount < 1)
             {
                 return NotFound($"No cinema hall associated with showing with Id: {showingId}");
             }
@@ -54,7 +64,7 @@ namespace Selu383.SP25.P03.Api.Controllers
                 .Seats.Where(_ => _.CinemaHallId == hallId)
                 .Select(_ => new SeatDto
                 {
-                    Id=_.Id,
+                    Id = _.Id,
                     Row = _.Row,
                     Number = _.Number,
                     SeatType = _.SeatType,
@@ -62,17 +72,19 @@ namespace Selu383.SP25.P03.Api.Controllers
                 })
                 .ToListAsync();
 
-                var ticketsSold = await _context.Tickets.Where(_=> _.ShowingId == showingId).ToListAsync();
+            var ticketsSold = await _context
+                .Tickets.Where(_ => _.ShowingId == showingId)
+                .ToListAsync();
 
-                foreach (var ticket in ticketsSold)
+            foreach (var ticket in ticketsSold)
+            {
+                var seat = seats.FirstOrDefault(_ => _.Id == ticket.SeatId);
+                if (seat is not null)
                 {
-                var seat = seats.FirstOrDefault(_=> _.Id == ticket.SeatId);
-                if(seat is not null)
-                {
-                seat.Status = "Unavailable";
+                    seat.Status = "Unavailable";
                 }
-                }
-            
+            }
+
             return Ok(seats);
         }
 

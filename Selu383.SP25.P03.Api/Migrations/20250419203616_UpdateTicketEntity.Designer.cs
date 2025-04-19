@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Selu383.SP25.P03.Api.Data;
 
@@ -11,9 +12,11 @@ using Selu383.SP25.P03.Api.Data;
 namespace Selu383.SP25.P03.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250419203616_UpdateTicketEntity")]
+    partial class UpdateTicketEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -463,10 +466,6 @@ namespace Selu383.SP25.P03.Api.Migrations
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PurchasedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("SeatId")
                         .HasColumnType("int");
 
@@ -477,24 +476,19 @@ namespace Selu383.SP25.P03.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("TicketType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SeatId");
 
+                    b.HasIndex("ShowingId");
+
                     b.HasIndex("TicketCode")
                         .IsUnique();
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("ShowingId", "SeatId")
-                        .IsUnique();
 
                     b.ToTable("Tickets");
                 });
@@ -626,15 +620,17 @@ namespace Selu383.SP25.P03.Api.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Selu383.SP25.P03.Api.Features.Users.User", "User")
+                    b.HasOne("Selu383.SP25.P03.Api.Features.Users.User", "PurchasedBy")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PurchasedBy");
 
                     b.Navigation("Seat");
 
                     b.Navigation("Showing");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CinemaHall", b =>

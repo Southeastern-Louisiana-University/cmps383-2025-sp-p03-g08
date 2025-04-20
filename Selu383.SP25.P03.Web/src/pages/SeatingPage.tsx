@@ -1,7 +1,7 @@
 import { Button, Text } from '@mantine/core';
 import '../styles/SeatingPage.css';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 
 
 interface Seat {
@@ -118,7 +118,12 @@ export function SeatingPage() {
             : 'No seats selected yet.'}
         </Text>
         {seats.filter((seat) => seat.selected).length > 0 && (
-          <Button className="purchaseButton">Continue</Button>
+          <Link to={"/checkout"}>
+          <Button className="purchaseButton" onClick={()=> {
+            const selectedSeats = seats.filter((seat)=> seat.selected);
+            sessionStorage.setItem('selectedSeats',JSON.stringify(selectedSeats))
+          }}>Continue</Button>
+          </Link>
         )}
       </div>
     </div>

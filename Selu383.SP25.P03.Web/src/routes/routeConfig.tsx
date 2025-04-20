@@ -12,6 +12,7 @@ import LoginPage from "../pages/LoginPage";
 import HomePage from "../pages/HomePage";
 import { SeatingPage } from "../pages/SeatingPage";
 import ProtectedRoute from "../Components/ProtectedRoute";
+import { CheckoutPage } from "../pages/CheckoutPage";
 
 export const RoutesConfig = () => {
   return (
@@ -23,6 +24,7 @@ export const RoutesConfig = () => {
       <Route path={routes.theaters} element={<TheaterPage />} />
       <Route path={routes.showtimes} element={<ShowTimesPage />} />
       <Route path={routes.seating} element={<SeatingPage />} />
+      <Route path={routes.checkout} element={<CheckoutPage />} />
       <Route path={routes.foodndrinks} element={<FoodAndDrinksPage />} />
       <Route path={routes.about} element={<AboutUsPage />} />
 

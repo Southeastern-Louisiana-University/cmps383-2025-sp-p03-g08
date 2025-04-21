@@ -8,7 +8,7 @@ import {
   Stack,
   Alert,
 } from "@mantine/core";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { routes } from "../routes/routeIndex";
 import { useAuth } from "../hooks/useAuth";
 
@@ -25,17 +25,21 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { login } = useAuth();
+
+  const redirectTo = location.state?.redirectTo ?? '/';
 
   useEffect(() => {
     let redirectTimer: number;
 
     if (loginSuccess) {
-      // on log in success, redirect after 3 secs
       redirectTimer = window.setTimeout(() => {
-        navigate(routes.home);
+        navigate(redirectTo, { state: { fromLogin: true } }); 
       }, 3000);
     }
+    
     // Clean up timer if component unmounts
     return () => {
       if (redirectTimer) clearTimeout(redirectTimer);
@@ -66,7 +70,7 @@ export default function LoginPage() {
 
       .then((data: UserDto) => {
         console.log("Logged in as", data);
-        login(data); // Update auth context
+        login(data);
         setLoginSuccess(true);
       })
 
@@ -86,7 +90,7 @@ export default function LoginPage() {
         Sign in
       </Title>
 
-      {loginSuccess ? ( // if login success, tell user and redirect to homepage
+      {loginSuccess ? ( 
         <Alert
           color="green"
           title="Login Successful!"
@@ -114,7 +118,7 @@ export default function LoginPage() {
               onChange={(e) => setUsername(e.target.value)}
               styles={{
                 label: {
-                  width: "100px", // Adjust label width as needed
+                  width: "100px",
                   ta: "left",
                 },
                 input: {

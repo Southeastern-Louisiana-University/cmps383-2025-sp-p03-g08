@@ -1,59 +1,36 @@
 import { Card, Group, Text, Button, Divider, Stack } from '@mantine/core';
-import { useEffect, useState } from 'react';
 
 type SeatItem = {
   id: string;
   row: string;
+  ticketType: "Adult" | "Child" | "Senior";
 };
 
 interface CartProps {
   items: SeatItem[];
   onCheckout: () => void;
   title?: string;
+  onTicketTypeChange: (seatId: string, type: "Adult" | "Child" | "Senior") => void;
 }
 
-type AgeType = 'Adult' | 'Child' | 'Senior';
-
-const PRICE_MAP: Record<AgeType, number> = {
+const PRICE_MAP: Record<SeatItem["ticketType"], number> = {
   Adult: 12,
   Child: 8,
   Senior: 10,
 };
 
-export function Cart({ items, onCheckout, title = 'Your Cart' }: CartProps) {
-  const [seatItems, setSeatItems] = useState<
-    (SeatItem & { ageType: AgeType })[]
-  >([]);
-
-  useEffect(() => {
-    const initialized = items.map((seat) => ({
-      ...seat,
-      ageType: 'Adult' as AgeType,
-    }));
-    setSeatItems(initialized);
-  }, [items]);
-
-  const handleAgeTypeChange = (seatId: string, newType: AgeType) => {
-    setSeatItems((prev) =>
-      prev.map((seat) =>
-        seat.id === seatId ? { ...seat, ageType: newType } : seat
-      )
-    );
-  };
-
-  const total = seatItems.reduce((sum, seat) => {
-    return sum + PRICE_MAP[seat.ageType];
-  }, 0);
+export function Cart({ items, onCheckout, title = 'Your Cart', onTicketTypeChange }: CartProps) {
+  const total = items.reduce((sum, seat) => sum + PRICE_MAP[seat.ticketType], 0);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <Text fw={600} style={{ fontSize: '32px', marginBottom: '1rem',marginTop:'10px' }}>
+      <Text fw={600} style={{ fontSize: '32px', marginBottom: '1rem', marginTop: '10px' }}>
         {title}
       </Text>
       <Divider my="xs" />
 
       <Stack gap="sm">
-        {seatItems.map((seat) => (
+        {items.map((seat) => (
           <div
             key={seat.id}
             style={{
@@ -64,13 +41,14 @@ export function Cart({ items, onCheckout, title = 'Your Cart' }: CartProps) {
             }}
           >
             <Group justify="space-between">
-              <Text style={{ fontSize: '20px',marginTop:'0', marginBottom: '5px'}}>{`Seat ${seat.row}-${seat.id}`}</Text>
+              <Text style={{ fontSize: '20px', marginTop: '0', marginBottom: '5px' }}>
+                {`Seat ${seat.row}-${seat.id}`}
+              </Text>
 
-              {/* Native select dropdown */}
               <select
-                value={seat.ageType}
+                value={seat.ticketType}
                 onChange={(e) =>
-                  handleAgeTypeChange(seat.id, e.target.value as AgeType)
+                  onTicketTypeChange(seat.id, e.target.value as "Adult" | "Child" | "Senior")
                 }
                 style={{
                   padding: '4px 8px',
@@ -84,7 +62,9 @@ export function Cart({ items, onCheckout, title = 'Your Cart' }: CartProps) {
                 <option value="Senior">Senior</option>
               </select>
 
-              <Text style={{marginTop:'5px', marginBottom:'0px'}}>${PRICE_MAP[seat.ageType].toFixed(2)}</Text>
+              <Text style={{ marginTop: '5px', marginBottom: '0px' }}>
+                ${PRICE_MAP[seat.ticketType].toFixed(2)}
+              </Text>
             </Group>
           </div>
         ))}
@@ -95,20 +75,19 @@ export function Cart({ items, onCheckout, title = 'Your Cart' }: CartProps) {
       <Group justify="space-between" mt="md">
         <Text fw={600}>Total: ${total.toFixed(2)}</Text>
         <Button
-  onClick={onCheckout}
-  style={{
-    backgroundColor: '#fdba74',
-    borderRadius: '5px',
-    border: 0,
-    height: '40px',
-    width: '100px',
-    cursor: 'pointer',
-    color: '#100e0e', // optional: add dark text for contrast
-  }}
->
-  Checkout
-</Button>
-
+          onClick={onCheckout}
+          style={{
+            backgroundColor: '#fdba74',
+            borderRadius: '5px',
+            border: 0,
+            height: '40px',
+            width: '100px',
+            cursor: 'pointer',
+            color: '#100e0e',
+          }}
+        >
+          Checkout
+        </Button>
       </Group>
     </Card>
   );

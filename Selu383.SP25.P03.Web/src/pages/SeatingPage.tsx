@@ -6,8 +6,8 @@ import { Link, useParams } from 'react-router';
 
 interface Seat {
   id: string;
-  row: string;      // e.g., "A", "B", etc.
-  status: string;   // e.g., "Available", "Occupied", "Reserved"
+  row: string;      
+  status: string;  
   selected: boolean;
 }
 
@@ -120,8 +120,17 @@ export function SeatingPage() {
         {seats.filter((seat) => seat.selected).length > 0 && (
           <Link to={"/checkout"}>
           <Button className="purchaseButton" onClick={()=> {
-            const selectedSeats = seats.filter((seat)=> seat.selected);
+           const selectedSeats = seats
+           .filter((seat) => seat.selected)
+           .map((seat) => ({
+            id: seat.id,
+            row: seat.row, // ✅ restore this!
+            ticketType: "Adult"
+          }));          
             sessionStorage.setItem('selectedSeats',JSON.stringify(selectedSeats))
+            if (params.showingId) {
+              sessionStorage.setItem('showingId', params.showingId); // ✅ store it
+            }
           }}>Continue</Button>
           </Link>
         )}

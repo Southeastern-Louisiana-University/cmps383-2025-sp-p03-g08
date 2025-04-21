@@ -13,6 +13,8 @@ import HomePage from "../pages/HomePage";
 import { SeatingPage } from "../pages/SeatingPage";
 import ProtectedRoute from "../Components/ProtectedRoute";
 import { CheckoutPage } from "../pages/CheckoutPage";
+import PaymentPage from "../pages/PaymentPage";
+import { ViewTicketsPage } from "../pages/ViewTicketsPage";
 
 export const RoutesConfig = () => {
   return (
@@ -25,6 +27,8 @@ export const RoutesConfig = () => {
       <Route path={routes.showtimes} element={<ShowTimesPage />} />
       <Route path={routes.seating} element={<SeatingPage />} />
       <Route path={routes.checkout} element={<CheckoutPage />} />
+      <Route path={routes.payment} element={<PaymentPage />} />
+      <Route path={routes.viewTickets} element={<ViewTicketsPage />} />
       <Route path={routes.foodndrinks} element={<FoodAndDrinksPage />} />
       <Route path={routes.about} element={<AboutUsPage />} />
 

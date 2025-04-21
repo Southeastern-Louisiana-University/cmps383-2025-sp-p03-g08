@@ -10,6 +10,7 @@ namespace Selu383.SP25.P03.Api.Features.Theaters
         [MaxLength(120)]
         public required string Name { get; set; }
         public required string Address { get; set; }
+        public required string ZipCode {get; set;}
         public int? ManagerId { get; set; }
         public virtual User? Manager { get; set; }
         public List<CinemaHall> CinemaHalls { get; set; }

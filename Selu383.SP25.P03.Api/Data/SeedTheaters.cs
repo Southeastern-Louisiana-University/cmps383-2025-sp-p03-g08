@@ -20,16 +20,21 @@ namespace Selu383.SP25.P03.Api.Data
                 }
 
                 context.Theaters.AddRange(
-                    new Theater { Name = "New York", Address = "570 2nd Ave, New York, NY 10016" },
+                    new Theater { 
+                        Name = "New York",
+                        Address = "570 2nd Ave, New York, NY", 
+                        ZipCode = "10016", },
                     new Theater
                     {
                         Name = "New Orleans",
-                        Address = "636 N Broad St, New Orleans, LA 70119",
+                        Address = "636 N Broad St, New Orleans, LA",
+                        ZipCode = "70119",
                     },
                     new Theater
                     {
                         Name = "Los Angeles",
-                        Address = "4020 Marlton Ave, Los Angeles, CA 90008",
+                        Address = "4020 Marlton Ave, Los Angeles, CA",
+                        ZipCode = "90008",
                     }
                 );
 

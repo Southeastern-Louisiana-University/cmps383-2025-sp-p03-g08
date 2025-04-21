@@ -33,16 +33,20 @@ export default function HomePage() {
     const fetchData = async () => {
       try {
         // Fetch movies
-        const moviesResponse = await fetch('/api/Movies');
+        const moviesResponse = await fetch("/api/Movies");
         if (!moviesResponse.ok) {
-          throw new Error(`Failed to fetch movies, status: ${moviesResponse.status}`);
+          throw new Error(
+            `Failed to fetch movies, status: ${moviesResponse.status}`
+          );
         }
         const moviesData: Movie[] = await moviesResponse.json();
 
-        // Fetch menu items 
-        const menuItemsResponse = await fetch('/api/MenuItems');
+        // Fetch menu items
+        const menuItemsResponse = await fetch("/api/MenuItems");
         if (!menuItemsResponse.ok) {
-          throw new Error(`Failed to fetch menu items, status: ${menuItemsResponse.status}`);
+          throw new Error(
+            `Failed to fetch menu items, status: ${menuItemsResponse.status}`
+          );
         }
         const menuItemsData: MenuItem[] = await menuItemsResponse.json();
 
@@ -77,7 +81,7 @@ export default function HomePage() {
                 key={movie.id}
                 poster={movie.posterURL}
                 title={movie.title}
-                linkUrl={`/showtimes/${movie.title.toLowerCase().replace(/\s+/g, '-')}`}
+                linkUrl={`/showtimes/${movie.title}`}
               />
             ))
           ) : (

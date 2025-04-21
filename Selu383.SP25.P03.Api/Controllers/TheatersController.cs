@@ -44,6 +44,70 @@ namespace Selu383.SP25.P03.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("nearest/{zipCode}")]
+        public ActionResult<TheaterDto> GetNearestTheater(string zipCode)
+        {
+            if (string.IsNullOrWhiteSpace(zipCode))
+            {
+                return BadRequest("ZIP code is required");
+            }
+
+            // Get all theaters
+            var allTheaters = theaters.ToList();
+            
+            if (!allTheaters.Any())
+            {
+                return NotFound("No theaters available");
+            }
+
+            // find theater with matching first 3 digits of ZIP code
+            var nearestTheater = allTheaters
+                .OrderBy(t => CalculateZipCodeSimilarity(t.ZipCode, zipCode))
+                .FirstOrDefault();
+
+            if (nearestTheater == null)
+            {
+                return NotFound("No theaters found near this ZIP code");
+            }
+
+            var dto = new TheaterDto
+            {
+                Id = nearestTheater.Id,
+                Name = nearestTheater.Name,
+                Address = nearestTheater.Address,
+                ZipCode = nearestTheater.ZipCode,
+                ManagerId = nearestTheater.ManagerId
+            };
+
+            return Ok(dto);
+        }
+
+        // similarity measure between ZIP codes, lower value means more similar
+        private static int CalculateZipCodeSimilarity(string zip1, string zip2)
+        {
+            // If the first 3 digits match, they're in the same general area
+            if (zip1.Length >= 3 && zip2.Length >= 3 && zip1.Substring(0, 3) == zip2.Substring(0, 3))
+            {
+                return 0;
+            }
+
+            // If the first 2 digits match, they're in the same region
+            if (zip1.Length >= 2 && zip2.Length >= 2 && zip1.Substring(0, 2) == zip2.Substring(0, 2))
+            {
+                return 1;
+            }
+
+            // If the first digit matches, they're in the same state/area
+            if (zip1.Length >= 1 && zip2.Length >= 1 && zip1[0] == zip2[0])
+            {
+                return 2;
+            }
+
+            // Otherwise, return a large distance
+            return 999;
+        }
+
         [HttpPost]
         [Authorize(Roles = UserRoleNames.Admin)]
         public ActionResult<TheaterDto> CreateTheater(TheaterDto dto)
@@ -58,6 +122,7 @@ namespace Selu383.SP25.P03.Api.Controllers
                 Name = dto.Name,
                 Address = dto.Address,
                 ManagerId = dto.ManagerId,
+                ZipCode = dto.ZipCode,
             };
             theaters.Add(theater);
 
@@ -93,6 +158,7 @@ namespace Selu383.SP25.P03.Api.Controllers
 
             theater.Name = dto.Name;
             theater.Address = dto.Address;
+            theater.ZipCode = dto.ZipCode;
 
             if (User.IsInRole(UserRoleNames.Admin))
             {
@@ -130,6 +196,7 @@ namespace Selu383.SP25.P03.Api.Controllers
             return string.IsNullOrWhiteSpace(dto.Name)
                 || dto.Name.Length > 120
                 || string.IsNullOrWhiteSpace(dto.Address)
+                || string.IsNullOrWhiteSpace(dto.ZipCode)
                 || dto.ManagerId != null && !users.Any(x => x.Id == dto.ManagerId);
         }
 
@@ -141,6 +208,7 @@ namespace Selu383.SP25.P03.Api.Controllers
                 Name = x.Name,
                 Address = x.Address,
                 ManagerId = x.ManagerId,
+                ZipCode = x.ZipCode,
             });
         }
     }

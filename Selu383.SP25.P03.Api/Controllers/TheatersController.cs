@@ -48,9 +48,9 @@ namespace Selu383.SP25.P03.Api.Controllers
         [Route("nearest/{zipCode}")]
         public ActionResult<TheaterDto> GetNearestTheater(string zipCode)
         {
-            if (string.IsNullOrWhiteSpace(zipCode))
+            if (string.IsNullOrWhiteSpace(zipCode) || !zipCode.All(char.IsDigit) )
             {
-                return BadRequest("ZIP code is required");
+                return BadRequest();
             }
 
             // Get all theaters
@@ -58,7 +58,7 @@ namespace Selu383.SP25.P03.Api.Controllers
             
             if (!allTheaters.Any())
             {
-                return NotFound("No theaters available");
+                return NotFound();
             }
 
             // find theater with matching first 3 digits of ZIP code
@@ -68,7 +68,7 @@ namespace Selu383.SP25.P03.Api.Controllers
 
             if (nearestTheater == null)
             {
-                return NotFound("No theaters found near this ZIP code");
+                return NotFound();
             }
 
             var dto = new TheaterDto

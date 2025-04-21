@@ -45,7 +45,7 @@ export default function ShowTimesPage() {
       });
 
       if (!response.ok) {
-        throw new Error("No theater found near that ZIP");
+        throw new Error("Invalid Zip");
       }
 
       const data: TheaterDto = await response.json();

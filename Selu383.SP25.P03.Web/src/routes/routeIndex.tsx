@@ -9,6 +9,8 @@ export const routes = {
   showtimes: "/showings/:movieId/:theaterId",
   seating: "/seating/:showingId",
   checkout: "/checkout",
+  payment: "/payment",
+  viewTickets: "/viewTickets",
   foodndrinks: "/food-drinks",
   menu: "/full-menu",
   tickets: "/tickets",

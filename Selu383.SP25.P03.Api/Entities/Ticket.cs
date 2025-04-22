@@ -20,4 +20,5 @@ public class Ticket
     public int? UserId { get; set; }
     public string TicketCode { get; set; }
     public string TicketType { get; set; }
+    public bool IsRedeemed { get; set; }
 }

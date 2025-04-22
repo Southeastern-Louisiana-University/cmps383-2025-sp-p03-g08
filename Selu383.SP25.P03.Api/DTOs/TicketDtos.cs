@@ -18,7 +18,8 @@ public class GetTicketDto
 
     public string PurchaserName { get; set; } // UserName or GuestName
 
-    public int? UserId { get; set; } // Nullable if purchased as guest
+    public int? UserId { get; set; }
+    public int CinemHallId { get; set; } // Nullable if purchased as guest
 }
 
 public class createTicketDto

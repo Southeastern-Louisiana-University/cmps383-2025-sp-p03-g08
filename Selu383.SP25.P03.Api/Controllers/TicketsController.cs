@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,7 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
                     PurchaseDate = t.PurchaseDate,
                     PurchaserName = t.PurchasedBy,
                     UserId = t.UserId,
+                    CinemHallId = t.Showing.CinemaHallId,
                 })
                 .ToListAsync();
 
@@ -68,6 +70,7 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
                     PurchaseDate = t.PurchaseDate,
                     PurchaserName = t.PurchasedBy,
                     UserId = t.UserId,
+                    CinemHallId = t.Showing.CinemaHallId,
                 })
                 .FirstOrDefaultAsync(t => t.Id == id);
 
@@ -77,6 +80,72 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
             }
 
             return Ok(ticket);
+        }
+
+        [HttpGet("for-user")]
+        public async Task<IActionResult> GetTickets([FromQuery] string? guestName)
+        {
+            // If user is logged in
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                var user = await userManager.GetUserAsync(User);
+                if (user == null)
+                    return Unauthorized();
+
+                var userTickets = await context
+                    .Tickets.Where(t => t.UserId == user.Id && t.IsRedeemed == false)
+                    .Include(t => t.Showing)
+                    .ThenInclude(s => s.Movie)
+                    .Include(t => t.Showing)
+                    .ThenInclude(s => s.CinemaHall)
+                    .Select(t => new
+                    {
+                        t.Id,
+                        t.SeatId,
+                        SeatLabel = t.Seat.Row + "-" + t.Seat.Id,
+                        t.TicketType,
+                        ShowingTime = t.Showing.StartTime,
+                        PurchasedDate = t.PurchaseDate,
+                        t.TicketCode,
+                        MovieName = t.Showing.Movie.Title,
+                        CinemaHallName = t.Showing.CinemaHall.Name,
+                        t.Price,
+                    })
+                    .OrderByDescending(t => t.PurchasedDate)
+                    .ToListAsync();
+
+                return Ok(userTickets);
+            }
+
+            // If guest (not logged in), look up by guest name
+            if (!string.IsNullOrEmpty(guestName))
+            {
+                var guestTickets = await context
+                    .Tickets.Where(t => t.PurchasedBy == guestName && t.IsRedeemed == false)
+                    .Include(t => t.Showing)
+                    .ThenInclude(s => s.Movie)
+                    .Include(t => t.Showing)
+                    .ThenInclude(s => s.CinemaHall)
+                    .Select(t => new
+                    {
+                        t.Id,
+                        t.SeatId,
+                        SeatLabel = t.Seat.Row + "-" + t.Seat.Id,
+                        t.TicketType,
+                        ShowingTime = t.Showing.StartTime,
+                        PurchasedDate = t.PurchaseDate,
+                        t.TicketCode,
+                        MovieTitle = t.Showing.Movie.Title,
+                        CinemaHallName = t.Showing.CinemaHall.Name,
+                        t.Price,
+                    })
+                    .OrderByDescending(t => t.PurchasedDate)
+                    .ToListAsync();
+
+                return Ok(guestTickets);
+            }
+
+            return BadRequest("No guest name provided and no user authenticated.");
         }
 
         // POST: api/tickets
@@ -256,6 +325,7 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
 
                 var ticketDtos = await context
                     .Tickets.Where(ticket => ticketIds.Contains(ticket.Id))
+                    .Include(_ => _.Showing)
                     .Select(ticket => new GetTicketDto
                     {
                         Id = ticket.Id,
@@ -270,6 +340,7 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
                         PurchaseDate = ticket.PurchaseDate,
                         PurchaserName = ticket.PurchasedBy,
                         UserId = ticket.UserId,
+                        CinemHallId = ticket.Showing.CinemaHallId,
                     })
                     .ToListAsync();
 

@@ -27,3 +27,43 @@ h1 {
     background-color: #ffffff;
   }
 }
+@media print {
+  /* Hide everything */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Show only the print area and its children */
+  #print-area,
+  #print-area * {
+    visibility: visible;
+  }
+
+  /* Ensure the print area is positioned at the top */
+  #print-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  /* Hide the navbar and print button */
+  .navbar,
+  nav,
+  button {
+    display: none !important;
+  }
+  @media print {
+    .ticket-card {
+      page-break-after: always; /* ✅ forces each ticket to a new page */
+      break-after: always;       /* ✅ ensures compatibility with modern browsers */
+    }
+  
+    /* Optional: remove last blank page */
+    .ticket-card:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+  }
+  
+}

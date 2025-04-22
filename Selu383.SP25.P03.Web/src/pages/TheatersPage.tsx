@@ -1,61 +1,156 @@
-import { Link, useParams } from 'react-router'
-import '../styles/TheatersPage.css'
-import { useWorkflow } from '../hooks/WorkflowContext'
-import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from "react-router";
+import "../styles/TheatersPage.css";
+import { useWorkflow } from "../hooks/WorkflowContext";
+import { useEffect, useState } from "react";
 
-interface Theater {
-  id: number,
-  name: string,
-  address: string
+interface TheaterDto {
+  id: number;
+  name: string;
+  address: string;
+  zipCode: string;
+  managerId?: number;
 }
-export default function TheatersPage() {
-let params = useParams();
-const [theaters,setTheaters]=useState<Theater[]>([]);
-const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      // Fetch movies
-      const theatersResponse = await fetch(`/api/theaters`);
-      if (!theatersResponse.ok) {
-        throw new Error(`Failed to fetch movies, status: ${theatersResponse.status}`);
-      }
-      const theatersData: Theater[] = await theatersResponse.json();
 
-      setTheaters(theatersData);
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err);
-      } else {
-        setError(new Error("An unexpected error occurred."));
+interface Movie {
+  id: number;
+  title: string;
+  description: string;
+  posterURL: string;
+}
+
+export default function TheatersPage() {
+  const { movieId } = useParams();
+  const navigate = useNavigate();
+
+  const [movie, setMovie] = useState<Movie | null>(null);
+  const [zip, setZip] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [theater, setTheater] = useState<TheaterDto | null>(null);
+  const [error, setError] = useState("");
+  const [searchError, setSearchError] = useState("");
+
+  // Fetch movie on initial load
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch movie details
+        const movieResponse = await fetch(`/api/Movies/${movieId}`);
+        if (!movieResponse.ok) {
+          throw new Error(`Failed to fetch movie information`);
+        }
+        const movieData = await movieResponse.json();
+        setMovie(movieData);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "An unexpected error occurred"
+        );
+      } finally {
+        setLoading(false);
       }
+    };
+
+    fetchData();
+  }, [movieId]);
+
+  // Handle ZIP code search
+  const handleFindTheater = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setTheater(null);
+    setSearchError("");
+    setLoading(true);
+
+    try {
+      // Use the new nearest theater endpoint
+      const response = await fetch(`/api/theaters/nearest/${zip}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Invalid Zip");
+      }
+
+      const data: TheaterDto = await response.json();
+      setTheater(data);
+    } catch (err: any) {
+      setSearchError(err.message || "An unexpected error occurred");
     } finally {
       setLoading(false);
     }
-  }
-  fetchData();
-}, []);
+  };
+
+  const handleTheaterSelect = (theaterId: number) => {
+    navigate(`/showings/${movieId}/${theaterId}`);
+  };
+
+  if (loading)
+    return <div className="loading">Loading theater information...</div>;
+  if (error) return <div className="error">Error: {error}</div>;
 
   return (
-    <div>    <div className = "heading-container"> <h1>Theaters</h1></div>
-    <div className="theatersPage">
-
-      <div className="theatersPage__list">
-        {theaters.map(t => (
-          <div key={t.id} className="theatersPage__card">
-            <img src="https://imgur.com/ftrpBar.jpg" alt={t.name} />
-            <div className = "theaterInfo">
-            <h2>{t.name}</h2>
-            <p>{t.address}</p>
-            <Link to={`/showings/${params.movieId}/${t.id}`}>
-            <button>Choose This Theater</button>
-            </Link>
-            </div>
+    <div className="movieTheaterPage">
+      {/* Movie Header */}
+      {movie && (
+        <div className="movieHeader">
+          <img
+            src={movie.posterURL}
+            alt={movie.title}
+            className="moviePoster"
+          />
+          <div className="movieInfo">
+            <h1>{movie.title}</h1>
+            <p>{movie.description}</p>
           </div>
-        ))}
+        </div>
+      )}
+
+      {/* Find Nearest Theater Section */}
+      <div style={{ padding: "2rem" }}>
+        <h1>Find Closest Theater</h1>
+        <p>Enter your ZIP code to find the closest theater:</p>
+
+        {/* ZIP Input Form */}
+        <form onSubmit={handleFindTheater}>
+          <input
+            type="text"
+            placeholder="Enter ZIP Code"
+            value={zip}
+            onChange={(e) => setZip(e.target.value)}
+            style={{ padding: "0.5rem", marginRight: "1rem", width: "120px" }}
+          />
+          <button
+            className="button"
+            type="submit"
+            disabled={loading}
+            style={{ padding: "0.5rem", marginRight: "1rem", width: "120px" }}
+          >
+            {loading ? "Searching..." : "Enter"}
+          </button>
+        </form>
+
+        {/* Display errors */}
+        {searchError && <p style={{ color: "red" }}>{searchError}</p>}
+
+        {/* Once a theater is found, show its details */}
+        {theater && (
+          <div style={{ marginTop: "2rem" }}>
+            <h2>Closest Theater:</h2>
+            <p>
+              <strong>{theater.name}</strong>
+            </p>
+            <p>
+              {theater.address}, {theater.zipCode}
+            </p>
+            <button
+              onClick={() => handleTheaterSelect(theater.id)}
+              disabled={loading}
+            >
+              See Showtimes
+            </button>
+          </div>
+        )}
       </div>
     </div>
-    </div>
-  )
+  );
 }

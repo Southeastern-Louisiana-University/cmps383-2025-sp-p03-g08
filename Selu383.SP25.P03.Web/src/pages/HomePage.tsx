@@ -82,7 +82,7 @@ export default function HomePage() {
                 key={movie.id}
                 poster={movie.posterURL}
                 title={movie.title}
-                linkUrl={`/showtimes/${movie.title}`}
+                linkUrl={`/theaters/${movie.id}`}
               />
             ))
           ) : (

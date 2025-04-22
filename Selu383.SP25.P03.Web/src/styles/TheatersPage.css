@@ -1,51 +1,196 @@
-.theatersPage {
-  padding: 2rem;
-  display:flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width:100%;
+/* TheatersPage.css */
+
+.movieTheaterPage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
 }
-.theatersPage__list {
+
+/* Movie header section */
+.movieHeader {
   display: flex;
-  flex-direction: column;
-  width:60%;
-  gap: 2rem;
-  grid-template-columns: 1fr;
-  justify-content: center;
-  align-items: center;
+  gap: 30px;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #e5e5e5;
 }
-.theatersPage__card {
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  padding: 1rem;
-  gap: 10px;
-  justify-content: space-between;
-  width: 100%;
-  max-height: 500px;
-  color: black;
-  display: flex;
-}
-.theaterInfo {
-  width:30%;
-}
-.theatersPage__card img {
-  width: 550px;
-  border-radius: 8px;
-  height: 400px;
+
+.moviePoster {
+  width: 220px;
+  height: 330px;
   object-fit: cover;
-
-}
-.theatersPage__card div {
-  margin-right: 15px;
-
-}
-.theatersPage__card button {
-  background-color: #fdba74;
-  border: none;
   border-radius: 8px;
-  padding: 0.6rem 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.moviePoster:hover {
+  transform: scale(1.02);
+}
+
+.movieInfo {
+  flex: 1;
+}
+
+.movieInfo h1 {
+  font-size: 32px;
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #222;
+}
+
+.movieInfo p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 24px;
+}
+
+/* Theater search section */
+.theaterSearchSection {
+  background-color: #f8f9fa;
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.theaterSearchSection h1 {
+  font-size: 24px;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.theaterSearchSection p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 24px;
+}
+
+/* Form styling */
+form {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  padding: 12px 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 180px;
+  margin-right: 16px;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+  border-color: #ffffff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
+}
+
+button {
+  background-color: #000000;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-size: 16px;
   cursor: pointer;
-  width: 100%;
-  color: black;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #003d7a;
+}
+
+button:disabled {
+  background-color: #91b4d6;
+  cursor: not-allowed;
+}
+
+/* Error message */
+.error {
+  color: #d32f2f;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+/* Theater results section */
+.theaterResults {
+  background-color: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+}
+
+.theaterResults h2 {
+  font-size: 22px;
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #222;
+}
+
+.theaterDetails {
+  margin-bottom: 24px;
+}
+
+.theaterDetails p {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.theaterDetails strong {
+  font-size: 18px;
+  color: #333;
+}
+
+/* Loading state */
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #666;
+}
+
+/* See Showtimes button styling */
+.seeShowtimesButton {
+  background-color: #e50914;
+  margin-top: 16px;
+  font-weight: 600;
+}
+
+.seeShowtimesButton:hover {
+  background-color: #b2070f;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .movieHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .moviePoster {
+    margin-bottom: 20px;
+  }
+
+  form {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 16px;
+  }
+
+  button {
+    width: 100%;
+  }
 }

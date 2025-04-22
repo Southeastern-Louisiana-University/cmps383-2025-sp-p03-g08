@@ -1,111 +1,169 @@
-import { useParams } from "react-router";
-import { useState } from "react";
+import { useParams, useNavigate } from "react-router";
+import { useState, useEffect } from "react";
 
-interface TheaterDto {
+interface Theater {
   id: number;
   name: string;
   address: string;
   zipCode: string;
-  managerId?: number;
 }
 
-interface ShowTime {
+interface Movie {
   id: number;
-  time: string;
-  // You might later add more info about the showtime,
-  // such as a link to the seating page or pricing details.
+  title: string;
+  posterURL: string;
+  duration: string;
+}
+
+interface showTimes {
+  id: number;
+  movieId: number;
+  theaterId: number;
+  startTime: string;
+  showType: string;
+  isSoldOut: boolean;
 }
 
 export default function ShowTimesPage() {
-  const { movieId } = useParams(); // movie identifier from the URL
-  const [zip, setZip] = useState("");
-  const [theater, setTheater] = useState<TheaterDto | null>(null);
+  const { movieId, theaterId } = useParams();
+
+  const [showTime, setShowTime] = useState<showTimes[]>([]);
+  const [theater, setTheater] = useState<Theater | null>(null);
+  const [movie, setMovie] = useState<Movie | null>(null);
+
+  const navigate = useNavigate();
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Dummy list of showtimes
-  const showTimes: ShowTime[] = [
-    { id: 1, time: "6:30 PM" },
-    { id: 2, time: "9:00 PM" },
-    { id: 3, time: "11:00 PM" },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch theater details
+        const theaterResponse = await fetch(`/api/theaters/${theaterId}`);
+        if (!theaterResponse.ok) {
+          throw new Error("Failed to fetch theater details");
+        }
+        const theaterData = await theaterResponse.json();
+        setTheater(theaterData);
 
-  const handleFindTheater = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setTheater(null);
-    setError("");
-    setLoading(true);
+        // Fetch movie details
+        const movieResponse = await fetch(`/api/Movies/${movieId}`);
+        if (!movieResponse.ok) {
+          throw new Error("Failed to fetch movie details");
+        }
+        const movieData = await movieResponse.json();
+        setMovie(movieData);
 
-    try {
-      // Use the new nearest theater endpoint
-      const response = await fetch(`/api/theaters/nearest/${zip}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Invalid Zip");
+        // Fetch showings for this movie at this theater
+        const showingsResponse = await fetch(
+          `/api/Showings/${movieId}/${theaterId}`
+        );
+        if (!showingsResponse.ok) {
+          console.warn("Could not fetch showings");
+        } else {
+          const showingsData = await showingsResponse.json();
+          setShowTime(showingsData);
+        }
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "An unexpected error occurred"
+        );
+      } finally {
+        setLoading(false);
       }
+    };
+    fetchData();
+  }, [movieId, theaterId]);
 
-      const data: TheaterDto = await response.json();
-      setTheater(data);
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
-    } finally {
-      setLoading(false);
-    }
+  const handleSelectShowtime = (showingId: number) => {
+    navigate(`/seating/${showingId}`);
   };
 
-  const handleChooseShowtime = (showTime: ShowTime) => {
-    // navigate to seating page
-    // navigate(`/seating/${movieId}/${theater?.id}/${showTime.id}`);
-    alert(`You chose the ${showTime.time} show at ${theater?.name}`);
+  // Format time from ISO string to readable time
+  const formatTime = (timeString: string) => {
+    const date = new Date(timeString);
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
+
+  // Format date from ISO string to readable date
+  const formatDate = (timeString: string) => {
+    const date = new Date(timeString);
+    return date.toLocaleDateString([], {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  if (loading) return <div className="loading">Loading showtimes...</div>;
+  if (error) return <div className="error">Error: {error}</div>;
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Show Times</h1>
-      <p>Enter your ZIP code to find the closest theater:</p>
-
-      {/* ZIP Input Form */}
-      <form onSubmit={handleFindTheater}>
-        <input
-          type="text"
-          placeholder="Enter ZIP Code"
-          value={zip}
-          onChange={(e) => setZip(e.target.value)}
-          style={{ padding: "0.5rem", marginRight: "1rem", width: "120px" }}
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Searching..." : "Find Theater"}
-        </button>
-      </form>
-
-      {/* Display errors */}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {/* Once a theater is found, show its details and list showtimes */}
-      {theater && (
-        <div style={{ marginTop: "2rem" }}>
-          <h2>Closest Theater:</h2>
-          <p>
-            <strong>{theater.name}</strong>
-          </p>
-          <p>
-            {theater.address}, {theater.zipCode}
-          </p>
-
-          <h3>Available Showtimes for "{movieId}":</h3>
-          {showTimes.map((st) => (
-            <div key={st.id} style={{ marginBottom: "1rem" }}>
-              <p>{st.time}</p>
-              <button onClick={() => handleChooseShowtime(st)}>
-                Choose Seats
-              </button>
+    <div className="showtimesPage">
+      {movie && theater && (
+        <>
+          <div className="movieTheaterHeader">
+            <img
+              src={movie.posterURL}
+              alt={movie.title}
+              className="moviePoster"
+            />
+            <div className="headerInfo">
+              <h1>{movie.title}</h1>
+              <h2>at {theater.name}</h2>
+              <p>
+                {theater.address}, {theater.zipCode}
+              </p>
+              <p>Runtime: {movie.duration}</p>
             </div>
-          ))}
-        </div>
+          </div>
+
+          <div className="showtimesContainer">
+            <h2>Available Showtimes</h2>
+
+            {/* Group showings by date */}
+            {showTime.length > 0 ? (
+              [...new Set(showTime.map((s) => formatDate(s.startTime)))].map(
+                (date) => (
+                  <div key={date} className="showtimesDate">
+                    <h3>{date}</h3>
+                    <div className="showtimesGrid">
+                      {showTime
+                        .filter((s) => formatDate(s.startTime) === date)
+                        .map((showing) => (
+                          <div
+                            key={showing.id}
+                            className={`showtimeCard ${
+                              showing.isSoldOut ? "soldOut" : ""
+                            }`}
+                          >
+                            <div className="showtimeInfo">
+                              <span className="showtimeTime">
+                                {formatTime(showing.startTime)}
+                              </span>
+                              <span className="showtimeType">
+                                {showing.showType}
+                              </span>
+                            </div>
+                            <button
+                              onClick={() => handleSelectShowtime(showing.id)}
+                              disabled={showing.isSoldOut}
+                            >
+                              {showing.isSoldOut ? "Sold Out" : "Select Seats"}
+                            </button>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )
+              )
+            ) : (
+              <p className="noShowtimes">
+                No showtimes available for this movie at this theater.
+              </p>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

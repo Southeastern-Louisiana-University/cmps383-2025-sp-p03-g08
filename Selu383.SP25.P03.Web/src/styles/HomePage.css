@@ -1,6 +1,7 @@
 .homePage {
   padding: 2rem;
   width: 100vw;
+  margin-top: 150px;
 }
 .homePage__nowPlaying h1 {
   font-size: 2.5rem;

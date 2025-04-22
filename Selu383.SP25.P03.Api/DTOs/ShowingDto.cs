@@ -8,6 +8,15 @@ public class GetShowingDto
     public string CinemaHallName { get; set; }
 }
 
+public class ShowingForTheater 
+{   
+    public int Id {get;set;}
+     public DateTime StartTime { get; set; }
+      public string ShowType { get; set; }
+      public bool IsSoldOut { get; set; }
+
+}
+
 public class CreateShowingDto
 {
     public string ShowType { get; set; }

@@ -61,7 +61,22 @@ namespace Selu383.SP25.P03.Api.Controllers
 
             return showing;
         }
+        [HttpGet("{movieId}/{theaterId}")]
+        public async Task<ActionResult<List<ShowingForTheater>>> GetShowingsByMovieAndTheater(int movieId,int theaterId)
+        {
+            var showings = await _context.Showings.Include(_=> _.CinemaHall).Where(_=> _.MovieId == movieId && _.CinemaHall.TheaterId == theaterId).
+            Select(_=> new ShowingForTheater{
+                Id = _.Id,
+                 StartTime = _.StartTime,
+                 ShowType = _.ShowType,
+                 IsSoldOut = _.IsSoldOut
+            }).
+            ToListAsync();
+            
+        return Ok(showings);
+        }
 
+        [HttpGet("/theater/{theaterId}")]
         [HttpPost]
         public async Task<ActionResult<Showing>> PostShowing(CreateShowingDto showingDto)
         {

@@ -1,96 +1,88 @@
-
 import { Button, Text } from '@mantine/core';
 import '../styles/SeatingPage.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router';
 
-type SeatStatus = 'available' | 'reserved' | 'occupied';
 
 interface Seat {
   id: string;
-  status: SeatStatus;
+  row: string;      // e.g., "A", "B", etc.
+  status: string;   // e.g., "Available", "Occupied", "Reserved"
   selected: boolean;
 }
 
-const seatingLayout: Seat[][] = [
-  // Row A
-  [
-    { id: 'A1', status: 'available', selected: false },
-    { id: 'A2', status: 'available', selected: false },
-    { id: 'A3', status: 'reserved', selected: false },
-    { id: 'A4', status: 'available', selected: false },
-    { id: 'A5', status: 'occupied', selected: false },
-    { id: 'A6', status: 'available', selected: false },
-    { id: 'A7', status: 'available', selected: false },
-    { id: 'A8', status: 'available', selected: false },
+// Helper function to group seats by their "row" property.
+const groupSeatsByRow = (seats: Seat[]): Seat[][] => {
+  const rows: { [key: string]: Seat[] } = {};
+  seats.forEach((seat) => {
+    if (!rows[seat.row]) {
+      rows[seat.row] = [];
+    }
+    rows[seat.row].push(seat);
+  });
 
-  ],
-  // Row B
-  [
-    { id: 'B1', status: 'available', selected: false },
-    { id: 'B2', status: 'available', selected: false },
-    { id: 'B3', status: 'available', selected: false },
-    { id: 'B4', status: 'reserved', selected: false },
-    { id: 'B5', status: 'occupied', selected: false },
-    { id: 'B6', status: 'available', selected: false },
-    { id: 'B7', status: 'available', selected: false },
-    { id: 'B8', status: 'available', selected: false },
-    { id: 'B9', status: 'available', selected: false },
-    { id: 'B10', status: 'available', selected: false },
-  ],
-  [
-    { id: 'C1', status: 'available', selected: false },
-    { id: 'C2', status: 'available', selected: false },
-    { id: 'C3', status: 'available', selected: false },
-    { id: 'C4', status: 'available', selected: false },
-    { id: 'C5', status: 'available', selected: false },
-    { id: 'C6', status: 'available', selected: false },
-    { id: 'C7', status: 'available', selected: false },
-    { id: 'C8', status: 'available', selected: false },
-    { id: 'C9', status: 'reserved', selected: false },
-    { id: 'C10', status: 'reserved', selected: false },
-  ],
-  [
-    { id: 'D1', status: 'available', selected: false },
-    { id: 'D2', status: 'available', selected: false },
-    { id: 'D3', status: 'reserved', selected: false },
-    { id: 'D4', status: 'reserved', selected: false },
-    { id: 'D5', status: 'available', selected: false },
-    { id: 'D6', status: 'available', selected: false },
-    { id: 'D7', status: 'available', selected: false },
-    { id: 'D8', status: 'available', selected: false },
-    { id: 'D9', status: 'reserved', selected: false },
-    { id: 'D10', status: 'available', selected: false },
-  ],
-  [
-    { id: 'E1', status: 'reserved', selected: false },
-    { id: 'E2', status: 'available', selected: false },
-    { id: 'E3', status: 'available', selected: false },
-    { id: 'E4', status: 'reserved', selected: false },
-    { id: 'E5', status: 'occupied', selected: false },
-    { id: 'E6', status: 'available', selected: false },
-    { id: 'E7', status: 'available', selected: false },
-    { id: 'E8', status: 'available', selected: false },
-    { id: 'E9', status: 'available', selected: false },
-    { id: 'E10', status: 'available', selected: false },
-  ],
-  // Add more rows here...
-];
+  // Convert the grouped object into an array of arrays.
+  const groupedRows = Object.keys(rows)
+    .sort((a, b) => a.localeCompare(b)) // sort row keys alphabetically
+    .map((rowKey) => rows[rowKey]);
+
+  return groupedRows;
+};
 
 export function SeatingPage() {
-  const [seats, setSeats] = useState(seatingLayout);
+  // State for the flat list of seats from the backend
+  const [seats, setSeats] = useState<Seat[]>([]);
+  // Get route parameters (assume showingId exists)
+  const params = useParams<{ showingId: string }>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
+  // State to hold the grouped seats (an array of Seat arrays)
+  const [groupedSeats, setGroupedSeats] = useState<Seat[][]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const seatsResponse = await fetch(`/api/seats/by-showing/${params.showingId}`);
+        if (!seatsResponse.ok) {
+          throw new Error(`Failed to fetch seats, status: ${seatsResponse.status}`);
+        }
+        const seatsData: Seat[] = await seatsResponse.json();
+        setSeats(seatsData);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err);
+        } else {
+          setError(new Error("An unexpected error occurred."));
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [params.showingId]);
+
+  // Group the seats by their row value whenever the flat seats array changes.
+  useEffect(() => {
+    if (seats.length > 0) {
+      setGroupedSeats(groupSeatsByRow(seats));
+    }
+  }, [seats]);
+
+  // Handle seat selection: toggles "selected" when available.
   const handleSelectSeat = (seatId: string) => {
-    setSeats((prevSeats) => {
-      return prevSeats.map((row) =>
-        row.map((seat) => {
-          if (seat.id === seatId && seat.status === 'available') {
-            return { ...seat, selected: !seat.selected };
-          }
-          return seat;
-        })
-      );
-    });
+    setSeats((prevSeats: Seat[]) =>
+      prevSeats.map((seat: Seat) => {
+        if (seat.id === seatId && seat.status.toLowerCase() === 'available') {
+          return { ...seat, selected: !seat.selected };
+        }
+        return seat;
+      })
+    );
   };
+
+  if (loading) return <div>Loading data...</div>;
+  if (error) return <div>Error loading data: {error.message}</div>;
 
   return (
     <div className="seating-page">
@@ -99,17 +91,17 @@ export function SeatingPage() {
       </div>
       
       <div className="seating-container">
-      <div className = "screen">Screen</div>
-        {seats.map((row, rowIndex) => (
+        <div className="screen">Screen</div>
+        {groupedSeats.map((row, rowIndex) => (
           <div key={rowIndex} className="seating-row">
-            {row.map((seat) => (
+            {row.map((seat: Seat) => (
               <Button
                 key={seat.id}
-                className={`seat ${seat.selected ? 'selected' : ''}`}
+                className={`seat ${seat.selected ? 'selected' : (seat.status.toLowerCase() === 'available' ? '' : 'unavailable')}`}
                 onClick={() => handleSelectSeat(seat.id)}
                 variant={seat.selected ? 'filled' : 'outline'}
                 color={seat.selected ? 'teal' : 'gray'}
-                disabled={seat.status === 'occupied' || seat.status === 'reserved'}
+                disabled={seat.status.toLowerCase() === 'occupied' || seat.status.toLowerCase() === 'reserved'}
                 radius={0}
               >
                 {seat.id}
@@ -118,15 +110,21 @@ export function SeatingPage() {
           </div>
         ))}
       </div>
-      <div className= "seating-container">
+      
+      <div className="seating-container">
         <Text size="lg">
-          {seats.flat().filter((seat) => seat.selected).length > 0
-            ? `You have selected ${seats.flat().filter((seat) => seat.selected).length} seat(s).`
+          {seats.filter((seat) => seat.selected).length > 0
+            ? `You have selected ${seats.filter((seat) => seat.selected).length} seat(s).`
             : 'No seats selected yet.'}
         </Text>
-        {seats.flat().filter((seat) => seat.selected).length > 0
-            && <Button className = "purchaseButton">Continue</Button>
-        }
+        {seats.filter((seat) => seat.selected).length > 0 && (
+          <Link to={"/checkout"}>
+          <Button className="purchaseButton" onClick={()=> {
+            const selectedSeats = seats.filter((seat)=> seat.selected);
+            sessionStorage.setItem('selectedSeats',JSON.stringify(selectedSeats))
+          }}>Continue</Button>
+          </Link>
+        )}
       </div>
     </div>
   );

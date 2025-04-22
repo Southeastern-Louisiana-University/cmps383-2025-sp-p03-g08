@@ -43,7 +43,14 @@
   }
   
   .seat.selected {
-    background-color: #EFBF04; 
+    background-color: #fdba74; 
+    border: none;
+    border-radius: 5px;
+  }
+
+  .seat.unavailable{
+    cursor: not-allowed;
+    background-color: black;
     border: none;
     border-radius: 5px;
   }
@@ -74,8 +81,10 @@
     height: 30px;
     align-items: center;
     font-size: 20px;
+    background-color: #fdba74;
+    color: black;
   }
   .purchaseButton:hover {
-    background-color: #EFBF04; /* Darker yellow or another color for hover */
+    background-color: #fdba74; /* Darker yellow or another color for hover */
     color: black; /* Change text color when hovered */
   }

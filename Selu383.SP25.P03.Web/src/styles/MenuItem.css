@@ -1,0 +1,27 @@
+.menu-item{
+    background-color: #f5f5f5;
+    border: '1px solid #ddd';
+    border-radius: '8px';
+     padding: '1rem';
+     max-width:50%;
+}
+
+.menu-grid {
+    display: 'grid';
+    grid-template-columns:'repeat(auto-fill, minmax(280px, 1fr))';
+     gap: '2rem';
+     margin-top: '1rem';
+     width: 80%;
+     max-width:50%;
+}
+
+.menu-item-button {
+    background-color: #fdba74;
+    color: #100e0e;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    border: none;
+    display: inline-block;
+    height: 35px;
+    width: 100px;
+}

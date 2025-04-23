@@ -17,6 +17,16 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+body.dark {
+  background-color: #282626;
+  color: white;
+}
+
+body.light {
+  background-color: #ffffff;
+  color: black;
+}
+
 h1 {
   font-size: 2.5rem;
 }

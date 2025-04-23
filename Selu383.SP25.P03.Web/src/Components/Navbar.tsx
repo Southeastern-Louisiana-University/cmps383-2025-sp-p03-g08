@@ -5,7 +5,14 @@ import { useAuth } from "../hooks/useAuth";
 import { Flex } from "@mantine/core";
 import { useState } from "react";
 
-export default function Navbar() {
+export default function Navbar({
+  theme,
+  toggleTheme,
+}: {
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
+}) {
+
   const navigate = useNavigate();
   const { user, logout } = useAuth(); // for authentication
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
@@ -32,6 +39,9 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
+      <button onClick={toggleTheme} className="btn-toggle">
+  {theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
+</button>
       <div className="navbar__logo">
         <Link to={routes.root}>
           <img

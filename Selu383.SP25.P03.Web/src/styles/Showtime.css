@@ -13,14 +13,6 @@
     border:0px;
 }
 
-.showTimes button{
-    background-color: #fdba74;
-    border-radius: 5px;
-    border:0px;
-    height:40px;
-    width:100px;
-    cursor: pointer;
-}
 
 .showTimes p{
     font-size:20px;

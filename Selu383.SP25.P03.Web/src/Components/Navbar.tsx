@@ -4,6 +4,7 @@ import { routes } from "../routes/routeIndex";
 import { useAuth } from "../hooks/useAuth";
 import { Flex } from "@mantine/core";
 import { useState } from "react";
+import { NavbarCart } from "./navbarCart";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -54,6 +55,9 @@ export default function Navbar() {
         </li>
       </ul>
       <div className="navbar__auth">
+        {/* Add NavbarCart component */}
+        <NavbarCart />
+
         {!isLoggedIn && ( // if not signed in, display sign in button
           <button
             onClick={() => navigate(routes.login)}

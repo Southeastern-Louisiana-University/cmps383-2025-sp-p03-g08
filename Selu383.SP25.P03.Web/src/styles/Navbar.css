@@ -2,51 +2,66 @@
   position: fixed;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   background-color: #100e0e;
   padding: 1rem 2rem;
-  right:0;
-  left:0;
-  z-index: 9999;
-  
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1000;
 }
+
 .navbar__logo {
   display: flex;
   align-items: center;
-  justify-content: center;
   width: auto;
-  min-width:300px;
-  margin-right:auto;
+  min-width: 300px;
+  margin-right: auto;
   color: #fdba74;
   font-size: 1.5rem;
-  text-align: center;
   text-decoration: none;
 }
+
 .navbar__icon {
   max-width: 100px;
   max-height: 100px;
   margin-right: 8px;
 }
+
 .navbar__brand {
   color: #fdba74;
   font-size: 1.5rem;
   text-decoration: none;
 }
+
+/* Updated navbar links section */
 .navbar__links {
   display: flex;
   list-style: none;
   gap: 2rem;
-  margin-right: 0px;
-  padding: 20px;
-  min-width: fit-content;
+  margin: 0;
+  padding: 0;
 }
+
 .navbar__links a {
   color: #fdba74;
   text-decoration: none;
   font-size: 1.5rem;
-  margin-right: 0px;
-  padding: 0px;
+  padding: 0;
+  display: block;
 }
+
+.navbar__links li {
+  display: flex;
+  align-items: center;
+}
+
+/* Updated navbar auth section */
+.navbar__auth {
+  display: flex;
+  align-items: center;
+  margin-left: 2rem;
+}
+
 .navbar__signin {
   background-color: #fdba74;
   border: none;
@@ -58,6 +73,7 @@
   margin-left: 1rem;
 }
 
+/* Keep your existing logout styles */
 .logout-confirm-overlay {
   position: fixed;
   top: 0;
@@ -68,7 +84,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 
 .logout-confirm-dialog {
@@ -103,4 +118,13 @@
 
 .logout-confirm-button:hover {
   background-color: #ff7875;
+}
+
+/* This is important for content positioning */
+.page-content {
+  padding-top: 120px; /* Increased to ensure content doesn't hide under navbar */
+}
+
+body {
+  margin: 0;
 }

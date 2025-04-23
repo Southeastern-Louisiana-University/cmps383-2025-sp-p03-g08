@@ -7,9 +7,9 @@ import {
   Button,
   Stack,
   Alert,
+  Box,
 } from "@mantine/core";
 import { useLocation, useNavigate } from "react-router";
-import { routes } from "../routes/routeIndex";
 import { useAuth } from "../hooks/useAuth";
 
 interface UserDto {
@@ -29,17 +29,17 @@ export default function LoginPage() {
 
   const { login } = useAuth();
 
-  const redirectTo = location.state?.redirectTo ?? '/';
+  const redirectTo = location.state?.redirectTo ?? "/";
 
   useEffect(() => {
     let redirectTimer: number;
 
     if (loginSuccess) {
       redirectTimer = window.setTimeout(() => {
-        navigate(redirectTo, { state: { fromLogin: true } }); 
+        navigate(redirectTo, { state: { fromLogin: true } });
       }, 3000);
     }
-    
+
     // Clean up timer if component unmounts
     return () => {
       if (redirectTimer) clearTimeout(redirectTimer);
@@ -85,79 +85,91 @@ export default function LoginPage() {
   }
 
   return (
-    <Container size="xl">
-      <Title ta="center" className={classes.title}>
-        Sign in
-      </Title>
+    <Box className="page-content">
+      <Container size="sm" pt={40}>
+        <Title ta="center" className={classes.title} order={1} mb={30}>
+          Sign in
+        </Title>
 
-      {loginSuccess ? ( 
-        <Alert
-          color="green"
-          title="Login Successful!"
-          style={{
-            maxWidth: "500px",
-            margin: "20px auto",
-            padding: "15px",
-            borderRadius: "8px",
-            textAlign: "center",
-          }}
-        >
-          <p style={{ fontSize: "18px", marginTop: "10px" }}>
-            Welcome back, <strong>{username}</strong>!
-          </p>
-          <p style={{ fontSize: "14px", marginTop: "5px" }}>
-            Redirecting you to the homepage...
-          </p>
-        </Alert>
-      ) : (
-        <form onSubmit={handleLogin} name="login" autoComplete="on">
-          <Stack ta="center" maw={500} mx="auto">
-            <TextInput
-              label="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              styles={{
-                label: {
-                  width: "100px",
-                  ta: "left",
-                },
-                input: {
-                  width: "10%",
-                  height: "25px",
-                },
-              }}
-            />
-            <TextInput
-              type="password"
-              label="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              styles={{
-                input: {
-                  width: "10%",
-                  height: "25px",
-                },
-              }}
-            />
+        {loginSuccess ? (
+          <Alert
+            color="green"
+            title="Login Successful!"
+            variant="filled"
+            radius="md"
+            w="100%"
+            maw={400}
+            mx="auto"
+            py="md"
+          >
+            <p style={{ fontSize: "18px", marginTop: "10px" }}>
+              Welcome back, <strong>{username}</strong>!
+            </p>
+          </Alert>
+        ) : (
+          <form onSubmit={handleLogin} name="login" autoComplete="on">
+            <Stack ta="center" maw={400} mx="auto" gap="lg">
+              <TextInput
+                label="Username"
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                size="md"
+                radius="md"
+                w="100%"
+                required
+                styles={{
+                  label: {
+                    textAlign: "left",
+                    display: "block",
+                    marginBottom: "8px",
+                  },
+                }}
+              />
 
-            <Button
-              type="submit"
-              value={loading ? "Loading..." : "Login"}
-              disabled={loading}
-              styles={{
-                root: {
-                  marginTop: "20px",
-                  width: "5%",
-                  height: "25px",
-                },
-              }}
-            >
-              {loading ? "Signing in..." : "Sign in"}
-            </Button>
-            {formError ? <p style={{ color: "red" }}>{formError}</p> : null}
-          </Stack>
-        </form>
-      )}
-    </Container>
+              <TextInput
+                type="password"
+                label="Password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                size="md"
+                radius="md"
+                w="100%"
+                required
+                styles={{
+                  label: {
+                    textAlign: "left",
+                    display: "block",
+                    marginBottom: "8px",
+                  },
+                }}
+              />
+
+              <Button
+                type="submit"
+                loading={loading}
+                disabled={loading}
+                size="md"
+                radius="md"
+                fullWidth
+                style={{
+                  backgroundColor: "#fdba74",
+                  color: "#100e0e",
+                }}
+              >
+                {loading ? "Signing in..." : "Sign in"}
+              </Button>
+
+              {formError && (
+                <Alert color="red" title="Error" variant="light" radius="md">
+                  {formError}
+                </Alert>
+              )}
+            </Stack>
+          </form>
+        )}
+      </Container>
+    </Box>
   );
 }

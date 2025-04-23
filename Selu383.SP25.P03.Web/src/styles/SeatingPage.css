@@ -27,6 +27,9 @@
     flex-grow: 1; /* Ensures this part grows to fill the available space */
     margin: 20px;
   }
+  .seating-container .btn-orange{
+    font-size: 15px;
+  }
   .seating-row {
     display: flex;
     justify-content: space-evenly; /* Evenly space the seats horizontally */
@@ -80,7 +83,7 @@
     border-radius: 5px;
     height: 30px;
     align-items: center;
-    font-size: 20px;
+    font-size: 15px;
     background-color: #fdba74;
     color: black;
   }

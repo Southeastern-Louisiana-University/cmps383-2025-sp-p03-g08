@@ -14,8 +14,10 @@
 }
 
 .navbar__logo img {
-  width: 164px;
-  height: 164px;
+  width: 125px;
+  height: 150px;
+  margin-right: 8px;
+  margin-top: 15px;
 }
 
 .navbar__links {
@@ -39,6 +41,42 @@
   border: none;
   cursor: pointer;
 }
+a,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+  color: inherit; /* or set a specific color */
+}
+
+
+.btn-orange {
+  background-color: #fdba74;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  color: black;
+  display: inline-block;
+  align-items: center;   /* vertical centering */
+  justify-content: center; 
+  text-decoration: none;
+}
+
+.custom-select {
+  background-color: #fdba74;
+  color: #100e0e;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  appearance: default;
+  -webkit-appearance: default;
+  -moz-appearance: default;
+}
+
+
 @media print {
   /* Hide everything */
   body * {
@@ -67,8 +105,8 @@
   }
   @media print {
     .ticket-card {
-      page-break-after: always; /* ✅ forces each ticket to a new page */
-      break-after: always;       /* ✅ ensures compatibility with modern browsers */
+      page-break-after: always;
+      break-after: always;       
     }
   
     /* Optional: remove last blank page */
@@ -77,5 +115,4 @@
       break-after: auto;
     }
   }
-  
 }

@@ -119,7 +119,7 @@ export function SeatingPage() {
         </Text>
         {seats.filter((seat) => seat.selected).length > 0 && (
           <Link to={"/checkout"}>
-          <Button className="purchaseButton" onClick={()=> {
+          <button className="btn-orange" onClick={()=> {
            const selectedSeats = seats
            .filter((seat) => seat.selected)
            .map((seat) => ({
@@ -131,7 +131,7 @@ export function SeatingPage() {
             if (params.showingId) {
               sessionStorage.setItem('showingId', params.showingId); // ✅ store it
             }
-          }}>Continue</Button>
+          }}>Continue</button>
           </Link>
         )}
       </div>

@@ -8,6 +8,7 @@
   right:0;
   left:0;
   z-index: 9999;
+  height: 125px;
   
 }
 .navbar__logo {
@@ -22,16 +23,7 @@
   text-align: center;
   text-decoration: none;
 }
-.navbar__icon {
-  max-width: 100px;
-  max-height: 100px;
-  margin-right: 8px;
-}
-.navbar__brand {
-  color: #fdba74;
-  font-size: 1.5rem;
-  text-decoration: none;
-}
+
 .navbar__links {
   display: flex;
   list-style: none;

@@ -1,5 +1,6 @@
 import { Link, useParams } from "react-router";
 import "../styles/Showtime.css";
+import "../styles/App.css";
 import { useWorkflow } from "../hooks/WorkflowContext";
 import { useEffect, useState } from "react";
 
@@ -52,7 +53,7 @@ export default function ShowTimesPage() {
           <div key={i} className="showingOptions">
             <p>{s.showType} {s.showTime}</p>
             <Link to={`/seating/${s.id}`}>
-            <button>Choose Seats</button>
+            <button className="btn-orange">Choose Seats</button>
             </Link>
           </div>
         ))}

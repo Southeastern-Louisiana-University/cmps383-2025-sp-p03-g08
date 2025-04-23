@@ -33,9 +33,9 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar__logo">
-        <Link to={routes.root} className="navbar__brand">
+        <Link to={routes.root}>
           <img
-            src="https://imgur.com/uBaK4nV.jpg"
+            src="https://imgur.com/auq9VgV.jpg"
             alt="Lion Logo"
             className="navbar__icon"
           />

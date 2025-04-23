@@ -50,12 +50,7 @@ export function Cart({ items, onCheckout, title = 'Your Cart', onTicketTypeChang
                 onChange={(e) =>
                   onTicketTypeChange(seat.id, e.target.value as "Adult" | "Child" | "Senior")
                 }
-                style={{
-                  padding: '4px 8px',
-                  fontSize: '14px',
-                  borderRadius: '4px',
-                  border: '1px solid #ccc',
-                }}
+                className='custom-select'
               >
                 <option value="Adult">Adult</option>
                 <option value="Child">Child</option>
@@ -74,20 +69,12 @@ export function Cart({ items, onCheckout, title = 'Your Cart', onTicketTypeChang
 
       <Group justify="space-between" mt="md">
         <Text fw={600}>Total: ${total.toFixed(2)}</Text>
-        <Button
+        <button
           onClick={onCheckout}
-          style={{
-            backgroundColor: '#fdba74',
-            borderRadius: '5px',
-            border: 0,
-            height: '40px',
-            width: '100px',
-            cursor: 'pointer',
-            color: '#100e0e',
-          }}
+          className='btn-orange'
         >
           Checkout
-        </Button>
+        </button>
       </Group>
     </Card>
   );

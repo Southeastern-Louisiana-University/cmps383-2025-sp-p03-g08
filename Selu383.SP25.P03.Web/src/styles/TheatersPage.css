@@ -14,6 +14,7 @@
   grid-template-columns: 1fr;
   justify-content: center;
   align-items: center;
+  margin-top: 50px;
 }
 .theatersPage__card {
   background-color: #f5f5f5;
@@ -30,7 +31,7 @@
   width:30%;
 }
 .theatersPage__card img {
-  width: 550px;
+  width: 75%;
   border-radius: 8px;
   height: 400px;
   object-fit: cover;

@@ -9,7 +9,7 @@ type GuestInfo = {
   };
 
   type PaymentModalProps = {
-    guestInfo?: GuestInfo; // Optional if user is logged in
+    guestInfo?: GuestInfo; 
   };
   
   
@@ -68,14 +68,13 @@ export function PaymentModal({ guestInfo }: PaymentModalProps) {
   };
 
   const createTickets = async () => {
-    // 1. 🧠 Pull selected seats from sessionStorage
+    
     const seatData = sessionStorage.getItem("selectedSeats");
     if (!seatData) {
       alert("No seats selected.");
       return;
     }
-  
-    // 2. 🧠 Pull showingId from sessionStorage
+ 
     const showingIdString = sessionStorage.getItem("showingId");
     if (!showingIdString) {
       alert("No showing ID found.");
@@ -83,7 +82,7 @@ export function PaymentModal({ guestInfo }: PaymentModalProps) {
     }
     const showingId = parseInt(showingIdString, 10);
   
-    // 3. ✅ Parse and format seat data
+ 
     const selectedSeats = JSON.parse(seatData) as { id: string; ticketType: string }[];
   
     const seats = selectedSeats.map(seat => ({
@@ -91,7 +90,7 @@ export function PaymentModal({ guestInfo }: PaymentModalProps) {
       ticketType: seat.ticketType,
     }));
   
-    // 4. ✅ Get guestName from props
+
     const guestName = guestInfo?.name ?? null;
   
     const body = {
@@ -136,8 +135,8 @@ export function PaymentModal({ guestInfo }: PaymentModalProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   
-    const isValid = validate(); // ✅ runs the checks and calls setErrors
-    if (!isValid) return;       // ✅ prevents ticket creation if form is invalid
+    const isValid = validate(); 
+    if (!isValid) return;      
   
     const result = await createTickets();
   if (result) {
@@ -149,10 +148,10 @@ export function PaymentModal({ guestInfo }: PaymentModalProps) {
   
 
   const handleViewTickets = () => {
-    // redirect user to ticket page
+   
     console.log('Navigating to tickets...');
     navigate("/viewTickets")
-    // e.g., useNavigate('/tickets') or window.location.href
+    
   };
 
   return (
@@ -208,7 +207,8 @@ export function PaymentModal({ guestInfo }: PaymentModalProps) {
         {errors.cvc && <div style={{ color: 'red', fontSize: '0.9rem' }}>{errors.cvc}</div>}
       </label>
 
-      <button type="submit" style={styles.button}>Submit Payment</button>
+      <button type="submit" className='btn-orange' style={{ width: '100%',
+    padding: '0.75rem'}}>Submit Payment</button>
     </form>
     {showSuccessModal && (
         <SuccessModal

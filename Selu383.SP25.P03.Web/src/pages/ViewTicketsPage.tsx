@@ -53,32 +53,30 @@ export function ViewTicketsPage() {
 
   return (
     <Container size="md" style={{ paddingTop: '150px' }}>
-      <Text size="xl" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
         Your Tickets
-      </Text>
+      </h1>
 
       {loading && <Loader />}
       {error && <Alert color="red">{error}</Alert>}
 
       {!loading && !error && tickets.length === 0 && (
-        <Text style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+        <h1 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
           No tickets found.
-        </Text>
+        </h1>
       )}
 
-      {/* ✅ Print Button */}
+     
       {tickets.length > 0 && (
-        <Button
+        <div style={{textAlign:'center', marginBottom: '10px'}}>
+        <button
           onClick={() => window.print()}
-          style={{
-            display: 'block',
-            margin: '0 auto 2rem auto',
-            backgroundColor: '#4caf50',
-            color: '#fff',
-          }}
+          className = 'btn-orange'
+          style={{textAlign:'center'}}
         >
           Print Tickets
-        </Button>
+        </button>
+        </div>
       )}
 
       {/* ✅ Printable Area */}
@@ -101,10 +99,12 @@ export function ViewTicketsPage() {
          withBorder
          style={{
            backgroundColor: '#f9f9f9',
+           color: 'black',
            width: '100%',
            maxWidth: '500px',
            borderRadius: '20px',
            paddingLeft: '1.5rem',
+           marginBottom: '10px'
          }}
        >
        

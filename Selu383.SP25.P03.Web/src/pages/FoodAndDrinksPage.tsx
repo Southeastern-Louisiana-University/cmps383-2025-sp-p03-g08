@@ -19,7 +19,7 @@ export default function FoodAndDrinksPage() {
   ]
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div style={{ padding: '2rem', marginTop:'150px' }}>
       <h1>Food & Drinks</h1>
       <p style ={{marginBottom:'30px'}}>Have your favorite meal delivered to your seat!</p>
       <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap', marginTop: '1rem', justifyContent:'center'}}>

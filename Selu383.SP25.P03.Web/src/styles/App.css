@@ -1,6 +1,6 @@
 #root {
   margin: 0 auto;
-  max-width: 100%;
+  max-width: 100;
   width: 100%;
   margin: 0 ;
   padding: 0rem;
@@ -46,7 +46,7 @@ a:visited,
 a:hover,
 a:active {
   text-decoration: none;
-  color: inherit; /* or set a specific color */
+  color: black; /* or set a specific color */
 }
 
 

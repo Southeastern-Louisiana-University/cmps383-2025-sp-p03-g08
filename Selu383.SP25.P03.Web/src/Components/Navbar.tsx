@@ -4,6 +4,7 @@ import { routes } from "../routes/routeIndex";
 import { useAuth } from "../hooks/useAuth";
 import { Flex } from "@mantine/core";
 import { useState } from "react";
+import { Moon, Sun } from "lucide-react";
 
 export default function Navbar({
   theme,
@@ -38,11 +39,9 @@ export default function Navbar({
   };
 
   return (
+    <>
     <nav className="navbar">
-      <button onClick={toggleTheme} className="btn-toggle">
-  {theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
-</button>
-      <div className="navbar__logo">
+    <div className="navbar__logo">
         <Link to={routes.root}>
           <img
             src="https://imgur.com/auq9VgV.jpg"
@@ -63,62 +62,81 @@ export default function Navbar({
           <Link to={routes.about}>About Us</Link>
         </li>
       </ul>
-      <div className="navbar__auth">
-        {!isLoggedIn && ( // if not signed in, display sign in button
-          <button
-            onClick={() => navigate(routes.login)}
-            className="navbar__signin"
-          >
-            Sign In
-          </button>
-        )}
-        {isUser && ( // let user log out if logged in - MAKE PAGE FOR LOGOUT CONFIRMATION
-          <Flex>
-            {!logoutModalOpen && (
-              <button onClick={handleLogoutClick} className="navbar__signin">
-                Log out
-              </button>
-            )}
-          </Flex>
-        )}
-        {isAdmin && ( // let admin log out and go to protected management route - MAKE
-          <Flex>
-            {!logoutModalOpen && (
-              <button onClick={handleLogoutClick} className="navbar__signin">
-                Log out
-              </button>
-            )}
+      <div  style={{
+    height: '150px',
+    maxWidth: '100%',        // prevents overflow
+    overflowX: 'hidden',     // hides horizontal scroll
+    boxSizing: 'border-box'  // includes padding/border in width calculation
+  }}>
+  {!isLoggedIn && (
+    <button
+      onClick={() => navigate(routes.login)}
+      className="navbar__signin"
+    >
+      Sign In
+    </button>
+  )}
+
+  {isUser && (
+    <Flex>
+      {!logoutModalOpen && (
+        <button onClick={handleLogoutClick} className="navbar__signin">
+          Log out
+        </button>
+      )}
+    </Flex>
+  )}
+
+  {isAdmin && (
+    <Flex>
+      {!logoutModalOpen && (
+        <button onClick={handleLogoutClick} className="navbar__signin">
+          Log out
+        </button>
+      )}
+      <button
+        onClick={() => navigate("/manage")}
+        className="navbar__signin"
+      >
+        Management
+      </button>
+    </Flex>
+  )}
+
+  {/* Move the theme toggle button here */}
+  <button onClick={toggleTheme} className={`slider-toggle ${theme}`}>
+    <span className="slider-icon">
+      {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+    </span>
+    <span className="slider-label">
+      {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+    </span>
+  </button>
+</div>
+    </nav>
+    
+    {logoutModalOpen && (
+      <div className="logout-confirm-overlay">
+        <div className="logout-confirm-dialog">
+          <h3>Confirm Logout</h3>
+          <p>Are you sure you want to log out?</p>
+          <div className="logout-confirm-buttons">
             <button
-              onClick={() => navigate("/manage")}
-              className="navbar__signin"
+              className="logout-confirm-button"
+              onClick={handleCancelLogout}
             >
-              Management
+              No, Cancel
             </button>
-          </Flex>
-        )}
-      </div>
-      {logoutModalOpen && (
-        <div className="logout-confirm-overlay">
-          <div className="logout-confirm-dialog">
-            <h3>Confirm Logout</h3>
-            <p>Are you sure you want to log out?</p>
-            <div className="logout-confirm-buttons">
-              <button
-                className="logout-confirm-button"
-                onClick={handleCancelLogout}
-              >
-                No, Cancel
-              </button>
-              <button
-                className="logout-confirm-button"
-                onClick={handleConfirmLogout}
-              >
-                Yes, Logout
-              </button>
-            </div>
+            <button
+              className="logout-confirm-button"
+              onClick={handleConfirmLogout}
+            >
+              Yes, Logout
+            </button>
           </div>
         </div>
-      )}
-    </nav>
+      </div>
+    )}
+    </>
   );
 }

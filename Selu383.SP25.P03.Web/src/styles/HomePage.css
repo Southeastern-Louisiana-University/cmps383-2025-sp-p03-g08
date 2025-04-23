@@ -38,6 +38,7 @@
 }
 .homePage__testimonials {
   margin-top: 3rem;
+  margin-right:80px
 }
 .homePage__testimonialGrid {
   display: flex;

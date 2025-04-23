@@ -85,7 +85,7 @@ export default function LoginPage() {
   }
 
   return (
-    <Container size="xl">
+    <Container size="xl" style={{marginTop:'175px'}}>
       <Title ta="center" className={classes.title}>
         Sign in
       </Title>

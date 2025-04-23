@@ -1,6 +1,6 @@
 export default function AboutUsPage() {
     return (
-      <div style={{ padding: '2rem' }}>
+      <div style={{ padding: '2rem', marginTop:'150px'}}>
         <h1>About Us</h1>
         <p>
           Welcome to Lion’s Den Cinemas. We strive to create a comfortable and enjoyable atmosphere

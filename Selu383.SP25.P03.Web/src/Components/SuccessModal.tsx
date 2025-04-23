@@ -23,7 +23,7 @@ export function SuccessModal({
           <button onClick={onClose} style={buttonStyle}>
             Close
           </button>
-          <button onClick={onAction} style={{ ...buttonStyle, backgroundColor: '#4CAF50' }}>
+          <button onClick={onAction} className='btn-orange'>
             {actionLabel}
           </button>
         </div>

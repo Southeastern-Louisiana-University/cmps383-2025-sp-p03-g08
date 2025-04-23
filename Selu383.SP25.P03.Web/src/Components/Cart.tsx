@@ -1,4 +1,5 @@
 import { Card, Group, Text, Button, Divider, Stack } from '@mantine/core';
+import '../styles/Cart.css';
 
 type SeatItem = {
   id: string;
@@ -41,9 +42,9 @@ export function Cart({ items, onCheckout, title = 'Your Cart', onTicketTypeChang
             }}
           >
             <Group justify="space-between">
-              <Text style={{ fontSize: '20px', marginTop: '0', marginBottom: '5px' }}>
+              <div className='cartText'>
                 {`Seat ${seat.row}-${seat.id}`}
-              </Text>
+              </div>
 
               <select
                 value={seat.ticketType}
@@ -57,9 +58,9 @@ export function Cart({ items, onCheckout, title = 'Your Cart', onTicketTypeChang
                 <option value="Senior">Senior</option>
               </select>
 
-              <Text style={{ marginTop: '5px', marginBottom: '0px' }}>
+              <div className='cartText'>
                 ${PRICE_MAP[seat.ticketType].toFixed(2)}
-              </Text>
+              </div>
             </Group>
           </div>
         ))}

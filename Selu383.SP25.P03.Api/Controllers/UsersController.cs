@@ -19,7 +19,8 @@ namespace Selu383.SP25.P03.Api.Controllers
         public UsersController(
             RoleManager<Role> roleManager,
             UserManager<User> userManager,
-            DataContext dataContext)
+            DataContext dataContext
+        )
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
@@ -36,20 +37,54 @@ namespace Selu383.SP25.P03.Api.Controllers
                 return BadRequest();
             }
 
-            var result = await userManager.CreateAsync(new User { UserName = dto.Username }, dto.Password);
+            var result = await userManager.CreateAsync(
+                new User { UserName = dto.Username },
+                dto.Password
+            );
             if (result.Succeeded)
             {
-                await userManager.AddToRolesAsync(await userManager.FindByNameAsync(dto.Username), dto.Roles);
+                await userManager.AddToRolesAsync(
+                    await userManager.FindByNameAsync(dto.Username),
+                    dto.Roles
+                );
 
                 var user = await userManager.FindByNameAsync(dto.Username);
                 return new UserDto
                 {
                     Id = user.Id,
                     UserName = dto.Username,
-                    Roles = dto.Roles
+                    Roles = dto.Roles,
                 };
             }
             return BadRequest();
+        }
+
+        [HttpPost("register")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserDto>> Register([FromBody] RegisterUserDto dto)
+        {
+            var existingUser = await userManager.FindByNameAsync(dto.Username);
+            if (existingUser != null)
+            {
+                return BadRequest("Username already exists.");
+            }
+
+            var user = new User { UserName = dto.Username, Email = dto.Email };
+
+            var result = await userManager.CreateAsync(user, dto.Password);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors.Select(e => e.Description));
+            }
+
+            return Ok(
+                new UserDto
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Roles = new List<string>().ToArray(), // No roles assigned on public registration
+                }
+            );
         }
     }
 }

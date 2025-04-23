@@ -77,7 +77,7 @@ export default function HomePage() {
                 key={movie.id}
                 poster={movie.posterURL}
                 title={movie.title}
-                linkUrl={`/showtimes/${movie.title.toLowerCase().replace(/\s+/g, '-')}`}
+                linkUrl={`/theaters/${movie.id}`}
               />
             ))
           ) : (

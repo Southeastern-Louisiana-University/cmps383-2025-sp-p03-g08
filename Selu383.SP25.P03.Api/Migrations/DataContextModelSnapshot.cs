@@ -252,11 +252,13 @@ namespace Selu383.SP25.P03.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
-                    b.Property<int>("SeatType")
-                        .HasColumnType("int");
+                    b.Property<string>("SeatType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -451,11 +453,12 @@ namespace Selu383.SP25.P03.Api.Migrations
 
             modelBuilder.Entity("Ticket", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<bool>("IsRedeemed")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -463,22 +466,38 @@ namespace Selu383.SP25.P03.Api.Migrations
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("PurchasedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("SeatId")
                         .HasColumnType("int");
 
                     b.Property<int>("ShowingId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<string>("TicketCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TicketType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SeatId");
 
-                    b.HasIndex("ShowingId");
+                    b.HasIndex("TicketCode")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("ShowingId", "SeatId")
+                        .IsUnique();
 
                     b.ToTable("Tickets");
                 });
@@ -610,17 +629,15 @@ namespace Selu383.SP25.P03.Api.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Selu383.SP25.P03.Api.Features.Users.User", "PurchasedBy")
+                    b.HasOne("Selu383.SP25.P03.Api.Features.Users.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PurchasedBy");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Seat");
 
                     b.Navigation("Showing");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CinemaHall", b =>

@@ -1,6 +1,6 @@
 #root {
   margin: 0 auto;
-  max-width: 100%;
+  max-width: 100;
   width: 100%;
   margin: 0 ;
   padding: 0rem;
@@ -14,8 +14,10 @@
 }
 
 .navbar__logo img {
-  width: 164px;
-  height: 164px;
+  width: 125px;
+  height: 150px;
+  margin-right: 8px;
+  margin-top: 15px;
 }
 
 .navbar__links {
@@ -38,4 +40,79 @@
   border-radius: 8px;
   border: none;
   cursor: pointer;
+}
+a,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+  color: black; /* or set a specific color */
+}
+
+
+.btn-orange {
+  background-color: #fdba74;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  color: black;
+  display: inline-block;
+  align-items: center;   /* vertical centering */
+  justify-content: center; 
+  text-decoration: none;
+}
+
+.custom-select {
+  background-color: #fdba74;
+  color: #100e0e;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  appearance: default;
+  -webkit-appearance: default;
+  -moz-appearance: default;
+}
+
+
+@media print {
+  /* Hide everything */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Show only the print area and its children */
+  #print-area,
+  #print-area * {
+    visibility: visible;
+  }
+
+  /* Ensure the print area is positioned at the top */
+  #print-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  /* Hide the navbar and print button */
+  .navbar,
+  nav,
+  button {
+    display: none !important;
+  }
+  @media print {
+    .ticket-card {
+      page-break-after: always;
+      break-after: always;       
+    }
+  
+    /* Optional: remove last blank page */
+    .ticket-card:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+  }
 }

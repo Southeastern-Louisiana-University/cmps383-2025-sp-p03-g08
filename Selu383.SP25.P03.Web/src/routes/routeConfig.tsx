@@ -6,13 +6,15 @@ import { NotFoundTitle } from "../pages/page-not-found/not-found";
 import TheaterPage from "../pages/TheatersPage";
 import ShowTimesPage from "../pages/ShowTimesPage";
 import FoodAndDrinksPage from "../pages/FoodAndDrinksPage";
-import FullMenuPage from "../pages/FullMenuPage";
 import AboutUsPage from "../pages/AboutUsPage";
 import LoginPage from "../pages/LoginPage";
 
 import HomePage from "../pages/HomePage";
 import { SeatingPage } from "../pages/SeatingPage";
 import ProtectedRoute from "../Components/ProtectedRoute";
+import { CheckoutPage } from "../pages/CheckoutPage";
+import PaymentPage from "../pages/PaymentPage";
+import { ViewTicketsPage } from "../pages/ViewTicketsPage";
 
 export const RoutesConfig = () => {
   return (
@@ -24,8 +26,10 @@ export const RoutesConfig = () => {
       <Route path={routes.theaters} element={<TheaterPage />} />
       <Route path={routes.showtimes} element={<ShowTimesPage />} />
       <Route path={routes.seating} element={<SeatingPage />} />
+      <Route path={routes.checkout} element={<CheckoutPage />} />
+      <Route path={routes.payment} element={<PaymentPage />} />
+      <Route path={routes.viewTickets} element={<ViewTicketsPage />} />
       <Route path={routes.foodndrinks} element={<FoodAndDrinksPage />} />
-      <Route path={routes.menu} element={<FullMenuPage />} />
       <Route path={routes.about} element={<AboutUsPage />} />
 
       {/* Example protected route */}

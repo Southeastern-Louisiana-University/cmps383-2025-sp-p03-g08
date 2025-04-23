@@ -1,0 +1,26 @@
+.showTimes{
+    padding: 2rem;
+  width: 100vw;
+}
+
+.showingOptions{
+    padding: 2rem;
+    background-color: #f5f5f5;
+    color:black;
+    width: 60%;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border:0px;
+}
+
+
+.showTimes p{
+    font-size:20px;
+}
+
+.showTimes h1{
+    font-size: 50px;
+}
+.showTimes h2{
+font-size: 40px;
+}

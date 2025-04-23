@@ -4,12 +4,10 @@ import {
   Container,
   Title,
   TextInput,
-  Button,
   Stack,
   Alert,
 } from "@mantine/core";
-import { useNavigate } from "react-router";
-import { routes } from "../routes/routeIndex";
+import { useLocation, useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 
 interface UserDto {
@@ -21,22 +19,28 @@ interface UserDto {
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);
   const [formError, setFormError] = useState("");
   const [loading, setLoading] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { login } = useAuth();
+
+  const redirectTo = location.state?.redirectTo ?? '/';
 
   useEffect(() => {
     let redirectTimer: number;
 
     if (loginSuccess) {
-      // on log in success, redirect after 3 secs
       redirectTimer = window.setTimeout(() => {
-        navigate(routes.home);
+        navigate(redirectTo, { state: { fromLogin: true } }); 
       }, 3000);
     }
-    // Clean up timer if component unmounts
     return () => {
       if (redirectTimer) clearTimeout(redirectTimer);
     };
@@ -44,52 +48,101 @@ export default function LoginPage() {
 
   function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (loading) {
+    if (loading) return;
+  
+    setFormError("");
+  
+    // ✅ Validate username
+    if (!username.trim()) {
+      setFormError("Username is required.");
       return;
     }
+  
+    // ✅ If registering, validate email, password, confirm password
+    if (isRegistering) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    setFormError("");
-    setLoading(true);
-
-    fetch("/api/authentication/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Login failed");
-        }
-        return response.text().then((text) => (text ? JSON.parse(text) : {}));
+  
+      if (!email.trim()) {
+        setFormError("Email is required.");
+        return;
+      }
+  
+      if (!emailRegex.test(email)) {
+        setFormError("Please enter a valid email address.");
+        return;
+      }
+  
+      if (password.length < 8) {
+        setFormError("Password must be at least 8 characters long.");
+        return;
+      }
+  
+      if (password !== confirmPassword) {
+        setFormError("Passwords do not match.");
+        return;
+      }
+  
+      // ✅ Send registration request
+      setLoading(true);
+      fetch("/api/users/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password, email, phone }),
+        credentials: "include",
       })
-
-      .then((data: UserDto) => {
-        console.log("Logged in as", data);
-        login(data); // Update auth context
-        setLoginSuccess(true);
+      
+        .then((res) => {
+          if (!res.ok) throw new Error("Registration failed");
+          return res.text().then((t) => (t ? JSON.parse(t) : {}));
+        })
+        .then((data: UserDto) => {
+          login(data);
+          setLoginSuccess(true);
+        })
+        .catch(() => setFormError("Registration failed. Try again."))
+        .finally(() => setLoading(false));
+    } else {
+      // ✅ Basic password check for login
+      if (password.length < 8) {
+        setFormError("Password must be at least 8 characters long.");
+        return;
+      }
+  
+      // ✅ Send login request
+      setLoading(true);
+      fetch("/api/authentication/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+        credentials: "include",
       })
-
-      .catch((error) => {
-        console.error("Login error:", error);
-        setFormError("Wrong username or password");
-      })
-
-      .finally(() => {
-        setLoading(false);
-      });
+        .then((response) => {
+          if (!response.ok) throw new Error("Login failed");
+          return response.text().then((text) => (text ? JSON.parse(text) : {}));
+        })
+        .then((data: UserDto) => {
+          login(data);
+          setLoginSuccess(true);
+        })
+        .catch(() => setFormError("Wrong username or password"))
+        .finally(() => setLoading(false));
+    }
   }
+  
 
   return (
-    <Container size="xl">
+    <Container size="xl" style={{ marginTop: '175px' }}>
       <Title ta="center" className={classes.title}>
-        Sign in
+        {isRegistering ? "Create an Account" : "Sign in"}
       </Title>
 
-      {loginSuccess ? ( // if login success, tell user and redirect to homepage
+
+
+      {loginSuccess ? (
         <Alert
           color="green"
-          title="Login Successful!"
+          title="Success!"
           style={{
             maxWidth: "500px",
             margin: "20px auto",
@@ -99,7 +152,7 @@ export default function LoginPage() {
           }}
         >
           <p style={{ fontSize: "18px", marginTop: "10px" }}>
-            Welcome back, <strong>{username}</strong>!
+            Welcome, <strong>{username}</strong>!
           </p>
           <p style={{ fontSize: "14px", marginTop: "5px" }}>
             Redirecting you to the homepage...
@@ -112,48 +165,75 @@ export default function LoginPage() {
               label="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              styles={{
-                label: {
-                  width: "100px", // Adjust label width as needed
-                  ta: "left",
-                },
-                input: {
-                  width: "10%",
-                  height: "25px",
-                },
-              }}
             />
+
+            {isRegistering && (
+              <>
+                <TextInput
+                  label="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <TextInput
+                  label="Phone Number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </>
+            )}
+
             <TextInput
               type="password"
               label="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              styles={{
-                input: {
-                  width: "10%",
-                  height: "25px",
-                },
-              }}
             />
 
-            <Button
+            {isRegistering && (
+              <TextInput
+                type="password"
+                label="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            )}
+
+            <button
               type="submit"
-              value={loading ? "Loading..." : "Login"}
               disabled={loading}
-              styles={{
-                root: {
-                  marginTop: "20px",
-                  width: "5%",
-                  height: "25px",
-                },
-              }}
+              className='btn-orange'
+              style={{marginTop:'10px'}}
             >
-              {loading ? "Signing in..." : "Sign in"}
-            </Button>
-            {formError ? <p style={{ color: "red" }}>{formError}</p> : null}
+              {loading ? (isRegistering ? "Creating account..." : "Signing in...") : (isRegistering ? "Register" : "Sign in")}
+            </button>
+
+            {formError && <p style={{ color: "red" }}>{formError}</p>}
           </Stack>
         </form>
       )}
+      <p style={{ textAlign: "center", marginTop: "1rem" }}>
+  {isRegistering ? (
+    <>
+      Already have an account?{" "}
+      <span
+        style={{ color: "#1c7ed6", cursor: "pointer", textDecoration: "underline" }}
+        onClick={() => setIsRegistering(false)}
+      >
+        Sign in
+      </span>
+    </>
+  ) : (
+    <>
+      Don't have an account?{" "}
+      <span
+        style={{ color: "#1c7ed6", cursor: "pointer", textDecoration: "underline" }}
+        onClick={() => setIsRegistering(true)}
+      >
+        Create one
+      </span>
+    </>
+  )}
+</p>
     </Container>
   );
 }

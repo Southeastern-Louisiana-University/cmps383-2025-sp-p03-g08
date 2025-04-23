@@ -1,6 +1,7 @@
 .homePage {
   padding: 2rem;
   width: 100vw;
+  margin-top: 150px;
 }
 .homePage__nowPlaying h1 {
   font-size: 2.5rem;
@@ -15,7 +16,6 @@
   width: 100vw;
   overflow-x: auto;
   height: 700px;
-  
 }
 .homePage__foodAndDrinks h2 {
   font-size: 2.5rem;
@@ -38,6 +38,7 @@
 }
 .homePage__testimonials {
   margin-top: 3rem;
+  margin-right:80px
 }
 .homePage__testimonialGrid {
   display: flex;

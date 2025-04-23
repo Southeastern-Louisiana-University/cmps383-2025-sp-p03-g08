@@ -36,7 +36,7 @@ namespace Selu383.SP25.P03.Api.Data
                 // For each CinemaHall, add 100 seats in a 10 by 10 layout (rows A-J, numbers 1-10).
                 foreach (var cinemaHall in cinemaHalls)
                 {
-                    for (char row = 'A'; row <= 'J'; row++)
+                    for (char row = 'A'; row <= 'E'; row++)
                     {
                         for (int number = 1; number <= 10; number++)
                         {
@@ -45,6 +45,8 @@ namespace Selu383.SP25.P03.Api.Data
                                 Row = row,
                                 Number = number,
                                 CinemaHallId = cinemaHall.Id,
+                                SeatType = "Regular",
+                                Status = "Available"
                                 // Status and SeatType use their default values.
                             };
                             seatsToAdd.Add(seat);

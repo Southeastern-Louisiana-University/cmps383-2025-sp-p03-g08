@@ -1,4 +1,4 @@
-import { Card, Group, Text, Button, Divider, Stack } from '@mantine/core';
+import { Card, Group, Text, Divider, Stack } from '@mantine/core';
 import '../styles/Cart.css';
 
 type SeatItem = {

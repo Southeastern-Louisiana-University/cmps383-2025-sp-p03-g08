@@ -4,14 +4,10 @@ import {
   Container,
   Title,
   TextInput,
-  Button,
   Stack,
   Alert,
-  Group,
-  Switch
 } from "@mantine/core";
 import { useLocation, useNavigate } from "react-router";
-import { routes } from "../routes/routeIndex";
 import { useAuth } from "../hooks/useAuth";
 
 interface UserDto {

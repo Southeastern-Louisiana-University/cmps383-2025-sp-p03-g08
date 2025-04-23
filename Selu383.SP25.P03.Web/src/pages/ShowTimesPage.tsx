@@ -1,7 +1,6 @@
 import { Link, useParams } from "react-router";
 import "../styles/Showtime.css";
 import "../styles/App.css";
-import { useWorkflow } from "../hooks/WorkflowContext";
 import { useEffect, useState } from "react";
 
 interface Showing {

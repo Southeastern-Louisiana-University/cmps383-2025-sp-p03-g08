@@ -6,7 +6,6 @@ import {
   Loader,
   Alert,
   Divider,
-  Button,
 } from '@mantine/core';
 import Barcode from 'react-barcode';
 

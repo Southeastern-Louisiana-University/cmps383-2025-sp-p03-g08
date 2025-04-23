@@ -1,6 +1,5 @@
 import { Link, useParams } from 'react-router'
 import '../styles/TheatersPage.css'
-import { useWorkflow } from '../hooks/WorkflowContext'
 import { useEffect, useState } from 'react';
 
 interface Theater {
@@ -11,11 +10,9 @@ interface Theater {
 export default function TheatersPage() {
 let params = useParams();
 const [theaters,setTheaters]=useState<Theater[]>([]);
-const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
 useEffect(() => {
   const fetchData = async () => {
-    try {
+    
       // Fetch movies
       const theatersResponse = await fetch(`/api/theaters`);
       if (!theatersResponse.ok) {
@@ -24,15 +21,7 @@ useEffect(() => {
       const theatersData: Theater[] = await theatersResponse.json();
 
       setTheaters(theatersData);
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err);
-      } else {
-        setError(new Error("An unexpected error occurred."));
-      }
-    } finally {
-      setLoading(false);
-    }
+    
   }
   fetchData();
 }, []);

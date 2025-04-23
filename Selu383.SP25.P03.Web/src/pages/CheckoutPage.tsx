@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Text, Button } from "@mantine/core";
+import { Container, Text} from "@mantine/core";
 import { Cart } from "../Components/Cart";
 import { useNavigate } from "react-router";
 

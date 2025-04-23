@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router";
 import "../styles/Navbar.css";
 import { routes } from "../routes/routeIndex";
 import { useAuth } from "../hooks/useAuth";
-import { Flex } from "@mantine/core";
 import { useState } from "react";
 import { Moon, Sun } from "lucide-react";
 

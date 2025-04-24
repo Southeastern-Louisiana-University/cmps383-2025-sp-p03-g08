@@ -39,6 +39,7 @@ export default function FoodScreen() {
       return { ...prev, [item.id]: qty + 1 };
     });
   };
+
   const removeFromCart = (item: FoodItem) => {
     setCart((prev) => {
       const qty = prev[item.id] || 0;
@@ -58,10 +59,8 @@ export default function FoodScreen() {
     });
   }, [searchText, selectedCategory]);
 
-  const totalItems = useMemo(
-    () => Object.values(cart).reduce((sum, q) => sum + q, 0),
-    [cart]
-  );
+  const totalItems = useMemo(() => Object.values(cart).reduce((sum, q) => sum + q, 0), [cart]);
+
   const totalPrice = useMemo(
     () =>
       sampleFoodItems.reduce((sum, item) => {
@@ -101,14 +100,15 @@ export default function FoodScreen() {
       </View>
 
       {/* Categories */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chipContainer}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={[styles.chipContainer, { paddingLeft: 4 }]}
+      >
         {categories.map((cat) => (
           <TouchableOpacity
             key={cat}
-            style={[
-              styles.chip,
-              selectedCategory === cat && styles.chipSelected,
-            ]}
+            style={[styles.chip, selectedCategory === cat && styles.chipSelected]}
             onPress={() => setSelectedCategory(cat)}
           >
             <Text
@@ -124,40 +124,42 @@ export default function FoodScreen() {
       </ScrollView>
 
       {/* Items */}
-      {filteredItems.map((item) => {
+      {filteredItems.map((item, index) => {
         const qty = cart[item.id] || 0;
         return (
-          <View key={item.id} style={styles.itemContainer}>
-            <View style={styles.imagePlaceholder}>
-              <Text style={styles.imagePlaceholderText}>Image</Text>
-            </View>
-            <View style={styles.itemDetails}>
-              <Text style={styles.itemName}>{item.name}</Text>
-              <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
-              {qty > 0 ? (
-                <View style={styles.quantityContainer}>
+          <View key={item.id} style={{ marginTop: index === 0 ? 0 : 8 }}>
+            <View style={styles.itemContainer}>
+              <View style={styles.imagePlaceholder}>
+                <Text style={styles.imagePlaceholderText}>Image</Text>
+              </View>
+              <View style={styles.itemDetails}>
+                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
+                {qty > 0 ? (
+                  <View style={styles.quantityContainer}>
+                    <TouchableOpacity
+                      style={styles.qtyButton}
+                      onPress={() => removeFromCart(item)}
+                    >
+                      <Text style={styles.qtyButtonText}>–</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.qtyText}>{qty}</Text>
+                    <TouchableOpacity
+                      style={styles.qtyButton}
+                      onPress={() => addToCart(item)}
+                    >
+                      <Text style={styles.qtyButtonText}>+</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
                   <TouchableOpacity
-                    style={styles.qtyButton}
-                    onPress={() => removeFromCart(item)}
-                  >
-                    <Text style={styles.qtyButtonText}>–</Text>
-                  </TouchableOpacity>
-                  <Text style={styles.qtyText}>{qty}</Text>
-                  <TouchableOpacity
-                    style={styles.qtyButton}
+                    style={styles.addButton}
                     onPress={() => addToCart(item)}
                   >
-                    <Text style={styles.qtyButtonText}>+</Text>
+                    <Text style={styles.addButtonText}>Add to Cart</Text>
                   </TouchableOpacity>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  style={styles.addButton}
-                  onPress={() => addToCart(item)}
-                >
-                  <Text style={styles.addButtonText}>Add to Cart</Text>
-                </TouchableOpacity>
-              )}
+                )}
+              </View>
             </View>
           </View>
         );
@@ -179,107 +181,144 @@ export default function FoodScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#000", padding: 16 },
-
+  container: {
+    flex: 1,
+    backgroundColor: "#1a1a1a",
+    padding: 16,
+  },
   title: {
     fontSize: 28,
     fontWeight: "bold",
     color: "#fdba74",
-    marginBottom: 12,
+    marginBottom: 16,
     textAlign: "center",
   },
-
   searchContainer: {
-    backgroundColor: "#222",
-    borderRadius: 8,
-    marginBottom: 12,
+    backgroundColor: "#2c2c2c",
+    borderRadius: 12,
+    marginBottom: 16,
     paddingHorizontal: 12,
   },
   searchInput: {
-    height: 40,
+    height: 44,
     color: "#fff",
+    fontSize: 16,
   },
-
-  chipContainer: { marginBottom: 16 },
+  chipContainer: {
+    flexDirection: "row",
+    marginBottom: 24,
+  },
   chip: {
     backgroundColor: "#333",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    marginRight: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginRight: 10,
   },
-  chipSelected: { backgroundColor: "#fdba74" },
-  chipText: { color: "#fff", fontWeight: "600" },
-  chipTextSelected: { color: "#000" },
-
+  chipSelected: {
+    backgroundColor: "#fdba74",
+  },
+  chipText: {
+    color: "#fff",
+    fontWeight: "600",
+  },
+  chipTextSelected: {
+    color: "#000",
+  },
   itemContainer: {
     flexDirection: "row",
-    backgroundColor: "#121212",
-    borderRadius: 8,
-    marginBottom: 16,
+    backgroundColor: "#2a2a2a",
+    borderRadius: 14,
+    marginBottom: 20,
     overflow: "hidden",
   },
   imagePlaceholder: {
     width: 100,
     height: 100,
-    backgroundColor: "#333",
+    backgroundColor: "#444",
     justifyContent: "center",
     alignItems: "center",
   },
-  imagePlaceholderText: { color: "#888" },
-
+  imagePlaceholderText: {
+    color: "#bbb",
+  },
   itemDetails: {
     flex: 1,
-    padding: 12,
+    padding: 14,
     justifyContent: "space-between",
   },
-  itemName: { fontSize: 20, color: "#fff", fontWeight: "600" },
-  itemPrice: { fontSize: 16, color: "#fff", marginVertical: 4 },
-
+  itemName: {
+    fontSize: 20,
+    color: "#fff",
+    fontWeight: "600",
+  },
+  itemPrice: {
+    fontSize: 16,
+    color: "#e0e0e0",
+    marginVertical: 6,
+  },
   addButton: {
     backgroundColor: "#fdba74",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
     alignSelf: "flex-start",
   },
-  addButtonText: { color: "#000", fontWeight: "600" },
-
+  addButtonText: {
+    color: "#000",
+    fontWeight: "600",
+  },
   quantityContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 8,
+    marginTop: 6,
   },
   qtyButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: "#333",
+    backgroundColor: "#444",
     justifyContent: "center",
     alignItems: "center",
   },
-  qtyButtonText: { color: "#fff", fontSize: 20, fontWeight: "600" },
+  qtyButtonText: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "600",
+  },
   qtyText: {
     color: "#fff",
     marginHorizontal: 12,
     fontSize: 16,
     fontWeight: "600",
   },
-
   cartSummaryContainer: {
-    backgroundColor: "#121212",
-    padding: 16,
-    borderRadius: 8,
-    marginTop: 8,
+    backgroundColor: "#2a2a2a",
+    padding: 20,
+    borderRadius: 16,
+    marginTop: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 5,
     alignItems: "center",
   },
-  cartSummaryText: { color: "#fff", fontSize: 16, marginBottom: 8 },
-
+  cartSummaryText: {
+    color: "#fff",
+    fontSize: 16,
+    marginBottom: 10,
+  },
   checkoutButton: {
     backgroundColor: "#fdba74",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
+    paddingVertical: 14,
+    paddingHorizontal: 28,
+    borderRadius: 12,
   },
-  checkoutButtonText: { color: "#000", fontSize: 16, fontWeight: "bold" },
+  checkoutButtonText: {
+    color: "#1a1a1a",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });
+

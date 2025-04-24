@@ -12,11 +12,12 @@ import {
 } from "react-native";
 
 const { width } = Dimensions.get("window");
-const CARD_WIDTH = (width - 48) / 2;
-const TICKET_PRICE = 12; // $12 per ticket
 
 type Movie = { id: string; title: string; poster: any };
 type Theater = { id: string; name: string; location: string };
+
+const TICKET_PRICE = 12;
+const ROWS = 5, COLS = 8;
 
 const movies: Movie[] = [
   { id: "1", title: "Epic Adventure", poster: require("@/assets/images/poster1.jpg") },
@@ -33,7 +34,7 @@ const theaters: Theater[] = [
 ];
 
 export default function MoviesScreen() {
-  const [stage, setStage] = useState<"list"|"theater"|"seats"|"confirm">("list");
+  const [stage, setStage] = useState<"list" | "theater" | "seats" | "confirm">("list");
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [selectedTheater, setSelectedTheater] = useState<Theater | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -41,7 +42,6 @@ export default function MoviesScreen() {
   const [search, setSearch] = useState("");
 
   const showtimes = ["1:00 PM", "4:00 PM", "7:00 PM"];
-  const ROWS = 5, COLS = 8;
 
   const filtered = movies.filter(m =>
     m.title.toLowerCase().includes(search.toLowerCase())
@@ -73,7 +73,6 @@ export default function MoviesScreen() {
     resetAll();
   };
 
-  // 4️⃣ Confirmation screen
   if (stage === "confirm") {
     return (
       <ScrollView style={styles.container} contentContainerStyle={{ padding: 16 }}>
@@ -81,47 +80,19 @@ export default function MoviesScreen() {
           <Text style={styles.backText}>← Back to seat selection</Text>
         </TouchableOpacity>
         <Text style={styles.header}>Confirm Purchase</Text>
-        <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>Movie:</Text>
-          <Text style={styles.summaryValue}>{selectedMovie?.title}</Text>
-        </View>
-        <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>Theater:</Text>
-          <Text style={styles.summaryValue}>{selectedTheater?.name}</Text>
-        </View>
-        <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>Time:</Text>
-          <Text style={styles.summaryValue}>{selectedTime}</Text>
-        </View>
-        <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>Seats:</Text>
-          <Text style={styles.summaryValue}>{selectedSeats.join(", ")}</Text>
-        </View>
-        <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>Total Cost:</Text>
-          <Text style={styles.summaryValue}>
-            ${ (selectedSeats.length * TICKET_PRICE).toFixed(2) }
-          </Text>
-        </View>
+        <View style={styles.summaryRow}><Text style={styles.summaryLabel}>Movie:</Text><Text style={styles.summaryValue}>{selectedMovie?.title}</Text></View>
+        <View style={styles.summaryRow}><Text style={styles.summaryLabel}>Theater:</Text><Text style={styles.summaryValue}>{selectedTheater?.name}</Text></View>
+        <View style={styles.summaryRow}><Text style={styles.summaryLabel}>Time:</Text><Text style={styles.summaryValue}>{selectedTime}</Text></View>
+        <View style={styles.summaryRow}><Text style={styles.summaryLabel}>Seats:</Text><Text style={styles.summaryValue}>{selectedSeats.join(", ")}</Text></View>
+        <View style={styles.summaryRow}><Text style={styles.summaryLabel}>Total Cost:</Text><Text style={styles.summaryValue}>${(selectedSeats.length * TICKET_PRICE).toFixed(2)}</Text></View>
         <View style={styles.confirmButtons}>
-          <TouchableOpacity
-            style={styles.cancelButton}
-            onPress={resetAll}  // ← now resets all and goes back to list
-          >
-            <Text style={styles.cancelText}>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.confirmButton}
-            onPress={handleConfirmSale}
-          >
-            <Text style={styles.confirmText}>Confirm</Text>
-          </TouchableOpacity>
+          <TouchableOpacity style={styles.cancelButton} onPress={resetAll}><Text style={styles.cancelText}>Cancel</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmSale}><Text style={styles.confirmText}>Confirm</Text></TouchableOpacity>
         </View>
       </ScrollView>
     );
   }
 
-  // 3️⃣ Seat‐selection & showtime
   if (stage === "seats" && selectedMovie && selectedTheater) {
     return (
       <ScrollView style={styles.container} contentContainerStyle={{ padding: 16 }}>
@@ -136,32 +107,16 @@ export default function MoviesScreen() {
           {showtimes.map(t => (
             <TouchableOpacity
               key={t}
-              style={[
-                styles.timeButton,
-                selectedTime === t && styles.timeButtonSelected,
-              ]}
+              style={[styles.timeButton, selectedTime === t && styles.timeButtonSelected]}
               onPress={() => setSelectedTime(t)}
             >
-              <Text
-                style={[
-                  styles.timeText,
-                  selectedTime === t && styles.timeTextSelected,
-                ]}
-              >
-                {t}
-              </Text>
+              <Text style={[styles.timeText, selectedTime === t && styles.timeTextSelected]}>{t}</Text>
             </TouchableOpacity>
           ))}
         </View>
 
         <Text style={styles.subHeader}>Select Seats</Text>
-
-        {/* Screen Indicator */}
-        <View style={styles.screenBar}>
-          <Text style={styles.screenText}>SCREEN</Text>
-        </View>
-
-        {/* Seat Map */}
+        <View style={styles.screenBar}><Text style={styles.screenText}>SCREEN</Text></View>
         <View style={styles.seatMap}>
           {Array.from({ length: ROWS }).map((_, row) => (
             <View key={row} style={styles.seatRow}>
@@ -184,17 +139,13 @@ export default function MoviesScreen() {
           ))}
         </View>
 
-        <TouchableOpacity
-          style={styles.nextButton}
-          onPress={() => setStage("confirm")}
-        >
+        <TouchableOpacity style={styles.nextButton} onPress={() => setStage("confirm")}>
           <Text style={styles.nextText}>Proceed to Confirmation</Text>
         </TouchableOpacity>
       </ScrollView>
     );
   }
 
-  // 2️⃣ Theater‐selection
   if (stage === "theater" && selectedMovie) {
     return (
       <ScrollView style={styles.container} contentContainerStyle={{ padding: 16 }}>
@@ -219,7 +170,6 @@ export default function MoviesScreen() {
     );
   }
 
-  // 1️⃣ Main movies view
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 24 }}>
       <TextInput
@@ -229,8 +179,7 @@ export default function MoviesScreen() {
         value={search}
         onChangeText={setSearch}
       />
-
-      {["Highlights","New Releases","Coming Soon"].map((section, idx) => (
+      {["Highlights", "New Releases", "Coming Soon"].map((section, idx) => (
         <View key={section} style={styles.section}>
           <Text style={styles.sectionTitle}>{section}</Text>
           <ScrollView
@@ -238,16 +187,14 @@ export default function MoviesScreen() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.carousel}
           >
-            {filtered
-              .slice(idx*2, idx*2 + 3) // pick 3 per section
-              .map(m => (
-                <TouchableOpacity key={m.id} onPress={() => {
-                  setSelectedMovie(m);
-                  setStage("theater");
-                }}>
-                  <Image source={m.poster} style={styles.posterImage} />
-                </TouchableOpacity>
-              ))}
+            {filtered.slice(idx * 2, idx * 2 + 3).map(m => (
+              <TouchableOpacity key={m.id} onPress={() => {
+                setSelectedMovie(m);
+                setStage("theater");
+              }}>
+                <Image source={m.poster} style={styles.posterImage} />
+              </TouchableOpacity>
+            ))}
           </ScrollView>
         </View>
       ))}
@@ -256,151 +203,159 @@ export default function MoviesScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#000" },
+  container: { flex: 1, backgroundColor: "#0d0d0d" },
 
-  // Search
   searchInput: {
     margin: 16,
-    backgroundColor: "#222",
+    backgroundColor: "#1a1a1a",
     borderRadius: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     color: "#fff",
-    height: 40,
+    height: 44,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: "#2c2c2c",
   },
 
-  // Carousels
-  section: { marginTop: 16 },
+  section: { marginBottom: 24 },
   sectionTitle: {
-    color: "#fff",
-    fontSize: 20,
-    fontWeight: "600",
+    color: "#fdba74",
+    fontSize: 22,
+    fontWeight: "700",
     marginHorizontal: 16,
-    marginBottom: 8,
+    marginBottom: 10,
   },
   carousel: { paddingLeft: 16 },
   posterImage: {
-    width: 120,
-    height: 180,
-    borderRadius: 8,
+    width: 130,
+    height: 190,
+    borderRadius: 10,
     marginRight: 12,
-    backgroundColor: "#333",
+    borderWidth: 1,
+    borderColor: "#333",
   },
 
-  // Back link & headers
-  backText: { color: "#fdba74", marginBottom: 12, marginLeft: 16 },
-  header: {
+  backText: {
     color: "#fdba74",
-    fontSize: 24,
+    marginBottom: 12,
+    marginLeft: 16,
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  header: {
+    color: "#fff",
+    fontSize: 26,
     fontWeight: "bold",
-    marginBottom: 16,
+    marginBottom: 10,
     marginLeft: 16,
   },
   subHeader: {
-    color: "#fff",
+    color: "#ccc",
     fontSize: 18,
     fontWeight: "600",
     marginHorizontal: 16,
-    marginTop: 12,
+    marginTop: 14,
+    marginBottom: 6,
   },
 
-  // Theater selection
   theaterButton: {
-    backgroundColor: "#121212",
+    backgroundColor: "#1a1a1a",
     padding: 16,
-    borderRadius: 8,
+    borderRadius: 10,
     marginBottom: 12,
     marginHorizontal: 16,
+    borderWidth: 1,
+    borderColor: "#2f2f2f",
   },
   theaterName: { color: "#fff", fontSize: 18, fontWeight: "600" },
-  theaterLocation: { color: "#aaa", marginTop: 4 },
+  theaterLocation: { color: "#999", marginTop: 4 },
 
-  // Showtime & seats
   timesContainer: { flexDirection: "row", flexWrap: "wrap", margin: 16 },
   timeButton: {
     borderWidth: 1,
     borderColor: "#fdba74",
     borderRadius: 6,
     paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     marginRight: 12,
     marginBottom: 12,
   },
   timeButtonSelected: { backgroundColor: "#fdba74" },
-  timeText: { color: "#fdba74" },
-  timeTextSelected: { color: "#000", fontWeight: "600" },
+  timeText: { color: "#fdba74", fontSize: 15 },
+  timeTextSelected: { color: "#000", fontWeight: "700" },
 
   screenBar: {
-    height: 24,
+    height: 28,
     backgroundColor: "#444",
     marginHorizontal: 16,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderRadius: 6,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 16,
+    marginTop: 20,
   },
-  screenText: { color: "#fff", fontWeight: "600", letterSpacing: 2 },
+  screenText: { color: "#fff", fontWeight: "700", fontSize: 12 },
 
   seatMap: {
     marginHorizontal: 16,
-    backgroundColor: "#222",
-    padding: 8,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
+    backgroundColor: "#1a1a1a",
+    padding: 10,
+    borderRadius: 8,
+    marginTop: 8,
   },
   seatRow: { flexDirection: "row", marginBottom: 8, justifyContent: "center" },
   seat: {
-    width: 32,
-    height: 32,
+    width: 34,
+    height: 34,
     borderWidth: 1,
     borderColor: "#fdba74",
-    borderRadius: 4,
+    borderRadius: 6,
     margin: 4,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#0d0d0d",
   },
   seatSelected: { backgroundColor: "#fdba74" },
   seatText: { color: "#fdba74", fontSize: 12 },
-  seatTextSelected: { color: "#000", fontWeight: "600" },
+  seatTextSelected: { color: "#000", fontWeight: "700" },
 
   nextButton: {
     backgroundColor: "#fdba74",
-    paddingVertical: 14,
-    borderRadius: 8,
-    marginTop: 30,
+    paddingVertical: 16,
+    borderRadius: 10,
+    marginTop: 24,
     alignItems: "center",
     marginHorizontal: 16,
-    marginBottom: 30,
+    marginBottom: 40,
   },
-  nextText: { color: "#000", fontSize: 16, fontWeight: "600" },
+  nextText: { color: "#000", fontSize: 16, fontWeight: "700" },
 
-  // Confirmation
   summaryRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginHorizontal: 16,
-    marginBottom: 12,
+    marginBottom: 14,
   },
   summaryLabel: { color: "#aaa", fontSize: 16 },
   summaryValue: { color: "#fff", fontSize: 16, fontWeight: "600" },
   confirmButtons: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 24,
+    marginTop: 28,
   },
   cancelButton: {
     borderWidth: 1,
     borderColor: "#fdba74",
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
+    borderRadius: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 28,
   },
-  cancelText: { color: "#fdba74", fontSize: 16, fontWeight: "600" },
+  cancelText: { color: "#fdba74", fontSize: 16, fontWeight: "700" },
   confirmButton: {
     backgroundColor: "#fdba74",
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
+    borderRadius: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 28,
   },
-  confirmText: { color: "#000", fontSize: 16, fontWeight: "600" },
+  confirmText: { color: "#000", fontSize: 16, fontWeight: "700" },
 });
+ 

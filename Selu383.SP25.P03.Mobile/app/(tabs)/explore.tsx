@@ -23,6 +23,7 @@ export default function ExploreScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ dark: "#D84242", light: "#D84242" }}
+
       headerImage={
         <View style={{ height: 200, backgroundColor: "#1a1a1a" }} />
       }
@@ -33,7 +34,7 @@ export default function ExploreScreen() {
 
       <View style={styles.lionContainer}>
         <Image
-          source={require("@/assets/images/lion.jpeg")}
+          source={require("@/assets/images/logo.png")}
           style={styles.lionImage}
           resizeMode="contain"
         />

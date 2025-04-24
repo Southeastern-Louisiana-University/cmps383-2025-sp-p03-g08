@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   TextInput,
+  Image,
 } from "react-native";
 
 interface FoodItem {
@@ -14,14 +15,16 @@ interface FoodItem {
   name: string;
   price: number;
   category: string;
+  image: any;
 }
 
 const sampleFoodItems: FoodItem[] = [
-  { id: "1", name: "Pizza", price: 10.99, category: "Pizza" },
-  { id: "2", name: "Burger", price: 7.99, category: "Burgers" },
-  { id: "3", name: "Salad", price: 5.99, category: "Salads" },
-  { id: "4", name: "Sushi", price: 12.99, category: "Sushi" },
-  { id: "5", name: "Pasta", price: 8.99, category: "Pasta" },
+  { id: "1", name: "Pizza", price: 10.99, category: "Pizza", image: require("@/assets/food/pizza.jpeg") },
+  { id: "2", name: "Burger", price: 7.99, category: "Burgers", image: require("@/assets/food/burger.jpeg") },
+  { id: "3", name: "Salad", price: 5.99, category: "Salads", image: require("@/assets/food/salad.jpeg") },
+  { id: "4", name: "Egg Roll", price: 6.99, category: "Snacks", image: require("@/assets/food/eggroll.jpeg") },
+  { id: "5", name: "Mozzarella Sticks", price: 6.49, category: "Snacks", image: require("@/assets/food/mozarella_sticks.jpeg") },
+  { id: "6", name: "Pasta", price: 8.99, category: "Pasta", image: require("@/assets/food/pasta.jpeg") },
 ];
 
 export default function FoodScreen() {
@@ -129,9 +132,7 @@ export default function FoodScreen() {
         return (
           <View key={item.id} style={{ marginTop: index === 0 ? 0 : 8 }}>
             <View style={styles.itemContainer}>
-              <View style={styles.imagePlaceholder}>
-                <Text style={styles.imagePlaceholderText}>Image</Text>
-              </View>
+              <Image source={item.image} style={styles.itemImage} resizeMode="cover" />
               <View style={styles.itemDetails}>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
@@ -232,15 +233,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     overflow: "hidden",
   },
-  imagePlaceholder: {
+  itemImage: {
     width: 100,
     height: 100,
-    backgroundColor: "#444",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  imagePlaceholderText: {
-    color: "#bbb",
+    borderTopLeftRadius: 14,
+    borderBottomLeftRadius: 14,
   },
   itemDetails: {
     flex: 1,
@@ -321,4 +318,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-

@@ -16,21 +16,21 @@ const { width } = Dimensions.get("window");
 type Movie = { id: string; title: string; poster: any };
 type Theater = { id: string; name: string; location: string };
 
-const TICKET_PRICE = 12;
+const TICKET_PRICE = 50;
 const ROWS = 5, COLS = 8;
 
 const movies: Movie[] = [
-  { id: "1", title: "Epic Adventure", poster: require("@/assets/images/poster1.jpg") },
-  { id: "2", title: "Romantic Comedy", poster: require("@/assets/images/poster2.jpg") },
-  { id: "3", title: "Sci‑Fi Thriller", poster: require("@/assets/images/poster3.jpg") },
-  { id: "4", title: "Animated Fun", poster: require("@/assets/images/poster4.jpg") },
-  { id: "5", title: "Historical Drama", poster: require("@/assets/images/poster5.jpg") },
+  { id: "1", title: "Indiana Jones: Riders of the Lost Ark", poster: require("@/assets/images/poster1.jpg") },
+  { id: "2", title: "Friday", poster: require("@/assets/images/poster2.jpg") },
+  { id: "3", title: "Captian America:The First Avenger", poster: require("@/assets/images/poster3.jpg") },
+  { id: "4", title: "Elevation ", poster: require("@/assets/images/poster4.jpg") },
+  { id: "5", title: "Raiders of the lost Ark", poster: require("@/assets/images/poster5.jpg") },
 ];
 
 const theaters: Theater[] = [
-  { id: "t1", name: "AMC Downtown", location: "123 Main St." },
-  { id: "t2", name: "Regal Cinema", location: "456 Broadway" },
-  { id: "t3", name: "Cineplex 9", location: "789 Elm Ave." },
+  { id: "t1", name: "2nd lion Theater", location: "570 2nd Ave, New York, NY 10016" },
+  { id: "t2", name: "Broad Lion", location: "636 N Broad St, New Orleans, LA 70119" },
+  { id: "t3", name: "Lion Studios LA", location: "4020 Marlton Ave, Los Angeles, CA 90008" },
 ];
 
 export default function MoviesScreen() {

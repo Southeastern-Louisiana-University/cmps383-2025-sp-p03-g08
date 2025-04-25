@@ -4,8 +4,8 @@
   align-items: center;
   background-color: #100e0e;
   padding: 1rem 2rem;
-  right:0;
-  left:0;
+  right: 0;
+  left: 0;
   z-index: 9999;
   height: 125px;
   max-width: 100vw;
@@ -24,13 +24,11 @@
 .navbar__auth {
   display: flex;
   flex-direction: column; /* stack vertically */
-  align-items: center;     /* center horizontally */
-  justify-content: center; /* center vertically */
-  height: 100%;            /* stretch to fill navbar height */
+  align-items: center; /* center horizontally */
+  gap: 12px; /* space between items */
+  height: 100%;
+  margin-left: 20px;
 }
-
-
-
 
 .navbar__logo {
   display: flex;
@@ -64,22 +62,15 @@
   align-items: center;
 }
 
-/* Updated navbar auth section */
-.navbar__auth {
-  display: flex;
-  align-items: center;
-  margin-left: 2rem;
-}
-
 .navbar__signin {
   background-color: #fdba74;
   border: none;
   border-radius: 8px;
   padding: 0.5rem 1rem;
-  font-size: 1.2rem;
+  font-size: 1 rem;
   cursor: pointer;
   color: #100e0e;
-  margin-top:50px;
+  margin: 0;
 }
 
 /* Keep your existing logout styles */
@@ -99,7 +90,6 @@
   z-index: 10000; /* make sure it floats above navbar, etc */
   color: white;
 }
-
 
 .logout-confirm-dialog {
   text-align: center;
@@ -148,11 +138,7 @@
   color: #333;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 10px;
-  
 }
-
-
 
 .slider-toggle.dark {
   background-color: #333;

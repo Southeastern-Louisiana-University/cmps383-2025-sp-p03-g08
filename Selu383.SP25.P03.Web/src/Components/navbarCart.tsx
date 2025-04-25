@@ -4,6 +4,7 @@ import { Badge, Button } from "@mantine/core";
 import { routes } from "../routes/routeIndex";
 import { useCart } from "../hooks/cartContext";
 import { Cart } from "./Cart";
+import "../styles/navbarCart.css";
 
 export function NavbarCart() {
   const {
@@ -51,20 +52,9 @@ export function NavbarCart() {
 
   return (
     <div className="navbar-cart" style={{ position: "relative" }}>
-      <Button
+      <button
         onClick={toggleCart}
-        className="navbar__cart-button"
-        style={{
-          backgroundColor: items.length > 0 ? "#fdba74" : "transparent",
-          border: "none",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          padding: "8px 12px",
-          borderRadius: "4px",
-          marginLeft: "12px",
-          color: "#100e0e",
-        }}
+        className={`cart-button ${items.length > 0 ? "has-items" : ""}`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -82,42 +72,132 @@ export function NavbarCart() {
           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
         </svg>
 
-        {items.length > 0 && (
-          <Badge
-            color="red"
-            size="sm"
-            style={{
-              position: "absolute",
-              top: "-5px",
-              right: "-5px",
-            }}
-          >
-            {itemCount}
-          </Badge>
-        )}
-      </Button>
+        {items.length > 0 && <span className="cart-badge">{itemCount}</span>}
+      </button>
 
       {isCartOpen && items.length > 0 && (
-        <div
-          ref={dropdownRef}
-          style={{
-            position: "absolute",
-            right: 0,
-            top: "100%",
-            zIndex: 1000,
-            width: "350px",
-            marginTop: "8px",
-          }}
-        >
-          <Cart
-            items={items}
-            onCheckout={handleCheckout}
-            onRemoveItem={removeItem}
-            onTicketTypeChange={updateTicketType}
-            onUpdateFoodQuantity={updateFoodItemQuantity}
-            isDropdown={true}
-            title="Cart"
-          />
+        <div ref={dropdownRef} className="cart-dropdown">
+          <div className="cart-modal">
+            <div className="cart-header">
+              <h3>Your Cart</h3>
+              <button className="close-button" onClick={toggleCart}>
+                ×
+              </button>
+            </div>
+
+            <div className="cart-content">
+              {/* Render Tickets */}
+              {items
+                .filter((item) => "row" in item)
+                .map((item) => (
+                  <div key={item.id} className="cart-item ticket-item">
+                    <div className="item-details">
+                      <span className="item-name">
+                        Seat {item.row}-{item.id}
+                      </span>
+                      <select
+                        value={item.ticketType}
+                        onChange={(e) =>
+                          updateTicketType(
+                            item.id,
+                            e.target.value as "Adult" | "Child" | "Senior"
+                          )
+                        }
+                        className="ticket-type-select"
+                      >
+                        <option value="Adult">Adult</option>
+                        <option value="Child">Child</option>
+                        <option value="Senior">Senior</option>
+                      </select>
+                    </div>
+                    <div className="item-actions">
+                      <span className="item-price">
+                        $
+                        {item.ticketType === "Adult"
+                          ? "12.00"
+                          : item.ticketType === "Child"
+                          ? "8.00"
+                          : "10.00"}
+                      </span>
+                      <button
+                        className="remove-button"
+                        onClick={() => removeItem(item.id)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))}
+
+              {/* Render Food Items */}
+              {items
+                .filter((item) => "name" in item)
+                .map((item) => (
+                  <div key={item.id} className="cart-item food-item">
+                    <div className="item-details">
+                      <span className="item-name">{item.name}</span>
+                      <div className="quantity-control">
+                        <button
+                          onClick={() =>
+                            updateFoodItemQuantity(
+                              item.id,
+                              Math.max(1, item.quantity - 1)
+                            )
+                          }
+                        >
+                          -
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button
+                          onClick={() =>
+                            updateFoodItemQuantity(item.id, item.quantity + 1)
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                    <div className="item-actions">
+                      <span className="item-price">
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </span>
+                      <button
+                        className="remove-button"
+                        onClick={() => removeItem(item.id)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))}
+            </div>
+
+            <div className="cart-footer">
+              <div className="cart-total">
+                Total: $
+                {items
+                  .reduce((sum, item) => {
+                    if ("ticketType" in item) {
+                      return (
+                        sum +
+                        (item.ticketType === "Adult"
+                          ? 12
+                          : item.ticketType === "Child"
+                          ? 8
+                          : 10)
+                      );
+                    } else if ("price" in item && "quantity" in item) {
+                      return sum + item.price * item.quantity;
+                    }
+                    return sum;
+                  }, 0)
+                  .toFixed(2)}
+              </div>
+              <button className="checkout-button" onClick={handleCheckout}>
+                Checkout
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

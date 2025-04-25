@@ -1,26 +1,48 @@
-import { useState } from "react";
 import { BrowserRouter } from "react-router";
 import { RoutesConfig } from "./routes/routeConfig";
-import { MantineProvider, MantineColorScheme } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
 import Navbar from "./Components/Navbar";
 import { CartProvider } from "./hooks/cartContext";
 import { AuthProvider } from "./hooks/useAuth";
-import "@mantine/core/styles.css";
+
+import "./styles/App.css";
+
+import { useEffect, useState } from "react";
 
 function App() {
-  const [colorScheme, setColorScheme] = useState<MantineColorScheme>("dark");
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
-  // Toggle function for dark mode (not implemented yet!)
-  const toggleColorScheme = () => {
-    setColorScheme(colorScheme === "dark" ? "light" : "dark");
+  // Detect system preference or use stored value
+  useEffect(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved === "light" || saved === "dark") {
+      setTheme(saved);
+      document.body.className = saved;
+    } else {
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      const systemTheme = prefersDark ? "dark" : "light";
+      setTheme(systemTheme);
+      document.body.className = systemTheme;
+    }
+  }, []);
+  // Apply theme and store it
+  useEffect(() => {
+    document.body.className = theme;
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
-
   return (
-    <MantineProvider defaultColorScheme={colorScheme}>
+    <MantineProvider>
       <BrowserRouter>
         <AuthProvider>
           <CartProvider>
-            <Navbar />
+            {/* Now Navbar is inside CartProvider */}
+            <Navbar theme={theme} toggleTheme={toggleTheme} />
             <RoutesConfig />
           </CartProvider>
         </AuthProvider>

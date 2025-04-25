@@ -1,6 +1,5 @@
 import { useParams, useNavigate } from "react-router";
 import "../styles/TheatersPage.css";
-import { useWorkflow } from "../hooks/WorkflowContext";
 import { useEffect, useState } from "react";
 
 interface TheaterDto {

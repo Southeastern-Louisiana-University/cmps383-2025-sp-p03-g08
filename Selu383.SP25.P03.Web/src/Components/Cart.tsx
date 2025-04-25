@@ -1,3 +1,4 @@
+import "../styles/Cart.css";
 import {
   Card,
   Group,
@@ -252,20 +253,9 @@ export function Cart({
 
       <Group p="apart" mt="md">
         <Text fw={600}>Total: ${total.toFixed(2)}</Text>
-        <Button
-          onClick={onCheckout}
-          style={{
-            backgroundColor: "#fdba74",
-            borderRadius: "5px",
-            border: 0,
-            height: "40px",
-            width: isDropdown ? "100%" : "100px",
-            cursor: "pointer",
-            color: "#100e0e",
-          }}
-        >
+        <button onClick={onCheckout} className="btn-orange">
           Checkout
-        </Button>
+        </button>
       </Group>
     </Card>
   );

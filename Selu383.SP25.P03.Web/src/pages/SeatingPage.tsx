@@ -1,13 +1,12 @@
-import { Button, Text } from '@mantine/core';
-import '../styles/SeatingPage.css';
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router';
-
+import { Button, Text } from "@mantine/core";
+import "../styles/SeatingPage.css";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router";
 
 interface Seat {
   id: string;
-  row: string;      
-  status: string;  
+  row: string;
+  status: string;
   selected: boolean;
 }
 
@@ -43,9 +42,13 @@ export function SeatingPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const seatsResponse = await fetch(`/api/seats/by-showing/${params.showingId}`);
+        const seatsResponse = await fetch(
+          `/api/seats/by-showing/${params.showingId}`
+        );
         if (!seatsResponse.ok) {
-          throw new Error(`Failed to fetch seats, status: ${seatsResponse.status}`);
+          throw new Error(
+            `Failed to fetch seats, status: ${seatsResponse.status}`
+          );
         }
         const seatsData: Seat[] = await seatsResponse.json();
         setSeats(seatsData);
@@ -73,7 +76,7 @@ export function SeatingPage() {
   const handleSelectSeat = (seatId: string) => {
     setSeats((prevSeats: Seat[]) =>
       prevSeats.map((seat: Seat) => {
-        if (seat.id === seatId && seat.status.toLowerCase() === 'available') {
+        if (seat.id === seatId && seat.status.toLowerCase() === "available") {
           return { ...seat, selected: !seat.selected };
         }
         return seat;
@@ -89,7 +92,7 @@ export function SeatingPage() {
       <div className="heading-container">
         <h1>Choose Your Seats</h1>
       </div>
-      
+
       <div className="seating-container">
         <div className="screen">Screen</div>
         {groupedSeats.map((row, rowIndex) => (
@@ -97,11 +100,20 @@ export function SeatingPage() {
             {row.map((seat: Seat) => (
               <Button
                 key={seat.id}
-                className={`seat ${seat.selected ? 'selected' : (seat.status.toLowerCase() === 'available' ? '' : 'unavailable')}`}
+                className={`seat ${
+                  seat.selected
+                    ? "selected"
+                    : seat.status.toLowerCase() === "available"
+                    ? ""
+                    : "unavailable"
+                }`}
                 onClick={() => handleSelectSeat(seat.id)}
-                variant={seat.selected ? 'filled' : 'outline'}
-                color={seat.selected ? 'teal' : 'gray'}
-                disabled={seat.status.toLowerCase() === 'occupied' || seat.status.toLowerCase() === 'reserved'}
+                variant={seat.selected ? "filled" : "outline"}
+                color={seat.selected ? "teal" : "gray"}
+                disabled={
+                  seat.status.toLowerCase() === "occupied" ||
+                  seat.status.toLowerCase() === "reserved"
+                }
                 radius={0}
               >
                 {seat.id}
@@ -110,28 +122,38 @@ export function SeatingPage() {
           </div>
         ))}
       </div>
-      
+
       <div className="seating-container">
         <Text size="lg">
           {seats.filter((seat) => seat.selected).length > 0
-            ? `You have selected ${seats.filter((seat) => seat.selected).length} seat(s).`
-            : 'No seats selected yet.'}
+            ? `You have selected ${
+                seats.filter((seat) => seat.selected).length
+              } seat(s).`
+            : "No seats selected yet."}
         </Text>
         {seats.filter((seat) => seat.selected).length > 0 && (
           <Link to={"/checkout"}>
-          <Button className="purchaseButton" onClick={()=> {
-           const selectedSeats = seats
-           .filter((seat) => seat.selected)
-           .map((seat) => ({
-            id: seat.id,
-            row: seat.row, // ✅ restore this!
-            ticketType: "Adult"
-          }));          
-            sessionStorage.setItem('selectedSeats',JSON.stringify(selectedSeats))
-            if (params.showingId) {
-              sessionStorage.setItem('showingId', params.showingId); // ✅ store it
-            }
-          }}>Continue</Button>
+            <button
+              className="btn-orange"
+              onClick={() => {
+                const selectedSeats = seats
+                  .filter((seat) => seat.selected)
+                  .map((seat) => ({
+                    id: seat.id,
+                    row: seat.row, // ✅ restore this!
+                    ticketType: "Adult",
+                  }));
+                sessionStorage.setItem(
+                  "selectedSeats",
+                  JSON.stringify(selectedSeats)
+                );
+                if (params.showingId) {
+                  sessionStorage.setItem("showingId", params.showingId); // ✅ store it
+                }
+              }}
+            >
+              Continue
+            </button>
           </Link>
         )}
       </div>

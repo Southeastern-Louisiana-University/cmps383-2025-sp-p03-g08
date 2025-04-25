@@ -4,11 +4,33 @@
   align-items: center;
   background-color: #100e0e;
   padding: 1rem 2rem;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 1000;
+  right:0;
+  left:0;
+  z-index: 9999;
+  height: 125px;
+  max-width: 100vw;
 }
+.navbar__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 100vw;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 100%;
+}
+
+.navbar__auth {
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  align-items: center;     /* center horizontally */
+  justify-content: center; /* center vertically */
+  height: 100%;            /* stretch to fill navbar height */
+}
+
+
+
 
 .navbar__logo {
   display: flex;
@@ -21,19 +43,6 @@
   text-decoration: none;
 }
 
-.navbar__icon {
-  max-width: 100px;
-  max-height: 100px;
-  margin-right: 8px;
-}
-
-.navbar__brand {
-  color: #fdba74;
-  font-size: 1.5rem;
-  text-decoration: none;
-}
-
-/* Updated navbar links section */
 .navbar__links {
   display: flex;
   list-style: none;
@@ -70,21 +79,27 @@
   font-size: 1.2rem;
   cursor: pointer;
   color: #100e0e;
-  margin-left: 1rem;
+  margin-top:50px;
 }
 
 /* Keep your existing logout styles */
 .logout-confirm-overlay {
-  position: fixed;
+  position: fixed; /* ✅ now it's fixed to the entire screen */
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+
   background-color: rgba(0, 0, 0, 0.5);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  z-index: 10000; /* make sure it floats above navbar, etc */
+  color: white;
 }
+
 
 .logout-confirm-dialog {
   text-align: center;
@@ -120,11 +135,36 @@
   background-color: #ff7875;
 }
 
-/* This is important for content positioning */
-.page-content {
-  padding-top: 120px; /* Increased to ensure content doesn't hide under navbar */
+.slider-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background-color: #eee;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+  
 }
 
-body {
-  margin: 0;
+
+
+.slider-toggle.dark {
+  background-color: #333;
+  color: #fff;
+}
+
+.slider-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slider-label {
+  white-space: nowrap;
 }

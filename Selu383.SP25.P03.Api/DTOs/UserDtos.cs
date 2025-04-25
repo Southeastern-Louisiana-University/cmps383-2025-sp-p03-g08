@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Selu383.SP25.P03.Api.Features.Users
 {
     public class UserDto
@@ -20,5 +22,16 @@ namespace Selu383.SP25.P03.Api.Features.Users
         public required string Password { get; set; }
 
         public string[]? Roles { get; set; }
+    }
+
+    public class RegisterUserDto
+    {
+        public string Username { get; set; }
+
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        public string Password { get; set; }
     }
 }

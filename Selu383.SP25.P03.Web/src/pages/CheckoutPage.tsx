@@ -1,4 +1,5 @@
-import { Container, Text, Button } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { Container, Text } from "@mantine/core";
 import { Cart } from "../Components/Cart";
 import { useNavigate } from "react-router";
 import { useCart } from "../hooks/cartContext";
@@ -38,22 +39,13 @@ export function CheckoutPage() {
           )}
 
           {items.length > 0 && (
-            <Button
-              style={{
-                backgroundColor: "#fdba74",
-                borderRadius: "5px",
-                border: 0,
-                height: "40px",
-                width: "100px",
-                cursor: "pointer",
-                color: "#100e0e",
-                marginTop: "10px",
-                marginBottom: "5px",
-              }}
-              onClick={() => navigate(routes.foodndrinks)}
+            <button
+              className="btn-orange"
+              style={{ marginTop: "5px" }}
+              onClick={() => window.history.back()}
             >
               Go back
-            </Button>
+            </button>
           )}
         </div>
       </Container>

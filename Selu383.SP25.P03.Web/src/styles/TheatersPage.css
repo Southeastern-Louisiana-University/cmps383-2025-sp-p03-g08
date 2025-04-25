@@ -9,15 +9,32 @@
 /* Movie header section */
 .movieHeader {
   display: flex;
-  gap: 30px;
-  margin-bottom: 40px;
-  padding-bottom: 30px;
-  border-bottom: 1px solid #e5e5e5;
+  flex-direction: column;
+  width:60%;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
 }
-
-.moviePoster {
-  width: 220px;
-  height: 330px;
+.theatersPage__card {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 1rem;
+  gap: 10px;
+  justify-content: space-between;
+  width: 100%;
+  max-height: 500px;
+  color: black;
+  display: flex;
+}
+.theaterInfo {
+  width:30%;
+}
+.theatersPage__card img {
+  width: 75%;
+  border-radius: 8px;
+  height: 400px;
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);

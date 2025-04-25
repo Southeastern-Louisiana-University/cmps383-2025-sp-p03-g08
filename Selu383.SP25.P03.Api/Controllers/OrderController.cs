@@ -73,7 +73,7 @@ public class OrdersController : ControllerBase
                     .Seats.Select(seat => new Ticket
                     {
                         SeatId = seat.Id,
-                        ShowingId = dto.ShowingId,
+                        ShowingId = dto.ShowingId ?? 0,
                         TicketCode = GenerateTicketCode(),
                         TicketType = seat.TicketType,
                         UserId = userId,

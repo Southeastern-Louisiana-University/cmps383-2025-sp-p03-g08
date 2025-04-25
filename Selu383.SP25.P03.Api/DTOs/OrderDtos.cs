@@ -1,7 +1,7 @@
 public class OrderDto
 {
-    public int ShowingId { get; set; }
-    public List<SeatInfoDto> Seats { get; set; }
+    public int? ShowingId { get; set; }
+    public List<SeatInfoDto>? Seats { get; set; }
     public string? GuestName { get; set; }
     public string? Email { get; set; } // Optional for guests
     public List<MenuItemOrderDto>? FoodItems { get; set; } = null;

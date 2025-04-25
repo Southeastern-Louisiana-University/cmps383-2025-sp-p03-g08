@@ -31,6 +31,7 @@ namespace Selu383.SP25.P03.Api.Data
         public DbSet<PricingModel> PricingModels { get; set; }
 
         public DbSet<MenuItem> MenuItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

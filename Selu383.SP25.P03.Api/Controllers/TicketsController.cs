@@ -32,17 +32,15 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
                 .Select(t => new GetTicketDto
                 {
                     Id = t.Id,
-                    TicketCode = t.TicketCode,
                     SeatId = t.SeatId,
-                    SeatLabel = t.Seat.Row + t.Seat.Number.ToString(), // Combine row + number
-                    ShowingId = t.ShowingId,
-                    Showtime = t.Showing.StartTime, // Assuming Showing has StartTime
+                    SeatLabel = t.Seat.Row + "-" + t.Seat.Id,
+                    TicketType = t.TicketType,
+                    ShowingTime = t.Showing.StartTime,
+                    PurchasedDate = t.PurchaseDate,
+                    TicketCode = t.TicketCode,
+                    MovieName = t.Showing.Movie.Title,
+                    CinemaHallName = t.Showing.CinemaHall.Name,
                     Price = t.Price,
-                    TicketType = t.TicketType, // Assuming this exists
-                    PurchaseDate = t.PurchaseDate,
-                    PurchaserName = t.PurchasedBy,
-                    UserId = t.UserId,
-                    CinemHallId = t.Showing.CinemaHallId,
                 })
                 .ToListAsync();
 
@@ -54,23 +52,22 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
         public async Task<IActionResult> GetTicketById(Guid id)
         {
             var ticket = await context
-                .Tickets.Include(t => t.Seat)
+                .Tickets.Include(t => t.Showing)
+                .ThenInclude(s => s.Movie)
                 .Include(t => t.Showing)
-                .Include(t => t.PurchasedBy)
+                .ThenInclude(s => s.CinemaHall)
                 .Select(t => new GetTicketDto
                 {
                     Id = t.Id,
-                    TicketCode = t.TicketCode,
                     SeatId = t.SeatId,
-                    SeatLabel = t.Seat.Row + t.Seat.Number.ToString(), // Combine row + number
-                    ShowingId = t.ShowingId,
-                    Showtime = t.Showing.StartTime, // Assuming Showing has StartTime
+                    SeatLabel = t.Seat.Row + "-" + t.Seat.Id,
+                    TicketType = t.TicketType,
+                    ShowingTime = t.Showing.StartTime,
+                    PurchasedDate = t.PurchaseDate,
+                    TicketCode = t.TicketCode,
+                    MovieName = t.Showing.Movie.Title,
+                    CinemaHallName = t.Showing.CinemaHall.Name,
                     Price = t.Price,
-                    TicketType = t.TicketType, // Assuming this exists
-                    PurchaseDate = t.PurchaseDate,
-                    PurchaserName = t.PurchasedBy,
-                    UserId = t.UserId,
-                    CinemHallId = t.Showing.CinemaHallId,
                 })
                 .FirstOrDefaultAsync(t => t.Id == id);
 
@@ -98,18 +95,18 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
                     .ThenInclude(s => s.Movie)
                     .Include(t => t.Showing)
                     .ThenInclude(s => s.CinemaHall)
-                    .Select(t => new
+                    .Select(t => new GetTicketDto
                     {
-                        t.Id,
-                        t.SeatId,
+                        Id = t.Id,
+                        SeatId = t.SeatId,
                         SeatLabel = t.Seat.Row + "-" + t.Seat.Id,
-                        t.TicketType,
+                        TicketType = t.TicketType,
                         ShowingTime = t.Showing.StartTime,
                         PurchasedDate = t.PurchaseDate,
-                        t.TicketCode,
+                        TicketCode = t.TicketCode,
                         MovieName = t.Showing.Movie.Title,
                         CinemaHallName = t.Showing.CinemaHall.Name,
-                        t.Price,
+                        Price = t.Price,
                     })
                     .OrderByDescending(t => t.PurchasedDate)
                     .ToListAsync();
@@ -126,18 +123,18 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
                     .ThenInclude(s => s.Movie)
                     .Include(t => t.Showing)
                     .ThenInclude(s => s.CinemaHall)
-                    .Select(t => new
+                    .Select(t => new GetTicketDto
                     {
-                        t.Id,
-                        t.SeatId,
+                        Id = t.Id,
+                        SeatId = t.SeatId,
                         SeatLabel = t.Seat.Row + "-" + t.Seat.Id,
-                        t.TicketType,
+                        TicketType = t.TicketType,
                         ShowingTime = t.Showing.StartTime,
                         PurchasedDate = t.PurchaseDate,
-                        t.TicketCode,
-                        MovieTitle = t.Showing.Movie.Title,
+                        TicketCode = t.TicketCode,
+                        MovieName = t.Showing.Movie.Title,
                         CinemaHallName = t.Showing.CinemaHall.Name,
-                        t.Price,
+                        Price = t.Price,
                     })
                     .OrderByDescending(t => t.PurchasedDate)
                     .ToListAsync();
@@ -236,17 +233,15 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
             var dto = new GetTicketDto
             {
                 Id = ticket.Id,
-                TicketCode = ticket.TicketCode,
                 SeatId = ticket.SeatId,
-                SeatLabel = ticket.Seat.Row + ticket.Seat.Number.ToString(),
-                ShowingId = ticket.ShowingId,
-                Showtime = ticket.Showing.StartTime,
-                MovieTitle = ticket.Showing.Movie.Title,
-                Price = ticket.Price,
+                SeatLabel = ticket.Seat.Row + "-" + ticket.Seat.Id,
                 TicketType = ticket.TicketType,
-                PurchaseDate = ticket.PurchaseDate,
-                PurchaserName = ticket.PurchasedBy,
-                UserId = ticket.UserId,
+                ShowingTime = ticket.Showing.StartTime,
+                PurchasedDate = ticket.PurchaseDate,
+                TicketCode = ticket.TicketCode,
+                MovieName = ticket.Showing.Movie.Title,
+                CinemaHallName = ticket.Showing.CinemaHall.Name,
+                Price = ticket.Price,
             };
 
             return CreatedAtAction(nameof(GetTicketById), new { id = ticket.Id }, dto);
@@ -323,26 +318,23 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
 
                 var ticketIds = tickets.Select(_ => _.Id).ToList();
 
-                var ticketDtos = await context
-                    .Tickets.Where(ticket => ticketIds.Contains(ticket.Id))
+                var ticketDtos = context
+                    .Tickets.Where(t => ticketIds.Contains(t.Id))
                     .Include(_ => _.Showing)
-                    .Select(ticket => new GetTicketDto
+                    .Select(t => new GetTicketDto
                     {
-                        Id = ticket.Id,
-                        TicketCode = ticket.TicketCode,
-                        SeatId = ticket.SeatId,
-                        SeatLabel = ticket.Seat.Row + ticket.Seat.Number.ToString(),
-                        ShowingId = ticket.ShowingId,
-                        Showtime = ticket.Showing.StartTime,
-                        MovieTitle = ticket.Showing.Movie.Title,
-                        Price = ticket.Price,
-                        TicketType = ticket.TicketType,
-                        PurchaseDate = ticket.PurchaseDate,
-                        PurchaserName = ticket.PurchasedBy,
-                        UserId = ticket.UserId,
-                        CinemHallId = ticket.Showing.CinemaHallId,
+                        Id = t.Id,
+                        SeatId = t.SeatId,
+                        SeatLabel = t.Seat.Row + "-" + t.Seat.Id,
+                        TicketType = t.TicketType,
+                        ShowingTime = t.Showing.StartTime,
+                        PurchasedDate = t.PurchaseDate,
+                        TicketCode = t.TicketCode,
+                        MovieName = t.Showing.Movie.Title,
+                        CinemaHallName = t.Showing.CinemaHall.Name,
+                        Price = t.Price,
                     })
-                    .ToListAsync();
+                    .ToList();
 
                 return Ok(ticketDtos);
             }

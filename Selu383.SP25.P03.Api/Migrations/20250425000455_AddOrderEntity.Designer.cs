@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Selu383.SP25.P03.Api.Data;
 
@@ -11,9 +12,11 @@ using Selu383.SP25.P03.Api.Data;
 namespace Selu383.SP25.P03.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250425000455_AddOrderEntity")]
+    partial class AddOrderEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,7 +234,7 @@ namespace Selu383.SP25.P03.Api.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -598,7 +601,9 @@ namespace Selu383.SP25.P03.Api.Migrations
                 {
                     b.HasOne("Selu383.SP25.P03.Api.Features.Users.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -671,7 +676,7 @@ namespace Selu383.SP25.P03.Api.Migrations
 
             modelBuilder.Entity("Ticket", b =>
                 {
-                    b.HasOne("Order", "Order")
+                    b.HasOne("Order", null)
                         .WithMany("Tickets")
                         .HasForeignKey("OrderId");
 
@@ -690,8 +695,6 @@ namespace Selu383.SP25.P03.Api.Migrations
                     b.HasOne("Selu383.SP25.P03.Api.Features.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-
-                    b.Navigation("Order");
 
                     b.Navigation("Seat");
 

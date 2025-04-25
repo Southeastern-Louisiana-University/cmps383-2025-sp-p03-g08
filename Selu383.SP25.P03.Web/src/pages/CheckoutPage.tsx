@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
 import { Container, Text } from "@mantine/core";
 import { Cart } from "../Components/Cart";
 import { useNavigate } from "react-router";
 import { useCart } from "../hooks/cartContext";
-import { routes } from "../routes/routeIndex";
+import "../styles/CheckoutPage.css";
 
 export function CheckoutPage() {
   const { items, updateTicketType, removeItem, updateFoodItemQuantity } =
@@ -15,39 +14,33 @@ export function CheckoutPage() {
   };
 
   return (
-    <div
-      style={{ paddingTop: "120px", justifyContent: "center", display: "flex" }}
-    >
-      <Container style={{ width: "600px" }}>
-        <div style={{ textAlign: "center" }}>
-          <Text
-            style={{ fontSize: "60px", fontWeight: 700, marginBottom: "0px" }}
-          >
-            Review Your Cart
-          </Text>
+    <div className="checkout-page">
+      <Container className="checkout-container">
+        <div className="checkout-header">
+          <Text className="checkout-title">Review Your Cart</Text>
+        </div>
 
-          {items.length === 0 ? (
+        {items.length === 0 ? (
+          <div className="empty-cart-message">
             <Text>No items found in your cart.</Text>
-          ) : (
+            <button className="btn-orange" onClick={() => navigate("/tickets")}>
+              Get Tickets
+            </button>
+          </div>
+        ) : (
+          <div className="cart-section">
+            {/* Using the same Cart component as in dropdown, but with isDropdown=false */}
             <Cart
               items={items}
               onCheckout={handleCheckout}
               onTicketTypeChange={updateTicketType}
               onRemoveItem={removeItem}
               onUpdateFoodQuantity={updateFoodItemQuantity}
+              isDropdown={false}
+              title="Your Items"
             />
-          )}
-
-          {items.length > 0 && (
-            <button
-              className="btn-orange"
-              style={{ marginTop: "5px" }}
-              onClick={() => window.history.back()}
-            >
-              Go back
-            </button>
-          )}
-        </div>
+          </div>
+        )}
       </Container>
     </div>
   );

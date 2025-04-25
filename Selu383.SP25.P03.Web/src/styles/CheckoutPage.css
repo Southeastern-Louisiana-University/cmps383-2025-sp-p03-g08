@@ -1,0 +1,84 @@
+.checkout-page {
+  padding-top: 120px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.checkout-container {
+  width: 600px;
+  max-width: 95%;
+}
+
+.checkout-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.checkout-title {
+  font-size: 48px;
+  font-weight: 700;
+  color: inherit;
+}
+
+.empty-cart-message {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.cart-section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Match the styling for cart items from the dropdown */
+.cart-section :global(.ticket-item) {
+  background-color: #f5f5f5;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.cart-section :global(.food-item) {
+  background-color: #f8f8e0;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+/* Dark mode support */
+.dark .cart-section :global(.ticket-item) {
+  background-color: #383838;
+}
+
+.dark .cart-section :global(.food-item) {
+  background-color: #3a3a2a;
+}
+
+.checkout-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+
+.go-back-btn {
+  min-width: 100px;
+}
+
+/* Style for the orange buttons used throughout the app */
+.btn-orange {
+  background-color: #fdba74;
+  color: #100e0e;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-orange:hover {
+  background-color: #f8a85c;
+}

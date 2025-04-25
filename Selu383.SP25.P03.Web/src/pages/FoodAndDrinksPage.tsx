@@ -1,10 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/MenuItem.css";
 import { useCart, FoodItem } from "../hooks/cartContext";
-import { Button, Text, Notification } from "@mantine/core";
+
+interface MenuItem {
+  id: string;
+  name: string;
+  description: string;
+  imageURL: string;
+  price: number;
+  category: string;
+  calories: number;
+}
 
 export default function FoodAndDrinksPage() {
   const { addItem } = useCart();
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [notification, setNotification] = useState<{
     visible: boolean;
     item: string;
@@ -13,39 +25,38 @@ export default function FoodAndDrinksPage() {
     item: "",
   });
 
-  // Food items from seed data
-  const items = [
-    {
-      id: "1",
-      name: "Mozarella Sticks",
-      description: "4 Fried Mozarella Sticks served with marinara sauce",
-      image: "https://imgur.com/ZPJRaPj.jpg",
-      price: 5.99,
-    },
-    {
-      id: "2",
-      name: "Cheeseburger Sliders",
-      description:
-        "3 Delicious Cheeseburger Sliders dressed with cheddar cheese and a pickle",
-      image: "https://imgur.com/TkGozIU.jpg",
-      price: 7.99,
-    },
-    {
-      id: "3",
-      name: "Southwest Egg Rolls",
-      description: "6 Tasty Southwest Egg Rolls served with dipping sauce",
-      image: "https://imgur.com/nAikWFY.jpg",
-      price: 4.99,
-    },
-  ];
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/MenuItems");
 
-  const handleAddToCart = (item: (typeof items)[0]) => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch menu items: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setMenuItems(data);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        );
+        console.error("Error fetching menu items:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenuItems();
+  }, []);
+
+  const handleAddToCart = (item: MenuItem) => {
     const foodItem: FoodItem = {
       id: item.id,
       name: item.name,
       price: item.price,
       quantity: 1,
-      image: item.image,
+      image: item.imageURL,
     };
 
     addItem(foodItem);
@@ -60,97 +71,65 @@ export default function FoodAndDrinksPage() {
   };
 
   return (
-    <div style={{ padding: "2rem", marginTop: "150px" }}>
-      <h1>Food & Drinks</h1>
-      <p style={{ marginBottom: "30px" }}>
+    <div className="food-page">
+      <h1 className="food-page-title">Food & Drinks</h1>
+      <p className="food-page-subtitle">
         Have your favorite meal delivered to your seat!
       </p>
 
       {/* Notification */}
       {notification.visible && (
-        <Notification
-          color="green"
-          onClose={() => setNotification({ visible: false, item: "" })}
-          style={{
-            position: "fixed",
-            top: "100px",
-            right: "20px",
-            zIndex: 1000,
-            maxWidth: "300px",
-          }}
-        >
-          <Text>{notification.item} added to cart!</Text>
-        </Notification>
+        <div className="notification">
+          <div className="notification-content">
+            <span>{notification.item} added to cart!</span>
+            <button
+              className="notification-close"
+              onClick={() => setNotification({ visible: false, item: "" })}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+      {loading && (
+        <div className="loading-indicator">Loading menu items...</div>
       )}
 
-      <div
-        style={{
-          display: "flex",
-          gap: "3rem",
-          flexWrap: "wrap",
-          marginTop: "1rem",
-          justifyContent: "center",
-        }}
-      >
-        {items.map((item) => (
-          <div
-            key={item.id}
-            style={{
-              width: "300px",
-              borderRadius: "8px",
-              padding: "1rem",
-              backgroundColor: "black",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <img
-              src={item.image}
-              alt={item.name}
-              style={{
-                width: "100%",
-                borderRadius: "8px",
-                height: "180px",
-                objectFit: "cover",
-              }}
-            />
-            <h2>{item.name}</h2>
-            <p
-              style={{
-                height: "4rem",
-                maxWidth: "100%",
-                overflow: "hidden",
-                marginBottom: "1rem",
-              }}
-            >
-              {item.description}
-            </p>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "auto",
-              }}
-            >
-              <Text size="xl" w={700}>
-                ${item.price.toFixed(2)}
-              </Text>
-              <Button
-                className="menu-item-button"
-                onClick={() => handleAddToCart(item)}
-                style={{
-                  backgroundColor: "#fdba74",
-                  color: "#100e0e",
-                  width: "500px",
-                }}
-              >
-                Add to Cart
-              </Button>
+      {error && <div className="error-message">Error: {error}</div>}
+
+      {!loading && !error && (
+        <div className="menu-grid">
+          {menuItems.map((item) => (
+            <div key={item.id} className="menu-item">
+              <img
+                src={item.imageURL}
+                alt={item.name}
+                className="menu-item-image"
+              />
+              <h2 className="menu-item-name">{item.name}</h2>
+              <p className="menu-item-description">{item.description}</p>
+              <div className="menu-item-footer">
+                <span className="menu-item-price">
+                  ${item.price.toFixed(2)}
+                </span>
+                <span className="menu-item-calories">{item.calories} cal</span>
+                <button
+                  className="menu-item-button"
+                  onClick={() => handleAddToCart(item)}
+                >
+                  Add to Cart
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
+
+      {!loading && !error && menuItems.length === 0 && (
+        <div className="no-items-message">
+          No menu items available at this time.
+        </div>
+      )}
     </div>
   );
 }

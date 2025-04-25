@@ -13,44 +13,67 @@ import {
 
 const { width } = Dimensions.get("window");
 
+const PRICES = {
+  Adult: 12,
+  Child: 8,
+  Senior: 10,
+};
+
+type TicketType = keyof typeof PRICES;
 type Movie = { id: string; title: string; poster: any };
 type Theater = { id: string; name: string; location: string };
 
-const TICKET_PRICE = 50;
 const ROWS = 5, COLS = 8;
 
 const movies: Movie[] = [
   { id: "1", title: "Indiana Jones: Riders of the Lost Ark", poster: require("@/assets/images/poster1.jpg") },
   { id: "2", title: "Friday", poster: require("@/assets/images/poster2.jpg") },
-  { id: "3", title: "Captian America:The First Avenger", poster: require("@/assets/images/poster3.jpg") },
-  { id: "4", title: "Elevation ", poster: require("@/assets/images/poster4.jpg") },
-  { id: "5", title: "Raiders of the lost Ark", poster: require("@/assets/images/poster5.jpg") },
+  { id: "3", title: "Captain America: The First Avenger", poster: require("@/assets/images/poster3.jpg") },
+  { id: "4", title: "Elevation", poster: require("@/assets/images/poster4.jpg") },
+  { id: "5", title: "Raiders of the Lost Ark", poster: require("@/assets/images/poster5.jpg") },
 ];
 
 const theaters: Theater[] = [
-  { id: "t1", name: "2nd lion Theater", location: "570 2nd Ave, New York, NY 10016" },
+  { id: "t1", name: "2nd Lion Theater", location: "570 2nd Ave, New York, NY 10016" },
   { id: "t2", name: "Broad Lion", location: "636 N Broad St, New Orleans, LA 70119" },
   { id: "t3", name: "Lion Studios LA", location: "4020 Marlton Ave, Los Angeles, CA 90008" },
 ];
+
+const generateShowtimes = (): string[] => {
+  const times = [];
+  for (let hour = 8; hour <= 22; hour++) {
+    const isPM = hour >= 12;
+    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+    const suffix = isPM ? "PM" : "AM";
+    times.push(`${displayHour}:00 ${suffix}`);
+  }
+  return times;
+};
+
+const showtimes = generateShowtimes();
 
 export default function MoviesScreen() {
   const [stage, setStage] = useState<"list" | "theater" | "seats" | "confirm">("list");
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [selectedTheater, setSelectedTheater] = useState<Theater | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+  const [selectedTickets, setSelectedTickets] = useState<{ [seat: string]: TicketType }>({});
   const [search, setSearch] = useState("");
-
-  const showtimes = ["1:00 PM", "4:00 PM", "7:00 PM"];
 
   const filtered = movies.filter(m =>
     m.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  const toggleSeat = (seat: string) => {
-    setSelectedSeats(prev =>
-      prev.includes(seat) ? prev.filter(s => s !== seat) : [...prev, seat]
-    );
+  const toggleSeat = (seat: string, type?: TicketType) => {
+    setSelectedTickets(prev => {
+      const copy = { ...prev };
+      if (seat in copy) {
+        delete copy[seat];
+      } else if (type) {
+        copy[seat] = type;
+      }
+      return copy;
+    });
   };
 
   const resetAll = () => {
@@ -58,7 +81,7 @@ export default function MoviesScreen() {
     setSelectedMovie(null);
     setSelectedTheater(null);
     setSelectedTime(null);
-    setSelectedSeats([]);
+    setSelectedTickets({});
   };
 
   const handleConfirmSale = () => {
@@ -67,8 +90,8 @@ export default function MoviesScreen() {
       `Movie: ${selectedMovie?.title}\n` +
       `Theater: ${selectedTheater?.name}\n` +
       `Time: ${selectedTime}\n` +
-      `Seats: ${selectedSeats.join(", ")}\n` +
-      `Total: $${(selectedSeats.length * TICKET_PRICE).toFixed(2)}`
+      `Seats: ${Object.entries(selectedTickets).map(([seat, type]) => `${seat} (${type})`).join(", ")}\n` +
+      `Total: $${Object.values(selectedTickets).reduce((sum, type) => sum + PRICES[type], 0).toFixed(2)}`
     );
     resetAll();
   };
@@ -76,15 +99,15 @@ export default function MoviesScreen() {
   if (stage === "confirm") {
     return (
       <ScrollView style={styles.container} contentContainerStyle={{ padding: 16 }}>
-        <TouchableOpacity onPress={() => setStage("seats")}>
+        <TouchableOpacity onPress={() => setStage("seats")}>  
           <Text style={styles.backText}>← Back to seat selection</Text>
         </TouchableOpacity>
         <Text style={styles.header}>Confirm Purchase</Text>
         <View style={styles.summaryRow}><Text style={styles.summaryLabel}>Movie:</Text><Text style={styles.summaryValue}>{selectedMovie?.title}</Text></View>
         <View style={styles.summaryRow}><Text style={styles.summaryLabel}>Theater:</Text><Text style={styles.summaryValue}>{selectedTheater?.name}</Text></View>
         <View style={styles.summaryRow}><Text style={styles.summaryLabel}>Time:</Text><Text style={styles.summaryValue}>{selectedTime}</Text></View>
-        <View style={styles.summaryRow}><Text style={styles.summaryLabel}>Seats:</Text><Text style={styles.summaryValue}>{selectedSeats.join(", ")}</Text></View>
-        <View style={styles.summaryRow}><Text style={styles.summaryLabel}>Total Cost:</Text><Text style={styles.summaryValue}>${(selectedSeats.length * TICKET_PRICE).toFixed(2)}</Text></View>
+        <View style={styles.summaryRow}><Text style={styles.summaryLabel}>Seats:</Text><Text style={styles.summaryValue}>{Object.entries(selectedTickets).map(([seat, type]) => `${seat} (${type})`).join(", ")}</Text></View>
+        <View style={styles.summaryRow}><Text style={styles.summaryLabel}>Total Cost:</Text><Text style={styles.summaryValue}>${Object.values(selectedTickets).reduce((sum, type) => sum + PRICES[type], 0).toFixed(2)}</Text></View>
         <View style={styles.confirmButtons}>
           <TouchableOpacity style={styles.cancelButton} onPress={resetAll}><Text style={styles.cancelText}>Cancel</Text></TouchableOpacity>
           <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmSale}><Text style={styles.confirmText}>Confirm</Text></TouchableOpacity>
@@ -122,12 +145,25 @@ export default function MoviesScreen() {
             <View key={row} style={styles.seatRow}>
               {Array.from({ length: COLS }).map((_, col) => {
                 const seatId = `${row + 1}-${col + 1}`;
-                const isSel = selectedSeats.includes(seatId);
+                const isSel = seatId in selectedTickets;
                 return (
                   <TouchableOpacity
                     key={seatId}
                     style={[styles.seat, isSel && styles.seatSelected]}
-                    onPress={() => toggleSeat(seatId)}
+                    onPress={() => {
+                      if (isSel) {
+                        toggleSeat(seatId);
+                      } else {
+                        Alert.alert(
+                          "Select Ticket Type",
+                          `Choose a ticket type for seat ${seatId}`,
+                          Object.entries(PRICES).map(([type, price]) => ({
+                            text: `${type} ($${price})`,
+                            onPress: () => toggleSeat(seatId, type as TicketType),
+                          }))
+                        );
+                      }
+                    }}
                   >
                     <Text style={[styles.seatText, isSel && styles.seatTextSelected]}>
                       {row + 1}{String.fromCharCode(65 + col)}
@@ -171,191 +207,192 @@ export default function MoviesScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 24 }}>
+    <ScrollView style={styles.container} contentContainerStyle={{ padding: 16 }}>
       <TextInput
         style={styles.searchInput}
-        placeholder="Search movies..."
-        placeholderTextColor="#888"
+        placeholder="Search for movies"
         value={search}
         onChangeText={setSearch}
       />
-      {["Highlights", "New Releases", "Coming Soon"].map((section, idx) => (
-        <View key={section} style={styles.section}>
-          <Text style={styles.sectionTitle}>{section}</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.carousel}
-          >
-            {filtered.slice(idx * 2, idx * 2 + 3).map(m => (
-              <TouchableOpacity key={m.id} onPress={() => {
-                setSelectedMovie(m);
-                setStage("theater");
-              }}>
-                <Image source={m.poster} style={styles.posterImage} />
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
+      <Text style={styles.header}>Select a Movie</Text>
+      {filtered.map(movie => (
+        <TouchableOpacity
+          key={movie.id}
+          style={styles.movieCard}
+          onPress={() => {
+            setSelectedMovie(movie);
+            setStage("theater");
+          }}
+        >
+          <Image source={movie.poster} style={styles.moviePoster} />
+          <Text style={styles.movieTitle}>{movie.title}</Text>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#0d0d0d" },
-
+  container: {
+    flex: 1,
+    backgroundColor: "#000",
+  },
+  timesContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    marginVertical: 10,
+  },
   searchInput: {
-    margin: 16,
-    backgroundColor: "#1a1a1a",
+    height: 40,
+    borderColor: "#ddd",
+    borderWidth: 1,
     borderRadius: 8,
-    paddingHorizontal: 14,
+    paddingLeft: 10,
+    marginBottom: 20,
     color: "#fff",
-    height: 44,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#2c2c2c",
-  },
-
-  section: { marginBottom: 24 },
-  sectionTitle: {
-    color: "#fdba74",
-    fontSize: 22,
-    fontWeight: "700",
-    marginHorizontal: 16,
-    marginBottom: 10,
-  },
-  carousel: { paddingLeft: 16 },
-  posterImage: {
-    width: 130,
-    height: 190,
-    borderRadius: 10,
-    marginRight: 12,
-    borderWidth: 1,
-    borderColor: "#333",
-  },
-
-  backText: {
-    color: "#fdba74",
-    marginBottom: 12,
-    marginLeft: 16,
-    fontSize: 16,
-    fontWeight: "500",
   },
   header: {
+    fontSize: 24,
     color: "#fff",
-    fontSize: 26,
     fontWeight: "bold",
-    marginBottom: 10,
-    marginLeft: 16,
   },
   subHeader: {
-    color: "#ccc",
     fontSize: 18,
-    fontWeight: "600",
-    marginHorizontal: 16,
-    marginTop: 14,
-    marginBottom: 6,
+    color: "#fff",
+    marginVertical: 10,
   },
-
+  movieCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  moviePoster: {
+    width: 100,
+    height: 150,
+    borderRadius: 8,
+  },
+  movieTitle: {
+    fontSize: 18,
+    color: "#fff",
+    marginLeft: 15,
+  },
   theaterButton: {
-    backgroundColor: "#1a1a1a",
-    padding: 16,
-    borderRadius: 10,
-    marginBottom: 12,
-    marginHorizontal: 16,
-    borderWidth: 1,
-    borderColor: "#2f2f2f",
+    padding: 15,
+    backgroundColor: "#333",
+    borderRadius: 8,
+    marginVertical: 10,
   },
-  theaterName: { color: "#fff", fontSize: 18, fontWeight: "600" },
-  theaterLocation: { color: "#999", marginTop: 4 },
-
-  timesContainer: { flexDirection: "row", flexWrap: "wrap", margin: 16 },
-  timeButton: {
-    borderWidth: 1,
-    borderColor: "#fdba74",
-    borderRadius: 6,
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    marginRight: 12,
-    marginBottom: 12,
+  theaterName: {
+    fontSize: 20,
+    color: "#fff",
+    fontWeight: "bold",
   },
-  timeButtonSelected: { backgroundColor: "#fdba74" },
-  timeText: { color: "#fdba74", fontSize: 15 },
-  timeTextSelected: { color: "#000", fontWeight: "700" },
-
-  screenBar: {
-    height: 28,
+  theaterLocation: {
+    color: "#aaa",
+    fontSize: 14,
+  },
+  seatMap: {
+    marginVertical: 20,
+    flexDirection: "column",
+  },
+  seatRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  seat: {
+    width: 40,
+    height: 40,
     backgroundColor: "#444",
-    marginHorizontal: 16,
-    borderRadius: 6,
+    margin: 5,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 5,
+  },
+  seatSelected: {
+    backgroundColor: "#22a3d9",
+  },
+  seatText: {
+    color: "#fff",
+  },
+  seatTextSelected: {
+    color: "#000",
+  },
+  screenBar: {
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  screenText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  nextButton: {
+    padding: 15,
+    backgroundColor: "#22a3d9",
+    borderRadius: 8,
     marginTop: 20,
   },
-  screenText: { color: "#fff", fontWeight: "700", fontSize: 12 },
-
-  seatMap: {
-    marginHorizontal: 16,
-    backgroundColor: "#1a1a1a",
-    padding: 10,
-    borderRadius: 8,
-    marginTop: 8,
+  nextText: {
+    color: "#fff",
+    fontSize: 18,
+    textAlign: "center",
   },
-  seatRow: { flexDirection: "row", marginBottom: 8, justifyContent: "center" },
-  seat: {
-    width: 34,
-    height: 34,
-    borderWidth: 1,
-    borderColor: "#fdba74",
-    borderRadius: 6,
-    margin: 4,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#0d0d0d",
-  },
-  seatSelected: { backgroundColor: "#fdba74" },
-  seatText: { color: "#fdba74", fontSize: 12 },
-  seatTextSelected: { color: "#000", fontWeight: "700" },
-
-  nextButton: {
-    backgroundColor: "#fdba74",
-    paddingVertical: 16,
-    borderRadius: 10,
-    marginTop: 24,
-    alignItems: "center",
-    marginHorizontal: 16,
-    marginBottom: 40,
-  },
-  nextText: { color: "#000", fontSize: 16, fontWeight: "700" },
-
-  summaryRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginHorizontal: 16,
-    marginBottom: 14,
-  },
-  summaryLabel: { color: "#aaa", fontSize: 16 },
-  summaryValue: { color: "#fff", fontSize: 16, fontWeight: "600" },
   confirmButtons: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    marginTop: 28,
+    justifyContent: "space-between",
+    marginTop: 20,
   },
   cancelButton: {
-    borderWidth: 1,
-    borderColor: "#fdba74",
-    borderRadius: 10,
-    paddingVertical: 14,
-    paddingHorizontal: 28,
+    backgroundColor: "#ff4d4d",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 8,
   },
-  cancelText: { color: "#fdba74", fontSize: 16, fontWeight: "700" },
+  cancelText: {
+    color: "#fff",
+    fontSize: 16,
+  },
   confirmButton: {
-    backgroundColor: "#fdba74",
-    borderRadius: 10,
-    paddingVertical: 14,
-    paddingHorizontal: 28,
+    backgroundColor: "#4caf50",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 8,
   },
-  confirmText: { color: "#000", fontSize: 16, fontWeight: "700" },
+  confirmText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  backText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  timeButton: {
+    backgroundColor: "#444",
+    padding: 10,
+    borderRadius: 8,
+    margin: 5,
+  },
+  timeButtonSelected: {
+    backgroundColor: "#22a3d9",
+  },
+  timeText: {
+    color: "#fff",
+  },
+  timeTextSelected: {
+    color: "#000",
+  },
+  summaryRow: {
+    flexDirection: "row",
+    marginVertical: 10,
+  },
+  summaryLabel: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  summaryValue: {
+    color: "#fff",
+    fontSize: 18,
+    marginLeft: 10,
+  },
 });
- 

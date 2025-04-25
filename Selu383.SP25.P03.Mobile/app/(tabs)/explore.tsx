@@ -72,9 +72,8 @@ export default function ExploreScreen() {
         <Text style={styles.sectionTitle}>Order Again</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {recentItems.map((item) => (
-            <View key={item.id} style={styles.cardSmall}>
-              <View style={styles.cardImageSmall} />
-              <Text style={styles.cardTitleSmall}>{item.name}</Text>
+            <View 
+                key={item.id} style={styles.cardSmall}>
             </View>
           ))}
         </ScrollView>

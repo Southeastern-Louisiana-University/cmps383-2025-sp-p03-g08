@@ -7,7 +7,26 @@
   width:100%;
   margin-top:50px;
 }
+.findTheaters{
+  width:100%;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
 
+.findTheaters form {
+  width:auto;
+  gap:10px;
+}
+
+.findTheaters select {
+  width:auto;
+  gap:10px;
+  height:31.5px;
+  background-color: #fdba74;
+}
 .h1{
   color:black;
 }

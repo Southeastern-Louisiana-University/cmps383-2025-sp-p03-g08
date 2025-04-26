@@ -23,7 +23,8 @@ namespace Selu383.SP25.P03.Api.Controllers
         public TheatersController(
             DataContext dataContext,
             UserManager<User> userManager,
-            IConfiguration config
+            IConfiguration config,
+            HttpClient httpClient
         )
         {
             this.dataContext = dataContext;
@@ -31,7 +32,7 @@ namespace Selu383.SP25.P03.Api.Controllers
             users = dataContext.Set<User>();
             this.userManager = userManager;
             _config = config;
-            _httpClient = new HttpClient();
+            _httpClient = httpClient;
         }
 
         [HttpGet]
@@ -60,7 +61,7 @@ namespace Selu383.SP25.P03.Api.Controllers
             [FromQuery] int maxDistance = 50
         )
         {
-            var apiKey = _config["GOOGLE_GEOCODING_API_KEY"];
+            var apiKey = "AIzaSyAD0o-O-6IfEPnJ7PXyBoVUbsGf4EonOaM";
             var url =
                 $"https://maps.googleapis.com/maps/api/geocode/json?address={zipCode}&key={apiKey}";
 
@@ -87,11 +88,10 @@ namespace Selu383.SP25.P03.Api.Controllers
             double lat = location.GetProperty("lat").GetDouble();
             double lng = location.GetProperty("lng").GetDouble();
 
-            // 🔥 Now find theaters near this lat/lng
-            var theaters = await dataContext
-                .Theaters.Where(t =>
-                    CalculateDistance(lat, lng, t.Latitude, t.Longitude) <= maxDistance
-                )
+            var theaters = await dataContext.Theaters.ToListAsync();
+  
+            var nearbyTheaters = theaters
+                .Where(t => CalculateDistance(lat, lng, t.Latitude, t.Longitude) <= maxDistance)
                 .Select(x => new TheaterDto
                 {
                     Id = x.Id,
@@ -99,9 +99,9 @@ namespace Selu383.SP25.P03.Api.Controllers
                     Address = x.Address,
                     ManagerId = x.ManagerId,
                 })
-                .ToListAsync();
+                .ToList();
 
-            return Ok(theaters);
+            return Ok(nearbyTheaters);
         }
 
         [HttpGet("nearest-location")]

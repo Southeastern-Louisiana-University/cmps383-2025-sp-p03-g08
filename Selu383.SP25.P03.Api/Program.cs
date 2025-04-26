@@ -25,7 +25,7 @@ namespace Selu383.SP25.P03.Api
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddRazorPages();
-
+            builder.Services.AddHttpClient();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(

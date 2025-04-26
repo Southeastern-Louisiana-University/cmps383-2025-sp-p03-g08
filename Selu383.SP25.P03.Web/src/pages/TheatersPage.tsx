@@ -10,6 +10,9 @@ interface Theater {
 export default function TheatersPage() {
 let params = useParams();
 const [theaters,setTheaters]=useState<Theater[]>([]);
+const [zipCode, setZipCode] = useState("");
+const [error, setError] = useState<string | null>(null);
+const [loading, setLoading] = useState(false);
 const[maxDistance,setMaxDistance]=useState<number>(50);
 
 //Original code that returned all theaters by default 
@@ -51,6 +54,26 @@ const[maxDistance,setMaxDistance]=useState<number>(50);
 //     }
 //   );
 // };
+const handleFindByZipCode = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault(); 
+  setLoading(true);
+  setError(null);
+
+  try {
+    const response = await fetch(`/api/theaters/zip?zipCode=${zipCode}&maxDistance=${maxDistance}`);
+    if (!response.ok) {
+      throw new Error("Failed to find nearby theaters.");
+    }
+
+    const data = await response.json();
+    setTheaters(data); // 🎯 Update theaters list
+  } catch (err: any) {
+    console.error(err);
+    setError(err.message || "An unexpected error occurred.");
+  } finally {
+    setLoading(false);
+  }
+};
 
 const handleUseMyCurrentLocation = () => {
   console.log("Button clicked");
@@ -125,24 +148,46 @@ const handleMaxDistanceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     <div className="theatersPage">
     <h1>Find Theaters Near You</h1>
     <div className="findTheaters">
-    <select
+    <button
+  className="btn-orange"
+  type="button"
+  onClick={handleUseMyCurrentLocation}
+  style={{ padding: "0.5rem",display:"flex",gap:'5px',height:"31.5px"}}
+>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32" fill="currentColor">
+    <g>
+      <path d="M27,15A11,11,0,0,0,17,5.05V2H15V5.05A11,11,0,0,0,5.05,15H2v2H5.05A11,11,0,0,0,15,27V30h2V27A11,11,0,0,0,27,17H30V15ZM16,25a9,9,0,1,1,9-9A9,9,0,0,1,16,25Z"/>
+      <path d="M16,12a4,4,0,1,0,4,4A4,4,0,0,0,16,12Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,16,18Z"/>
+    </g>
+  </svg>
+  Use Current Location
+</button>
+
+<form onSubmit={handleFindByZipCode} >
+  <input
+    type="text"
+    placeholder="Enter ZIP Code"
+    value={zipCode}
+    onChange={(e) => setZipCode(e.target.value)}
+    style={{ padding: "0.5rem", marginRight: "0.5rem", width: "150px" }}
+  />
+  <button
+    type="submit"
+    className="btn-orange"
+    style={{ padding: "0.5rem", width: "120px" }}
+    disabled={loading}
+  >
+    {loading ? "Searching..." : "Find Theaters"}
+  </button>
+</form>
+<select
   value={maxDistance}
   onChange={handleMaxDistanceChange}
-  style={{ padding: "0.5rem", marginBottom: "1rem" }}
 >
   <option value={25}>Within 25 miles</option>
   <option value={50}>Within 50 miles</option>
   <option value={100}>Within 100 miles</option>
 </select>
-
-    <button
-  className="btn-orange"
-  type="button"
-  onClick={handleUseMyCurrentLocation}
-  style={{ padding: "0.5rem", marginTop: "1rem" }}
->
-  Use My Current Location
-</button>
 </div>
       <div className="theatersPage__list">
         {theaters.map(t => (

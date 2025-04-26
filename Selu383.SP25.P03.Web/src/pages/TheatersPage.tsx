@@ -86,7 +86,25 @@ export default function TheatersPage() {
   if (loading)
     return <div className="loading">Loading theater information...</div>;
   if (error) return <div className="error">Error: {error}</div>;
-
+  const handleUseMyLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+  
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log("Your current location:", latitude, longitude);
+        alert(`Your location: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`);
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+        alert("Unable to retrieve your location.");
+      }
+    );
+  };
+  
   return (
     <div className="movieTheaterPage">
       {/* Movie Header */}
@@ -127,6 +145,15 @@ export default function TheatersPage() {
             {loading ? "Searching..." : "Enter"}
           </button>
         </form>
+        <button
+  className="button"
+  type="button"
+  onClick={handleUseMyLocation}
+  style={{ padding: "0.5rem", marginTop: "1rem" }}
+>
+  Use My Current Location
+</button>
+
 
         {/* Display errors */}
         {searchError && <p style={{ color: "red" }}>{searchError}</p>}

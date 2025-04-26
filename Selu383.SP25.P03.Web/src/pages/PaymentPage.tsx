@@ -44,8 +44,8 @@ export default function PaymentPage() {
 
         {mode === 'select' && (
           <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2rem' }}>
-            <Button color="teal" onClick={() => setMode('guest')}>Checkout as Guest</Button>
-            <Button variant="outline" onClick={handleLoginRedirect}>Log In</Button>
+            <button className="btn-orange" onClick={() => setMode('guest')}>Checkout as Guest</button>
+            <button className="btn-orange" onClick={handleLoginRedirect}>Log In</button>
           </div>
         )}
 

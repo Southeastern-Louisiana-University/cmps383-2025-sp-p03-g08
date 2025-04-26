@@ -14,5 +14,7 @@ namespace Selu383.SP25.P03.Api.Features.Theaters
         public virtual User? Manager { get; set; }
         public List<CinemaHall> CinemaHalls { get; set; }
         public string? ImageURL { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 }

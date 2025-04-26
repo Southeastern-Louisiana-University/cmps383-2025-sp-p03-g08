@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 
 interface Showing {
   id: number;
-  showTime: string;
+  startTime: string;
   showType: string;
   isSoldOut: Boolean;
+  movieName: string;
 }
 
 export default function ShowTimesPage() {
@@ -50,7 +51,11 @@ export default function ShowTimesPage() {
       <div>
         {showings.map((s, i) => (
           <div key={i} className="showingOptions">
-            <p>{s.showType} {s.showTime}</p>
+            <p>{s.movieName}</p>
+            <p>{s.showType}</p>
+            <p> {new Date(s.startTime).toLocaleString([], { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
+</p>
+
             <Link to={`/seating/${s.id}`}>
             <button className="btn-orange">Choose Seats</button>
             </Link>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PaymentModal } from '../Components/PaymentModal';
-import { TextInput, Button } from '@mantine/core';
+import { TextInput, Button, Stack } from '@mantine/core';
 import { useLocation, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 
@@ -22,10 +22,6 @@ export default function PaymentPage() {
   
 
   const handleGuestContinue = () => {
-    if (!guestInfo.name || (!guestInfo.email && !guestInfo.phone)) {
-      alert('Please enter your name and at least email or phone.');
-      return;
-    }
     setMode('authenticated');
   };
 
@@ -52,33 +48,37 @@ export default function PaymentPage() {
         )}
 
         {mode === 'guest' && (
-          <div style={{ marginTop: '2rem', maxWidth: '400px', marginLeft: 'auto', marginRight: 'auto' }}>
-          <TextInput
-            label="Name"
-            placeholder="Full Name"
-            value={guestInfo.name}
-            onChange={(e) => setGuestInfo({ ...guestInfo, name: e.currentTarget.value })}
-            required
-          />
-          <TextInput
-            label="Email"
-            placeholder="Email"
-            value={guestInfo.email}
-            onChange={(e) => setGuestInfo({ ...guestInfo, email: e.currentTarget.value })}
-            style={{ marginTop: '1rem' }}
-          />
-          <TextInput
-            label="Phone"
-            placeholder="Phone"
-            value={guestInfo.phone}
-            onChange={(e) => setGuestInfo({ ...guestInfo, phone: e.currentTarget.value })}
-            style={{ marginTop: '1rem' }}
-          />
-
-          <Button style={{ marginTop: '1.5rem' }} onClick={handleGuestContinue}>
-            Continue to Payment
-          </Button>
-        </div>
+          <form onSubmit={(e) => { e.preventDefault(); handleGuestContinue(); }} name="guestCheckout" autoComplete="on">
+          <Stack ta="center" maw={500} mx="auto">
+            <TextInput
+              label="Name"
+              value={guestInfo.name}
+              onChange={(e) => setGuestInfo({ ...guestInfo, name: e.currentTarget.value })}
+              required
+            />
+        
+            <TextInput
+              label="Email"
+              value={guestInfo.email}
+              onChange={(e) => setGuestInfo({ ...guestInfo, email: e.currentTarget.value })}
+            />
+        
+            <TextInput
+              label="Phone"
+              value={guestInfo.phone}
+              onChange={(e) => setGuestInfo({ ...guestInfo, phone: e.currentTarget.value })}
+            />
+        
+            <button
+              type="submit"
+              className="btn-orange"
+              style={{ marginTop: '10px' }}
+            >
+              Continue to Payment
+            </button>
+          </Stack>
+        </form>
+        
       )}
 
 {mode === 'authenticated' && (

@@ -10,6 +10,7 @@ namespace Selu383.SP25.P03.Api
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            DotNetEnv.Env.Load();
 
             // Add services to the container.
             builder.Services.AddDbContext<DataContext>(options =>

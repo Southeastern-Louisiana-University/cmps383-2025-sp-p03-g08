@@ -17,7 +17,7 @@ type Ticket = {
   showingTime: string;
   purchasedDate: string;
   ticketCode: string;
-  movieTitle: string;
+  movieName: string;
   cinemaHallName: string;
   price: number;
 };
@@ -113,7 +113,7 @@ export function ViewTicketsPage() {
             </Text>
             <Divider my="sm" />
             <Text>
-              <strong>Movie:</strong> {ticket.movieTitle}
+              <strong>Movie:</strong> {ticket.movieName}
             </Text>
             <Text>
               <strong>Cinema Hall:</strong> {ticket.cinemaHallName}

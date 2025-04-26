@@ -61,7 +61,8 @@ namespace Selu383.SP25.P03.Api.Controllers
             [FromQuery] int maxDistance = 50
         )
         {
-            var apiKey = "AIzaSyAD0o-O-6IfEPnJ7PXyBoVUbsGf4EonOaM";
+            var apiKey = Environment.GetEnvironmentVariable("GOOGLE_GEOCODING_API_KEY");
+
             var url =
                 $"https://maps.googleapis.com/maps/api/geocode/json?address={zipCode}&key={apiKey}";
 
@@ -89,7 +90,7 @@ namespace Selu383.SP25.P03.Api.Controllers
             double lng = location.GetProperty("lng").GetDouble();
 
             var theaters = await dataContext.Theaters.ToListAsync();
-  
+
             var nearbyTheaters = theaters
                 .Where(t => CalculateDistance(lat, lng, t.Latitude, t.Longitude) <= maxDistance)
                 .Select(x => new TheaterDto

@@ -100,7 +100,7 @@ export function PaymentModal({ guestInfo }: PaymentModalProps) {
     };
   
     try {
-      const response = await fetch("/api/tickets/bulk", {
+      const response = await fetch("/api/orders/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

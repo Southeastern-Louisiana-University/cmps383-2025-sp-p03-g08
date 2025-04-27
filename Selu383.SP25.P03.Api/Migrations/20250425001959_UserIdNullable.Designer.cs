@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Selu383.SP25.P03.Api.Data;
 
@@ -11,9 +12,11 @@ using Selu383.SP25.P03.Api.Data;
 namespace Selu383.SP25.P03.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250425001959_UserIdNullable")]
+    partial class UserIdNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,6 +74,9 @@ namespace Selu383.SP25.P03.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -78,6 +84,8 @@ namespace Selu383.SP25.P03.Api.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("MenuItems");
                 });
@@ -236,32 +244,6 @@ namespace Selu383.SP25.P03.Api.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("OrderMenuItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("MenuItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MenuItemId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderMenuItems");
-                });
-
             modelBuilder.Entity("PricingModel", b =>
                 {
                     b.Property<int>("Id")
@@ -335,12 +317,6 @@ namespace Selu383.SP25.P03.Api.Migrations
 
                     b.Property<string>("ImageURL")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Latitude")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Longitude")
-                        .HasColumnType("float");
 
                     b.Property<int?>("ManagerId")
                         .HasColumnType("int");
@@ -578,6 +554,13 @@ namespace Selu383.SP25.P03.Api.Migrations
                     b.Navigation("Theater");
                 });
 
+            modelBuilder.Entity("MenuItem", b =>
+                {
+                    b.HasOne("Order", null)
+                        .WithMany("MenuItems")
+                        .HasForeignKey("OrderId");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Selu383.SP25.P03.Api.Features.Users.Role", null)
@@ -621,25 +604,6 @@ namespace Selu383.SP25.P03.Api.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("OrderMenuItem", b =>
-                {
-                    b.HasOne("MenuItem", "MenuItem")
-                        .WithMany()
-                        .HasForeignKey("MenuItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Order", "Order")
-                        .WithMany("OrderMenuItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MenuItem");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Selu383.SP25.P03.Api.Features.Seats.Seat", b =>
@@ -710,7 +674,7 @@ namespace Selu383.SP25.P03.Api.Migrations
 
             modelBuilder.Entity("Ticket", b =>
                 {
-                    b.HasOne("Order", "Order")
+                    b.HasOne("Order", null)
                         .WithMany("Tickets")
                         .HasForeignKey("OrderId");
 
@@ -730,8 +694,6 @@ namespace Selu383.SP25.P03.Api.Migrations
                         .WithMany()
                         .HasForeignKey("UserId");
 
-                    b.Navigation("Order");
-
                     b.Navigation("Seat");
 
                     b.Navigation("Showing");
@@ -746,7 +708,7 @@ namespace Selu383.SP25.P03.Api.Migrations
 
             modelBuilder.Entity("Order", b =>
                 {
-                    b.Navigation("OrderMenuItems");
+                    b.Navigation("MenuItems");
 
                     b.Navigation("Tickets");
                 });

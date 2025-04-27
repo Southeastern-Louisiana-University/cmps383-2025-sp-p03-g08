@@ -4,6 +4,7 @@ import { routes } from "../routes/routeIndex";
 import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
 import { Moon, Sun } from "lucide-react";
+import { NavbarCart } from "./navbarCart";
 
 export default function Navbar({
   theme,
@@ -49,7 +50,7 @@ export default function Navbar({
 
         <ul className="navbar__links">
           <li>
-            <Link to="/tickets">Get Tickets</Link>
+            <Link to="/orders">View Orders</Link>
           </li>
           <li>
             <Link to={routes.foodndrinks}>Food & Drinks</Link>
@@ -60,6 +61,7 @@ export default function Navbar({
         </ul>
 
         <div className="navbar__auth">
+        <NavbarCart />
           {!isLoggedIn && (
             <button onClick={() => navigate(routes.login)} className="navbar__signin">
               Sign In

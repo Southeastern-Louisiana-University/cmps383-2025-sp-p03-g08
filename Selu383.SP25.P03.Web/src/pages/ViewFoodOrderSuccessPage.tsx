@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Container, Card, Text, Divider, Loader, Alert } from '@mantine/core';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 
 type FoodItem = {
   menuItemId: number;
@@ -16,7 +16,6 @@ export function ViewFoodOrderSuccessPage() {
   const [error, setError] = useState<string | null>(null);
 
   const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const codeFromStorage = sessionStorage.getItem('confirmationCode');

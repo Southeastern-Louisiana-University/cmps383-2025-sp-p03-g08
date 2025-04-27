@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router'
 import '../styles/TheatersPage.css'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface Theater {
   id: number,
@@ -11,7 +11,6 @@ export default function TheatersPage() {
 let params = useParams();
 const [theaters,setTheaters]=useState<Theater[]>([]);
 const [zipCode, setZipCode] = useState("");
-const [error, setError] = useState<string | null>(null);
 const [loading, setLoading] = useState(false);
 const[maxDistance,setMaxDistance]=useState<number>(50);
 
@@ -57,7 +56,7 @@ const[maxDistance,setMaxDistance]=useState<number>(50);
 const handleFindByZipCode = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault(); 
   setLoading(true);
-  setError(null);
+ 
 
   try {
     const response = await fetch(`/api/theaters/zip?zipCode=${zipCode}&maxDistance=${maxDistance}`);
@@ -69,7 +68,6 @@ const handleFindByZipCode = async (e: React.FormEvent<HTMLFormElement>) => {
     setTheaters(data); // 🎯 Update theaters list
   } catch (err: any) {
     console.error(err);
-    setError(err.message || "An unexpected error occurred.");
   } finally {
     setLoading(false);
   }

@@ -16,6 +16,7 @@ public class GetTicketDto
     public string CinemaHallName { get; set; }
 
     public decimal Price { get; set; }
+    public string ConfirmationCode { get; set; }
 }
 
 public class createTicketDto

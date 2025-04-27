@@ -95,6 +95,7 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
                     .ThenInclude(s => s.Movie)
                     .Include(t => t.Showing)
                     .ThenInclude(s => s.CinemaHall)
+                    .Include(t => t.Order)
                     .Select(t => new GetTicketDto
                     {
                         Id = t.Id,
@@ -107,6 +108,7 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
                         MovieName = t.Showing.Movie.Title,
                         CinemaHallName = t.Showing.CinemaHall.Name,
                         Price = t.Price,
+                        ConfirmationCode = t.Order.ConfirmationCode,
                     })
                     .OrderByDescending(t => t.PurchasedDate)
                     .ToListAsync();
@@ -135,6 +137,7 @@ namespace Selu383.SP25.P03.Api.Features.Tickets
                         MovieName = t.Showing.Movie.Title,
                         CinemaHallName = t.Showing.CinemaHall.Name,
                         Price = t.Price,
+                        ConfirmationCode = t.Order.ConfirmationCode,
                     })
                     .OrderByDescending(t => t.PurchasedDate)
                     .ToListAsync();

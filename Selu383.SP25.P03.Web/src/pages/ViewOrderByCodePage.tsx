@@ -71,14 +71,14 @@ export function ViewOrderByCodePage() {
     width: '100%', // Make it responsive
   }}
 >
-  <div style={{ display: 'flex', gap: '1rem', width: '300px' }}>
+  <div style={{ display: 'flex', gap: '1rem', width: '300px',alignItems:'center' }}>
     <TextInput
       placeholder="Enter your confirmation code"
       value={confirmationCode}
       onChange={(e) => setConfirmationCode(e.currentTarget.value)}
       style={{ flexGrow: 1 }}
     />
-    <Button onClick={handleSearch}>Search</Button>
+    <button className="btn-orange" onClick={handleSearch}>Search</button>
   </div>
 </div>
 

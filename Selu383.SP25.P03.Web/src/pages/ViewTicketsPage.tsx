@@ -20,6 +20,7 @@ type Ticket = {
   movieName: string;
   cinemaHallName: string;
   price: number;
+  confirmationCode: string;
 };
 
 export function ViewTicketsPage() {
@@ -108,6 +109,9 @@ export function ViewTicketsPage() {
        >
        
             <Text size="lg"><strong> Lion's Den Cinema</strong></Text>
+            <Text size="lg">
+              <strong>Confirmation Code #</strong> {ticket.confirmationCode}
+            </Text>
             <Text size="lg">
               <strong>Ticket #</strong> {ticket.ticketCode}
             </Text>

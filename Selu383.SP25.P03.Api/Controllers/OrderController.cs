@@ -55,6 +55,20 @@ public class OrdersController : ControllerBase
         using var transaction = await context.Database.BeginTransactionAsync();
         try
         {
+            var confirmationCode = GenerateConfirmationCode();
+            var order = new Order
+            {
+                User = currentUser,
+                UserId = userId,
+                Email = dto.Email ?? currentUser?.Email,
+                CreatedAt = DateTime.UtcNow,
+                ConfirmationCode = confirmationCode,
+                Tickets = null, // Add tickets after
+                OrderMenuItems = new List<OrderMenuItem>(),
+            };
+
+            context.Orders.Add(order);
+            await context.SaveChangesAsync();
             if (buyingTickets)
             {
                 var showing = await context
@@ -79,27 +93,11 @@ public class OrdersController : ControllerBase
                         PurchasedBy = purchaser,
                         PurchaseDate = DateTime.UtcNow,
                         Price = CalculatePrice(showing.PricingModel, seat.TicketType),
+                        OrderId = order.Id,
                     })
                     .ToList();
+                context.Tickets.AddRange(tickets);
             }
-
-            var confirmationCode = GenerateConfirmationCode();
-            var order = new Order
-            {
-                User = currentUser,
-                UserId = userId,
-                Email = dto.Email ?? currentUser?.Email,
-                CreatedAt = DateTime.UtcNow,
-                ConfirmationCode = confirmationCode,
-                Tickets = buyingTickets ? tickets : null,
-                OrderMenuItems = new List<OrderMenuItem>(),
-            };
-
-            var validFoodItems = dto
-                .FoodItems?.Where(item => item.MenuItemId > 0 && item.Quantity > 0)
-                .ToList();
-
-            context.Orders.Add(order);
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
 
@@ -300,7 +298,7 @@ public class OrdersController : ControllerBase
             .ThenInclude(t => t.Showing)
             .ThenInclude(s => s.CinemaHall)
             .Include(o => o.Tickets)
-            .ThenInclude(t => t.Seat) 
+            .ThenInclude(t => t.Seat)
             .Include(o => o.OrderMenuItems)
             .ThenInclude(omi => omi.MenuItem)
             .FirstOrDefaultAsync(o => o.ConfirmationCode == code);

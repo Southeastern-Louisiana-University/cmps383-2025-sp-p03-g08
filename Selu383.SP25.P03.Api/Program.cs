@@ -10,6 +10,7 @@ namespace Selu383.SP25.P03.Api
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            DotNetEnv.Env.Load();
 
             // Add services to the container.
             builder.Services.AddDbContext<DataContext>(options =>
@@ -22,11 +23,6 @@ namespace Selu383.SP25.P03.Api
             );
 
             builder.Services.AddControllers();
-            builder.WebHost.ConfigureKestrel(serverOptions =>
-            {
-                var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-                serverOptions.ListenAnyIP(int.Parse(port));
-            });
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddRazorPages();

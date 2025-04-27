@@ -22,6 +22,11 @@ namespace Selu383.SP25.P03.Api
             );
 
             builder.Services.AddControllers();
+            builder.WebHost.ConfigureKestrel(serverOptions =>
+            {
+                var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+                serverOptions.ListenAnyIP(int.Parse(port));
+            });
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddRazorPages();

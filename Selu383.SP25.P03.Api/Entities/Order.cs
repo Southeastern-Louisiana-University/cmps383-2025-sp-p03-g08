@@ -9,5 +9,5 @@ public class Order
     public DateTime CreatedAt { get; set; }
     public string ConfirmationCode { get; set; }
     public List<Ticket>? Tickets { get; set; }
-    public List<MenuItem>? MenuItems { get; set; }
+    public List<OrderMenuItem>? OrderMenuItems { get; set; }
 }

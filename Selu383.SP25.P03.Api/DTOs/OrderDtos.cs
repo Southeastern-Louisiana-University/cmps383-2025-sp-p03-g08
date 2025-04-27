@@ -9,7 +9,8 @@ public class OrderDto
 
 public class MenuItemOrderDto
 {
-    public int? MenuItemId { get; set; } = null;
+    public int Id { get; set; }
+    public int MenuItemId { get; set; }
     public int Quantity { get; set; } = 0;
 }
 

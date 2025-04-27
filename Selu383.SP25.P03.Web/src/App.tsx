@@ -4,6 +4,8 @@ import { RoutesConfig } from "./routes/routeConfig";
 import { MantineProvider } from "@mantine/core";
 import Navbar from "./Components/Navbar";
 import { useEffect, useState } from "react";
+import { CartProvider } from "./hooks/cartContext";
+import { AuthProvider } from "./hooks/useAuth";
 
 
 function App() {
@@ -33,11 +35,16 @@ function App() {
     };
   return (
     <MantineProvider>
-      <BrowserRouter>
-   <Navbar theme={theme} toggleTheme={toggleTheme} />
-        <RoutesConfig />
-      </BrowserRouter>
-    </MantineProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <CartProvider>
+          {/* Now Navbar is inside CartProvider */}
+          <Navbar theme={theme} toggleTheme={toggleTheme} />
+          <RoutesConfig />
+        </CartProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  </MantineProvider>
   );
 }
 

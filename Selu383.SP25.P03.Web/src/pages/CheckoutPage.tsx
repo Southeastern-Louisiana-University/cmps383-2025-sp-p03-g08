@@ -1,68 +1,74 @@
 import { useEffect, useState } from "react";
-import { Container, Text} from "@mantine/core";
+import { Container, Text } from "@mantine/core";
 import { Cart } from "../Components/Cart";
 import { useNavigate } from "react-router";
+import { FoodCart } from "../Components/FoodCart";
 
 type SeatItem = {
   id: string;
   row: string;
-  price?: number; 
+  price?: number;
   ticketType: "Adult" | "Child" | "Senior";
 };
 
 export function CheckoutPage() {
-  const [items, setItems] = useState<SeatItem[]>([]);
+  const [seatItems, setSeatItems] = useState<SeatItem[]>([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     const seatData = sessionStorage.getItem("selectedSeats");
-  
+
     if (seatData) {
       const parsed = JSON.parse(seatData) as Omit<SeatItem, "ticketType">[];
       const withTicketType = parsed.map(seat => ({
         ...seat,
         ticketType: "Adult" as "Adult" | "Child" | "Senior",
       }));
-      setItems(withTicketType);
+      setSeatItems(withTicketType);
     }
   }, []);
 
   const updateTicketType = (seatId: string, newType: SeatItem["ticketType"]) => {
-    const updated = items.map(item =>
+    const updated = seatItems.map(item =>
       item.id === seatId ? { ...item, ticketType: newType } : item
     );
-  
-    setItems(updated);
+
+    setSeatItems(updated);
     sessionStorage.setItem("selectedSeats", JSON.stringify(updated));
   };
-  
-  
 
   const handleCheckout = () => {
     navigate("/payment");
   };
 
   return (
-    <div style={{ paddingTop: "120px", justifyContent:'center', display:'flex'}}>
+    <div style={{ paddingTop: "120px", justifyContent: "center", display: "flex" }}>
       <Container style={{ width: "600px" }}>
         <div style={{ textAlign: "center" }}>
-          <Text style={{ fontSize: "60px", fontWeight: 700, marginBottom:'0px'}}>
+          <Text style={{ fontSize: "60px", fontWeight: 700, marginBottom: "0px" }}>
             Review Your Cart
           </Text>
-  
-          {items.length === 0 ? (
-            <Text>No items found in your cart.</Text>
+
+          {seatItems.length > 0 ? (
+            <Cart
+              items={seatItems}
+              onCheckout={handleCheckout}
+              onTicketTypeChange={updateTicketType}
+            />
           ) : (
-            <Cart items={items} onCheckout={handleCheckout} onTicketTypeChange={updateTicketType}/>
+            <FoodCart onCheckout={handleCheckout} />
           )}
-  
-          {items.length > 0 && (
-            <button className='btn-orange' style={{marginTop:'5px'}}onClick={() => window.history.back()}>
-              Go back
-            </button>
-          )}
+
+          <button
+            className="btn-orange"
+            style={{ marginTop: "5px" }}
+            onClick={() => {sessionStorage.removeItem("selectedSeats"); // ✅ Clear selected seats
+              window.history.back(); } }
+          >
+            Go back
+          </button>
         </div>
       </Container>
     </div>
   );
-  
 }

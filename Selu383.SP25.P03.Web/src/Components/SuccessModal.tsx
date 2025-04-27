@@ -11,7 +11,7 @@ export function SuccessModal({
   onClose,
   onAction,
   title = '🎉 Payment Successful!',
-  message = 'Thank you for your purchase. Your tickets are now available.',
+  message = 'Thank you for your purchase.',
   actionLabel = 'View Tickets',
 }: SuccessModalProps) {
   return (

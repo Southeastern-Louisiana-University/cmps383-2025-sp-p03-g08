@@ -14,4 +14,6 @@ export const routes = {
   foodndrinks: "/food-drinks",
   menu: "/full-menu",
   tickets: "/tickets",
+  viewOrders: "/orders",
+  viewOrder: "/order"
 };

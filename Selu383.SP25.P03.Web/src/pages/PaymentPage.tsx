@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PaymentModal } from '../Components/PaymentModal';
-import { TextInput, Button, Stack } from '@mantine/core';
+import { TextInput, Stack } from '@mantine/core';
 import { useLocation, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 

@@ -4,22 +4,18 @@ public class GetTicketDto
 
     public string TicketCode { get; set; }
 
-    public string SeatLabel { get; set; } // e.g., "A12"
+    public string SeatLabel { get; set; } // e.g., "A-12"
     public int SeatId { get; set; }
 
-    public int ShowingId { get; set; }
-    public string MovieTitle { get; set; }
-    public DateTime Showtime { get; set; }
+    public string TicketType { get; set; }
+
+    public DateTime ShowingTime { get; set; } // Start time of the showing
+    public DateTime PurchasedDate { get; set; }
+
+    public string MovieName { get; set; }
+    public string CinemaHallName { get; set; }
 
     public decimal Price { get; set; }
-    public string TicketType { get; set; } // e.g., "Adult", "Child", "Senior"
-
-    public DateTime PurchaseDate { get; set; }
-
-    public string PurchaserName { get; set; } // UserName or GuestName
-
-    public int? UserId { get; set; }
-    public int CinemHallId { get; set; } // Nullable if purchased as guest
 }
 
 public class createTicketDto

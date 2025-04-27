@@ -15,6 +15,8 @@ import ProtectedRoute from "../Components/ProtectedRoute";
 import { CheckoutPage } from "../pages/CheckoutPage";
 import PaymentPage from "../pages/PaymentPage";
 import { ViewTicketsPage } from "../pages/ViewTicketsPage";
+import { ViewOrderByCodePage } from "../pages/ViewOrderByCodePage";
+import { ViewFoodOrderSuccessPage } from "../pages/ViewFoodOrderSuccessPage";
 
 export const RoutesConfig = () => {
   return (
@@ -31,6 +33,8 @@ export const RoutesConfig = () => {
       <Route path={routes.viewTickets} element={<ViewTicketsPage />} />
       <Route path={routes.foodndrinks} element={<FoodAndDrinksPage />} />
       <Route path={routes.about} element={<AboutUsPage />} />
+      <Route path={routes.viewOrders} element={<ViewOrderByCodePage />} />
+      <Route path={routes.viewOrder} element={<ViewFoodOrderSuccessPage />} />
 
       {/* Example protected route */}
       <Route

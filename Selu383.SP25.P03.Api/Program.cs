@@ -10,6 +10,7 @@ namespace Selu383.SP25.P03.Api
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            DotNetEnv.Env.Load();
 
             // Add services to the container.
             builder.Services.AddDbContext<DataContext>(options =>
@@ -25,7 +26,7 @@ namespace Selu383.SP25.P03.Api
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddRazorPages();
-
+            builder.Services.AddHttpClient();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(

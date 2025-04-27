@@ -61,7 +61,7 @@ namespace Selu383.SP25.P03.Api.Controllers
             [FromQuery] int maxDistance = 50
         )
         {
-            var apiKey = Environment.GetEnvironmentVariable("GOOGLE_GEOCODING_API_KEY");
+            var apiKey = "AIzaSyDqNYrHLbt4Tb0dZ--b4MvPdcy7XQfOUno";
 
             var url =
                 $"https://maps.googleapis.com/maps/api/geocode/json?address={zipCode}&key={apiKey}";

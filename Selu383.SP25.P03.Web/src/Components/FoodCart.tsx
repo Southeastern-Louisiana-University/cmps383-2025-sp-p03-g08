@@ -1,5 +1,6 @@
 import "../styles/Cart.css";
 import { useCart } from "../hooks/cartContext"; // ✅ Pull from context
+import { FoodItem } from "../hooks/cartContext";
 
 interface FoodCartProps {
   onCheckout: () => void;

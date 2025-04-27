@@ -20,11 +20,11 @@ namespace Selu383.SP25.P03.Api.Data
 
                 // Retrieve related entities for creating valid foreign key relationships.
                 // Adjust these queries as needed based on your seeded data.
-                var movie1 = await context.Movies.FirstOrDefaultAsync(m => m.Id == 0);
-                var movie2 = await context.Movies.FirstOrDefaultAsync(m => m.Id == 1);
-                var movie3 = await context.Movies.FirstOrDefaultAsync(m => m.Id == 1);
-                var cinemaHall1 = await context.CinemaHalls.FirstOrDefaultAsync(c => c.Id == 0);
-                var cinemaHall2 = await context.CinemaHalls.FirstOrDefaultAsync(c => c.Id == 1);
+                var movie1 = await context.Movies.FirstOrDefaultAsync(m => m.Id == 1);
+                var movie2 = await context.Movies.FirstOrDefaultAsync(m => m.Id == 2);
+                var movie3 = await context.Movies.FirstOrDefaultAsync(m => m.Id == 3);
+                var cinemaHall1 = await context.CinemaHalls.FirstOrDefaultAsync(c => c.Id == 1);
+                var cinemaHall2 = await context.CinemaHalls.FirstOrDefaultAsync(c => c.Id == 2);
 
                 var pricingModel1 = await context.PricingModels.FirstOrDefaultAsync(p =>
                     p.ModelName == "Standard"
@@ -54,7 +54,7 @@ namespace Selu383.SP25.P03.Api.Data
                 // Create showings, calculating EndTime by adding the movie's duration.
                 var showing1 = new Showing
                 {
-                    ShowType = "Regular",
+                    ShowType = "Dolby Cinema",
                     MovieId = movie1.Id,
                     CinemaHallId = cinemaHall1.Id,
                     PricingModelId = pricingModel1.Id,
@@ -76,12 +76,12 @@ namespace Selu383.SP25.P03.Api.Data
 
                 var showing3 = new Showing
                 {
-                    ShowType = "IMAX",
+                    ShowType = "Dolby Cinema",
                     MovieId = movie3.Id,
                     CinemaHallId = cinemaHall2.Id,
                     PricingModelId = pricingModel2.Id,
                     StartTime = startTime2,
-                    EndTime = startTime2.Add(movie2.Duration),
+                    EndTime = startTime2.Add(movie3.Duration),
                     IsSoldOut = false,
                 };
 
@@ -95,9 +95,47 @@ namespace Selu383.SP25.P03.Api.Data
                     EndTime = startTime2.Add(movie2.Duration),
                     IsSoldOut = false,
                 };
+                var showing5 = new Showing
+                {
+                    ShowType = "IMAX",
+                    MovieId = movie1.Id,
+                    CinemaHallId = cinemaHall1.Id,
+                    PricingModelId = pricingModel1.Id,
+                    StartTime = startTime1,
+                    EndTime = startTime1.Add(movie1.Duration),
+                    IsSoldOut = false,
+                };
+                var showing6 = new Showing
+                {
+                    ShowType = "Dolby Cinema",
+                    MovieId = movie2.Id,
+                    CinemaHallId = cinemaHall2.Id,
+                    PricingModelId = pricingModel2.Id,
+                    StartTime = startTime2,
+                    EndTime = startTime2.Add(movie2.Duration),
+                    IsSoldOut = false,
+                };
+                var showing7 = new Showing
+                {
+                    ShowType = "IMAX",
+                    MovieId = movie3.Id,
+                    CinemaHallId = cinemaHall2.Id,
+                    PricingModelId = pricingModel2.Id,
+                    StartTime = startTime2,
+                    EndTime = startTime2.Add(movie3.Duration),
+                    IsSoldOut = false,
+                };
 
                 // Add the new showings.
-                context.Showings.AddRange(showing1, showing2, showing3, showing4);
+                context.Showings.AddRange(
+                    showing1,
+                    showing2,
+                    showing3,
+                    showing4,
+                    showing5,
+                    showing6,
+                    showing7
+                );
                 await context.SaveChangesAsync();
             }
         }

@@ -3,6 +3,9 @@
 # dependencies
 node_modules/
 
+# Ignored - local only
+.env
+
 # Expo
 .expo/
 dist/

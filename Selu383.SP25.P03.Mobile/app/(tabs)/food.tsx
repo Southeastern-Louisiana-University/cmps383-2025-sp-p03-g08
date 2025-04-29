@@ -19,12 +19,12 @@ interface FoodItem {
 }
 
 const sampleFoodItems: FoodItem[] = [
-  { id: "1", name: "Pizza", price: 10.99, category: "Pizza", image: require("@/assets/food/pizza.jpeg") },
-  { id: "2", name: "Burger", price: 7.99, category: "Burgers", image: require("@/assets/food/burger.jpeg") },
-  { id: "3", name: "Salad", price: 5.99, category: "Salads", image: require("@/assets/food/salad.jpeg") },
-  { id: "4", name: "Egg Roll", price: 6.99, category: "Snacks", image: require("@/assets/food/eggroll.jpeg") },
-  { id: "5", name: "Mozzarella Sticks", price: 6.49, category: "Snacks", image: require("@/assets/food/mozarella_sticks.jpeg") },
-  { id: "6", name: "Pasta", price: 8.99, category: "Pasta", image: require("@/assets/food/pasta.jpeg") },
+  { id: "1", name: "Pizza", price: 10.99, category: "Pizza", image: require("@/assets/images/pizza.jpeg") },
+  { id: "2", name: "Burger", price: 7.99, category: "Burgers", image: require("@/assets/images/burger.jpeg") },
+  { id: "3", name: "Salad", price: 5.99, category: "Salads", image: require("@/assets/images/salad.jpeg") },
+  { id: "4", name: "Egg Roll", price: 6.99, category: "Snacks", image: require("@/assets/images/egg_roll.jpeg") },
+  { id: "5", name: "Mozzarella Sticks", price: 6.49, category: "Snacks", image: require("@/assets/images/Mozarella_Sticks.jpeg") },
+  { id: "6", name: "Pasta", price: 8.99, category: "Pasta", image: require("@/assets/images/pasta.jpeg") },
 ];
 
 export default function FoodScreen() {

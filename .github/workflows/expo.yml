@@ -23,18 +23,18 @@ jobs:
         with:
           node-version: 22.x
           cache: npm
-          cache-dependency-path: Selu383.SP25.P02.Mobile/package-lock.json
+          cache-dependency-path: Selu383.SP25.P03.Mobile/package-lock.json
 
       - name: 🏗 Setup EAS
         uses: expo/expo-github-action@v8
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-          project: Selu383.SP25.P02.Mobile
+          project: Selu383.SP25.P03.Mobile
           packager: npm
 
       - name: 📦 Install dependencies
-        run: npm install ./Selu383.SP25.P02.Mobile
+        run: npm install ./Selu383.SP25.P03.Mobile
 
       - name: set environment variables
         uses: allenevans/set-env@v3.0.0
@@ -42,7 +42,7 @@ jobs:
           EAS_LOCAL_BUILD_ARTIFACTS_DIR: ${{ runner.temp }}
 
       - name: 🚀 Build app
-        run: cd ./Selu383.SP25.P02.Mobile/ && eas build -p android --non-interactive --local
+        run: cd ./Selu383.SP25.P03.Mobile/ && eas build -p android --non-interactive --local
 
       - name: 🛳️ Make Release
         uses: "marvinpinto/action-automatic-releases@latest"

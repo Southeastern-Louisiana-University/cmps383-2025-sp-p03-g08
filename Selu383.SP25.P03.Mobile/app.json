@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Selu383-SP25-P02-Mobile-g08",
-    "slug": "selu383-sp25-p02-mobile-g08",
+    "name": "Selu383-SP25-P03-Mobile-g08",
+    "slug": "selu383-sp25-p03-mobile-g08",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -16,7 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.selu383.sp25.p02.g0m"
+      "package": "com.selu383.sp25.p03.g08"
     },
     "web": {
       "bundler": "metro",
